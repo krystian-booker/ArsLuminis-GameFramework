@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="En" xml:space="preserve">
+        <value>en</value>
+        <description>English</description>
+    </data>
+    <data name="Zh" xml:space="preserve">
+        <value>zh</value>
+        <description>Chinese (Simplified)</description>
+    </data>
+</root>
