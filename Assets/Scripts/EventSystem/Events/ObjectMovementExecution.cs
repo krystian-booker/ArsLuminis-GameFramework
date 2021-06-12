@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using EventSystem.Events.interfaces;
 using EventSystem.Events.Models;
-using EventSystem.Models;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,6 +9,7 @@ namespace EventSystem.Events
     public class ObjectMovementExecution : IEventExecution
     {
         private ObjectMovement _objectMovement;
+        private NavMeshAgent _targetNavMeshAgent;
         
         public IEnumerator Execute(GameEvent gameEvent)
         {
@@ -20,31 +20,38 @@ namespace EventSystem.Events
             yield return (gameEvent.initialDelayTime > 0 ? new WaitForSeconds(gameEvent.initialDelayTime) : null);
             
             //Create navMeshAgent
-            var targetNavMeshAgent = _objectMovement.target.GetComponent<NavMeshAgent>();
+            _targetNavMeshAgent = _objectMovement.target.GetComponent<NavMeshAgent>();
             
             //Expected to be null
-            if (targetNavMeshAgent == null)
+            if (_targetNavMeshAgent == null)
             {
-                targetNavMeshAgent = _objectMovement.target.AddComponent<NavMeshAgent>();
+                _targetNavMeshAgent = _objectMovement.target.AddComponent<NavMeshAgent>();
             }
             
-            //Set properties
-            targetNavMeshAgent.speed = _objectMovement.speed;
-            
+            //Set navmeshagent properties
+            _targetNavMeshAgent.speed = _objectMovement.speed;
+            _targetNavMeshAgent.updateRotation = !_objectMovement.disableRotation;
+            // _targetNavMeshAgent.areaMask = 0;
+                
             //Teleport if starting position given
             if (_objectMovement.startingPosition != null)
             {
-                targetNavMeshAgent.Warp(_objectMovement.startingPosition.transform.position);
+                _targetNavMeshAgent.Warp(_objectMovement.startingPosition.transform.position);
             }
 
             //Move to position
-            targetNavMeshAgent.SetDestination(_objectMovement.targetPosition.transform.position);
+            _targetNavMeshAgent.SetDestination(_objectMovement.targetPosition.transform.position);
         }
 
-        //Check if objects position is within range of the target position
+        //Check if objects position is within range of the target position of x,y
         public bool IsFinished()
         {
-            return (Vector3.Distance(_objectMovement.target.transform.position, _objectMovement.targetPosition.transform.position) <= _objectMovement.distanceThreshold);
+            if (_targetNavMeshAgent == null || !(_targetNavMeshAgent.remainingDistance <=
+                                                 _targetNavMeshAgent.stoppingDistance +
+                                                 _objectMovement.distanceThreshold)) return false;
+            //Tools.DestroyComponent(_targetNavMeshAgent);
+            return true;
+
         }
     }
 }

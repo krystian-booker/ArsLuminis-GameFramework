@@ -1,12 +1,14 @@
 ﻿using System;
 using EditorTools;
 using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor.Drawers;
+using Sirenix.Serialization;
 using UnityEngine;
 
 namespace EventSystem.Events.Models
 {
     /// <summary>
-    /// Able to be used for any object, only requirement is a collider
+    /// Able to be used for any object
     /// If you want a more detailed movement control over an object I'd recommend
     /// using CharacterMovement over ObjectMovement
     ///
@@ -35,6 +37,10 @@ namespace EventSystem.Events.Models
 
         [Tooltip("Speed that the object will move at, set on initialization. Default 3.5f")] [Range(0.1f, 10)]
         public float speed = 3.5f;
+
+        [Tooltip("Objects rotation will not be altered on movement")]
+        public bool disableRotation;
+        
 
 #if UNITY_EDITOR
         private void GenerateTargetPosition()

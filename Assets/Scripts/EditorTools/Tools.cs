@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EditorTools
 {
@@ -17,6 +14,11 @@ namespace EditorTools
         {
             Debug.Log($"Object instantiated at 0,0,0");
             return Instantiate(gameObject, Vector3.zero, Quaternion.identity);
+        }
+        
+        public static void DestroyComponent(Component component)
+        {
+            Destroy(component);
         }
     }
 }

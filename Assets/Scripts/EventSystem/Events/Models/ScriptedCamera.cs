@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Cinemachine;
+﻿using Cinemachine;
 using EditorTools;
-using EventSystem.Models;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;

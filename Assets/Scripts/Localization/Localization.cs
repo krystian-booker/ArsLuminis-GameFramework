@@ -56,7 +56,7 @@ namespace Localization
             _messageLocalizedResource = UnityEngine.Resources.Load<TextAsset>($"Localization/Messages/Messages.{languageTag}");
             if (_messageLocalizedResource == null)
             {
-                Debug.LogError($"Language file not found for {localization.ToString()} tag: {languageTag}");
+                Debug.LogError($"{nameof(Localization)}: Language file not found for {localization.ToString()} tag: {languageTag}");
                 _messageLocalizedResourceDoc = _messageDefaultResourceDoc; //Default language to english
             }
             else
@@ -90,12 +90,12 @@ namespace Localization
         
         private void TextNotFoundError(string dataName)
         {
-            Debug.LogError($"Translation not found for {dataName} in {localization.ToString()}");
+            Debug.LogError($"{nameof(Localization)}: Translation not found for {dataName} in {localization.ToString()}");
         }
         
         private void DefaultTextNotFoundError(string dataName)
         {
-            Debug.LogError($"Default text not found for {dataName} in En");
+            Debug.LogError($"{nameof(Localization)}: Default text not found for {dataName} in En");
         }
     }
 }

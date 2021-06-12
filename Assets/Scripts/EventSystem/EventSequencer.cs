@@ -15,12 +15,12 @@ namespace EventSystem
     {
         [Tooltip("Only required if the event sequence will be altering the camera state.")]
         public Camera primaryCamera;
-        
+
         [Tooltip("Loops all events from beginning to end")]
         public bool isLoop;
 
-        [Tooltip("List of events to occur, in order displayed here")]
-        [OdinSerialize] public List<GameEvent> events = new List<GameEvent>();
+        [Tooltip("List of events to occur, in order displayed here")] [OdinSerialize]
+        public List<GameEvent> events = new List<GameEvent>();
 
         //Event cycle
         private GameEvent _currentEvent;
@@ -28,6 +28,7 @@ namespace EventSystem
         private int _eventIterator;
 
         //Event executions
+        private ScriptedCameraExecution _scriptedCameraExecution;
         private ObjectMovementExecution _objectMovementExecution;
         private CharacterMovementExecution _characterMovementExecution;
 
@@ -47,18 +48,29 @@ namespace EventSystem
                 _currentEvent = events[_eventIterator];
             }
 
+            //Debugging state
+            if (_currentEvent.disabled)
+            {
+                _eventIterator++;
+                _currentEvent.isFinished = true;
+                return;
+            }
+
             //Event is currently running
             if (_currentEvent.isStarted)
             {
                 EventFinished();
                 return;
             }
-            
+
             StartEvent();
         }
 
         private void StartEvent()
         {
+            if (_currentEvent.isStarted)
+                return;
+            
             _eventIterator++;
             _currentEvent.isStarted = true;
             switch (_currentEvent.eventType)
@@ -67,6 +79,8 @@ namespace EventSystem
                     break;
                 case EventType.Camera:
                 {
+                    _scriptedCameraExecution = new ScriptedCameraExecution(primaryCamera);
+                    _currentEventCoroutine = _scriptedCameraExecution.Execute(_currentEvent);
                     break;
                 }
                 case EventType.CharacterMovement:
@@ -82,30 +96,39 @@ namespace EventSystem
                     break;
                 }
                 case EventType.Parallel:
+                    //TODO: Figure this out before its too late! :(
                     //new eventSequencer? 
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-            if (_currentEventCoroutine != null)
-            {
-                StartCoroutine(_currentEventCoroutine);
-            }
-            else
-            {
-                Debug.LogError($"Missing Coroutine for eventType: {_currentEvent.eventType.ToString()}");
-            }
+            StartCoroutine(_currentEventCoroutine);
         }
 
         private void EventFinished()
         {
+            if(_currentEvent.isFinished)
+                return;
+
             switch (_currentEvent.eventType)
             {
                 case EventType.Dialog:
                     throw new NotImplementedException();
                 case EventType.Camera:
-                    throw new NotImplementedException();
+                {
+                    if (_scriptedCameraExecution != null)
+                    {
+                        _currentEvent.isFinished = _scriptedCameraExecution.IsFinished();
+                        if (_currentEvent.isFinished)
+                        {
+                            _scriptedCameraExecution = null;
+                            GC.Collect();
+                        }
+                    }
+
+                    break;
+                }
                 case EventType.CharacterMovement:
                 {
                     if (_characterMovementExecution != null)
@@ -114,6 +137,7 @@ namespace EventSystem
                         if (_currentEvent.isFinished)
                         {
                             _characterMovementExecution = null;
+                            GC.Collect();
                         }
                     }
 
@@ -127,6 +151,7 @@ namespace EventSystem
                         if (_currentEvent.isFinished)
                         {
                             _objectMovementExecution = null;
+                            GC.Collect();
                         }
                     }
 

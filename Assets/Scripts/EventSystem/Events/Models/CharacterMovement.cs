@@ -36,6 +36,9 @@ namespace EventSystem.Events.Models
         [Tooltip("Speed that the object will move at, set on initialization. Default 3.5f")] [Range(0.1f, 10)]
         public float speed = 3.5f;
 
+        [Tooltip("Characters rotation will not be altered on movement")]
+        public bool disableRotation;
+        
 #if UNITY_EDITOR
         private void GenerateTargetPosition()
         {
