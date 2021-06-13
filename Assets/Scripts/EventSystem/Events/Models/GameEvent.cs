@@ -21,8 +21,8 @@ namespace EventSystem.Events.Models
         [OdinSerialize] [Tooltip("Amount of seconds that the event will be delayed before starting")] [Range(0, 20)]
         public int initialDelayTime = 0;
 
-        [Tooltip("GameEvent disabled in scene, helpful for debugging")]
-        public bool disabled;
+        [Tooltip("Skip gameEvent in sequence, helpful for debugging")]
+        public bool skip;
         
         [OdinSerialize] public EventType eventType;
 

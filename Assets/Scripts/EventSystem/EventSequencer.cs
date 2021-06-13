@@ -49,7 +49,7 @@ namespace EventSystem
             }
 
             //Debugging state
-            if (_currentEvent.disabled)
+            if (_currentEvent.skip)
             {
                 _eventIterator++;
                 _currentEvent.isFinished = true;
