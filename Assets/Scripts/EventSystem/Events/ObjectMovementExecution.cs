@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using EditorTools;
 using EventSystem.Events.interfaces;
 using EventSystem.Events.Models;
 using UnityEngine;
@@ -31,7 +32,7 @@ namespace EventSystem.Events
             //Set navmeshagent properties
             _targetNavMeshAgent.speed = _objectMovement.speed;
             _targetNavMeshAgent.updateRotation = !_objectMovement.disableRotation;
-            // _targetNavMeshAgent.areaMask = 0;
+            _targetNavMeshAgent.radius = _objectMovement.navMeshRadius;
                 
             //Teleport if starting position given
             if (_objectMovement.startingPosition != null)
@@ -49,7 +50,7 @@ namespace EventSystem.Events
             if (_targetNavMeshAgent == null || !(_targetNavMeshAgent.remainingDistance <=
                                                  _targetNavMeshAgent.stoppingDistance +
                                                  _objectMovement.distanceThreshold)) return false;
-            //Tools.DestroyComponent(_targetNavMeshAgent);
+            Tools.DestroyComponent(_targetNavMeshAgent);
             return true;
 
         }

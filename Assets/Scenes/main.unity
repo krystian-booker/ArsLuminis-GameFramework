@@ -377,7 +377,7 @@ GameObject:
   - component: {fileID: 477216150}
   - component: {fileID: 477216149}
   - component: {fileID: 477216148}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +404,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 1
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!136 &477216149
 CapsuleCollider:
@@ -851,7 +851,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 908706333}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.5, y: 0, z: 0}
+  m_LocalPosition: {x: -8, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1201522738}
@@ -894,7 +894,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945816075}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.5, y: 0, z: 0}
+  m_LocalPosition: {x: -2.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1201522738}
@@ -1015,8 +1015,8 @@ MonoBehaviour:
   m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
-    m_Style: 2
-    m_Time: 2
+    m_Style: 0
+    m_Time: 0
     m_CustomCurve:
       serializedVersion: 2
       m_Curve:
@@ -1183,7 +1183,7 @@ MonoBehaviour:
       Data: 0
     - Name: disabled
       Entry: 5
-      Data: true
+      Data: false
     - Name: eventType
       Entry: 3
       Data: 3
@@ -1217,12 +1217,9 @@ MonoBehaviour:
     - Name: disableRotation
       Entry: 5
       Data: true
-    - Name: ignoreCollisionLayers
-      Entry: 7
-      Data: 5|Sirenix.OdinInspector.Editor.Drawers.LayerMaskDrawer, Sirenix.OdinInspector.Editor
-    - Name: 
-      Entry: 8
-      Data: 
+    - Name: navMeshRadius
+      Entry: 4
+      Data: 0.2
     - Name: 
       Entry: 8
       Data: 
@@ -1231,7 +1228,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 6|EventSystem.Events.Models.GameEvent, Assembly-CSharp
+      Data: 5|EventSystem.Events.Models.GameEvent, Assembly-CSharp
     - Name: isStarted
       Entry: 5
       Data: false
@@ -1255,7 +1252,7 @@ MonoBehaviour:
       Data: 
     - Name: characterMovement
       Entry: 7
-      Data: 7|EventSystem.Events.Models.CharacterMovement, Assembly-CSharp
+      Data: 6|EventSystem.Events.Models.CharacterMovement, Assembly-CSharp
     - Name: descriptor
       Entry: 1
       Data: playerTrain
@@ -1288,7 +1285,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 8|EventSystem.Events.Models.GameEvent, Assembly-CSharp
+      Data: 7|EventSystem.Events.Models.GameEvent, Assembly-CSharp
     - Name: isStarted
       Entry: 5
       Data: false
@@ -1309,16 +1306,16 @@ MonoBehaviour:
       Data: 1
     - Name: scriptedCamera
       Entry: 7
-      Data: 9|EventSystem.Events.Models.ScriptedCamera, Assembly-CSharp
+      Data: 8|EventSystem.Events.Models.ScriptedCamera, Assembly-CSharp
     - Name: virtualCamera
       Entry: 10
       Data: 7
     - Name: blend
       Entry: 3
-      Data: 2
+      Data: 0
     - Name: blendTime
       Entry: 4
-      Data: 2
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -1333,7 +1330,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 10|EventSystem.Events.Models.GameEvent, Assembly-CSharp
+      Data: 9|EventSystem.Events.Models.GameEvent, Assembly-CSharp
     - Name: isStarted
       Entry: 5
       Data: false
@@ -1357,7 +1354,7 @@ MonoBehaviour:
       Data: 
     - Name: characterMovement
       Entry: 7
-      Data: 11|EventSystem.Events.Models.CharacterMovement, Assembly-CSharp
+      Data: 10|EventSystem.Events.Models.CharacterMovement, Assembly-CSharp
     - Name: descriptor
       Entry: 1
       Data: playerWalksToDoor
@@ -1591,7 +1588,7 @@ GameObject:
   - component: {fileID: 1440564329}
   - component: {fileID: 1440564328}
   - component: {fileID: 1440564327}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1837,7 +1834,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1662647092}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.5, y: 0, z: 30.2}
+  m_LocalPosition: {x: -8, y: 0, z: 30.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1201522738}

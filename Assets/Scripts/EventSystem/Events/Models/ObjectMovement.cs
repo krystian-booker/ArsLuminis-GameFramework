@@ -40,7 +40,9 @@ namespace EventSystem.Events.Models
 
         [Tooltip("Objects rotation will not be altered on movement")]
         public bool disableRotation;
-        
+
+        [Tooltip("Set the size of the navmesh radius")]
+        public float navMeshRadius;
 
 #if UNITY_EDITOR
         private void GenerateTargetPosition()
