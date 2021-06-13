@@ -123,7 +123,6 @@ namespace EventSystem
                         if (_currentEvent.isFinished)
                         {
                             _scriptedCameraExecution = null;
-                            GC.Collect();
                         }
                     }
 
@@ -137,7 +136,6 @@ namespace EventSystem
                         if (_currentEvent.isFinished)
                         {
                             _characterMovementExecution = null;
-                            GC.Collect();
                         }
                     }
 
@@ -151,7 +149,6 @@ namespace EventSystem
                         if (_currentEvent.isFinished)
                         {
                             _objectMovementExecution = null;
-                            GC.Collect();
                         }
                     }
 
