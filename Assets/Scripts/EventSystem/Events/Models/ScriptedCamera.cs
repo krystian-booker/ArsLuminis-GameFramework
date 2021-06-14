@@ -13,17 +13,16 @@ namespace EventSystem.Events.Models
     /// </summary>
     public class ScriptedCamera
     {
-        [OdinSerialize]
-        [InlineButton(nameof(GenerateNewVirtualCamera), "Create")]
+        [OdinSerialize] [InlineButton(nameof(GenerateNewVirtualCamera), "Create")]
         public CinemachineVirtualCamera virtualCamera;
 
-        [OdinSerialize]
-        [Tooltip("Note: Custom does not work here, you would need to create it as a ScriptableObject")]
+        [OdinSerialize] [Tooltip("Note: Custom does not work here, you would need to create it as a ScriptableObject")]
         public CinemachineBlendDefinition.Style blend;
 
-        [OdinSerialize]
-        [Tooltip("Time to blend, default is 2")]
+        [OdinSerialize] [Tooltip("Time to blend, default is 2")]
         public float blendTime = 2;
+
+#if UNITY_EDITOR
         private void GenerateNewVirtualCamera()
         {
             var vcamGameObject = UnityEngine.Resources.Load<GameObject>("Prefabs/editorTools/CM vcam");
@@ -33,5 +32,6 @@ namespace EventSystem.Events.Models
             var instantiatedVcam = Tools.InstantiateObject(vcamGameObject);
             virtualCamera = instantiatedVcam.GetComponent<CinemachineVirtualCamera>();
         }
+#endif
     }
 }

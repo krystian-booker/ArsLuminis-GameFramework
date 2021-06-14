@@ -54,5 +54,10 @@ namespace EventSystem.Events
             return true;
 
         }
+
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

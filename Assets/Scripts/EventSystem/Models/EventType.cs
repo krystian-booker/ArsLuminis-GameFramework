@@ -2,10 +2,11 @@
 {
     public enum EventType
     {
-        Dialog,
+        Animation,
         Camera,
         CharacterMovement,
-        ObjectMovement,
-        Parallel
+        Dialog,
+        Parallel,
+        ObjectMovement
     }
 }

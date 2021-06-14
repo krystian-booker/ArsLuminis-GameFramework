@@ -52,6 +52,8 @@ namespace EventSystem.Events.Models
             targetPosition = instantiatedTarget;
         }
 
+        private bool test;
+        
         private void GenerateStartingPosition()
         {
             var positionTargetGameObject = UnityEngine.Resources.Load<GameObject>("Prefabs/editorTools/GreenTarget");

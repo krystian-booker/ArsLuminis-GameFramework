@@ -21,7 +21,6 @@ namespace EventSystem.Events
             yield return (gameEvent.initialDelayTime > 0 ? new WaitForSeconds(gameEvent.initialDelayTime) : null);
             
             //Create navMeshAgent
-            
             _targetNavMeshAgent = _characterMovement.target.GetComponent<NavMeshAgent>();
             if (_targetNavMeshAgent == null)
             {
@@ -47,6 +46,11 @@ namespace EventSystem.Events
         {
             return (_targetNavMeshAgent != null && _targetNavMeshAgent.remainingDistance <=
                 _targetNavMeshAgent.stoppingDistance + _characterMovement.distanceThreshold);
+        }
+
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

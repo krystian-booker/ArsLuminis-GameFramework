@@ -304,7 +304,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.3484251, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -515,7 +515,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.3484251, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1082,7 +1082,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.3484251, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1404,7 +1404,7 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 5
+      Data: 6
     - Name: 
       Entry: 7
       Data: 1|EventSystem.Events.Models.GameEvent, Assembly-CSharp
@@ -1426,6 +1426,9 @@ MonoBehaviour:
     - Name: eventType
       Entry: 3
       Data: 1
+    - Name: scriptedAnimation
+      Entry: 6
+      Data: 
     - Name: scriptedCamera
       Entry: 7
       Data: 2|EventSystem.Events.Models.ScriptedCamera, Assembly-CSharp
@@ -1467,10 +1470,13 @@ MonoBehaviour:
       Data: 0
     - Name: skip
       Entry: 5
-      Data: false
+      Data: true
     - Name: eventType
       Entry: 3
       Data: 3
+    - Name: scriptedAnimation
+      Entry: 6
+      Data: 
     - Name: scriptedCamera
       Entry: 6
       Data: 
@@ -1497,7 +1503,7 @@ MonoBehaviour:
       Data: 1
     - Name: speed
       Entry: 4
-      Data: 3.5
+      Data: 7.5
     - Name: disableRotation
       Entry: 5
       Data: true
@@ -1531,6 +1537,9 @@ MonoBehaviour:
     - Name: eventType
       Entry: 3
       Data: 2
+    - Name: scriptedAnimation
+      Entry: 6
+      Data: 
     - Name: scriptedCamera
       Entry: 6
       Data: 
@@ -1588,6 +1597,9 @@ MonoBehaviour:
     - Name: eventType
       Entry: 3
       Data: 1
+    - Name: scriptedAnimation
+      Entry: 6
+      Data: 
     - Name: scriptedCamera
       Entry: 7
       Data: 8|EventSystem.Events.Models.ScriptedCamera, Assembly-CSharp
@@ -1633,6 +1645,9 @@ MonoBehaviour:
     - Name: eventType
       Entry: 3
       Data: 2
+    - Name: scriptedAnimation
+      Entry: 6
+      Data: 
     - Name: scriptedCamera
       Entry: 6
       Data: 
@@ -1662,6 +1677,51 @@ MonoBehaviour:
       Data: false
     - Name: 
       Entry: 8
+      Data: 
+    - Name: objectMovement
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 11|EventSystem.Events.Models.GameEvent, Assembly-CSharp
+    - Name: isStarted
+      Entry: 5
+      Data: false
+    - Name: isFinished
+      Entry: 5
+      Data: false
+    - Name: description
+      Entry: 6
+      Data: 
+    - Name: initialDelayTime
+      Entry: 3
+      Data: 0
+    - Name: skip
+      Entry: 5
+      Data: false
+    - Name: eventType
+      Entry: 3
+      Data: 0
+    - Name: scriptedAnimation
+      Entry: 7
+      Data: 12|EventSystem.Events.Models.ScriptedAnimation, Assembly-CSharp
+    - Name: animationTarget
+      Entry: 10
+      Data: 1
+    - Name: animationTrigger
+      Entry: 1
+      Data: TrainStart
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: scriptedCamera
+      Entry: 6
+      Data: 
+    - Name: characterMovement
+      Entry: 6
       Data: 
     - Name: objectMovement
       Entry: 6
@@ -1990,7 +2050,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.3484251, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2242,7 +2302,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.3484251, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2773,7 +2833,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2063686604}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.22, z: -43.12}
+  m_LocalPosition: {x: 0, y: 2.5, z: -45}
   m_LocalScale: {x: 10, y: 5, z: 20}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2792,7 +2852,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 07b840966b7d47b498a87485a5038a03, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1

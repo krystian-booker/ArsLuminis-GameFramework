@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace EditorTools
 {
@@ -19,6 +20,20 @@ namespace EditorTools
         public static void DestroyComponent(Component component)
         {
             Destroy(component);
+        }
+        
+        //Is this a bad idea?
+        public static Type GetEnumType(string enumName)
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                var type = assembly.GetType(enumName);
+                if (type == null)
+                    continue;
+                if (type.IsEnum)
+                    return type;
+            }
+            return null;
         }
     }
 }

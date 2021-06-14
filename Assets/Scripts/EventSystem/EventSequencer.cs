@@ -28,6 +28,7 @@ namespace EventSystem
         private int _eventIterator;
 
         //Event executions
+        private AnimationExecution _animationExecution;
         private ScriptedCameraExecution _scriptedCameraExecution;
         private ObjectMovementExecution _objectMovementExecution;
         private CharacterMovementExecution _characterMovementExecution;
@@ -75,6 +76,12 @@ namespace EventSystem
             _currentEvent.isStarted = true;
             switch (_currentEvent.eventType)
             {
+                case EventType.Animation:
+                {
+                    _animationExecution = new AnimationExecution();
+                    _currentEventCoroutine = _animationExecution.Execute(_currentEvent);
+                    break;
+                }
                 case EventType.Dialog:
                     break;
                 case EventType.Camera:
@@ -113,10 +120,27 @@ namespace EventSystem
 
             switch (_currentEvent.eventType)
             {
+                case EventType.Animation:
+                {
+                    //TODO:We should create a dispose method in the IEvent interface that dumps all the variables
+                    //This would prevent all this garbage collection
+                    if (_animationExecution != null)
+                    {
+                        _currentEvent.isFinished = _animationExecution.IsFinished();
+                        if (_currentEvent.isFinished)
+                        {
+                            _animationExecution = null;
+                        }
+                    }
+
+                    break;
+                }
                 case EventType.Dialog:
                     throw new NotImplementedException();
                 case EventType.Camera:
                 {
+                    //TODO:We should create a dispose method in the IEvent interface that dumps all the variables
+                    //This would prevent all this garbage collection
                     if (_scriptedCameraExecution != null)
                     {
                         _currentEvent.isFinished = _scriptedCameraExecution.IsFinished();
@@ -130,6 +154,8 @@ namespace EventSystem
                 }
                 case EventType.CharacterMovement:
                 {
+                    //TODO:We should create a dispose method in the IEvent interface that dumps all the variables
+                    //This would prevent all this garbage collection
                     if (_characterMovementExecution != null)
                     {
                         _currentEvent.isFinished = _characterMovementExecution.IsFinished();
@@ -143,6 +169,8 @@ namespace EventSystem
                 }
                 case EventType.ObjectMovement:
                 {
+                    //TODO:We should create a dispose method in the IEvent interface that dumps all the variables
+                    //This would prevent all this garbage collection
                     if (_objectMovementExecution != null)
                     {
                         _currentEvent.isFinished = _objectMovementExecution.IsFinished();

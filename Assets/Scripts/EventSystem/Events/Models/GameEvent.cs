@@ -27,6 +27,9 @@ namespace EventSystem.Events.Models
         [OdinSerialize] public EventType eventType;
 
         //Event types
+        [OdinSerialize] [ShowIf("eventType", EventType.Animation)]
+        public ScriptedAnimation scriptedAnimation;
+        
         [OdinSerialize] [ShowIf("eventType", EventType.Camera)]
         public ScriptedCamera scriptedCamera;
         

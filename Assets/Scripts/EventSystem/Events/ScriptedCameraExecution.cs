@@ -49,5 +49,10 @@ namespace EventSystem.Events
             //TODO: Possibly add an override for more control?
             return (Time.time - _timeStarted >= _cinemachineBrain.m_DefaultBlend.m_Time);
         }
+
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
