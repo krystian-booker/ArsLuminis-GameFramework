@@ -1,41 +1,38 @@
-﻿using System.Collections;
-using EventSystem.Events.interfaces;
-using EventSystem.Events.Models;
+﻿using System;
+using System.Collections;
+using EventSystem.Models.interfaces;
 using UnityEngine;
+using XNode;
 
 namespace EventSystem.Events
 {
     public class AnimationExecution : IEventExecution
     {
-        private ScriptedAnimation _scriptedAnimation;
+        private AnimationNode _animationNode;
         private Animator _animator;
-        
-        public IEnumerator Execute(GameEvent gameEvent)
-        {
-            //Copy object before delay to prevent a null on IsFinished check
-            _scriptedAnimation = gameEvent.scriptedAnimation;
-                        
-            //Initial delay
-            yield return (gameEvent.initialDelayTime > 0 ? new WaitForSeconds(gameEvent.initialDelayTime) : null);
 
-            //Get animator
-            _animator = _scriptedAnimation.animationTarget.GetComponent<Animator>();
+        public IEnumerator Execute(Node node)
+        {
+            _animationNode = node as AnimationNode;
+            if (_animationNode != null)
+            {
+                //Get animator
+                _animator = _animationNode.animationTarget.GetComponent<Animator>();
             
-            //Start animation
-            //TODO: Implement booleans, maybe floats and int? 
-            _animator.SetTrigger(_scriptedAnimation.animationTrigger);
+                //Start animation
+                _animator.SetTrigger(_animationNode.animationTrigger);
+                yield return null;
+            }
+            else
+            {
+                Debug.LogException(new Exception($"{nameof(AnimationExecution)}: Invalid setup on {nameof(AnimationNode)}."));
+            }
         }
 
         public bool IsFinished()
         {
-            return (_animator.GetCurrentAnimatorStateInfo(0).IsName("TrainMovesToPlatform"));
+            return true;
             //Animation event :o
-            //throw new System.NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

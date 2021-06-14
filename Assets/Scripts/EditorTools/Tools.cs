@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace EditorTools
@@ -22,18 +23,15 @@ namespace EditorTools
             Destroy(component);
         }
         
-        //Is this a bad idea?
+        /// <summary>
+        /// Finds enum from a string of the enums name.
+        /// This should only be used for editor code and NEVER in game.
+        /// </summary>
+        /// <param name="enumName">Name of the enum</param>
+        /// <returns>enum</returns>
         public static Type GetEnumType(string enumName)
         {
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                var type = assembly.GetType(enumName);
-                if (type == null)
-                    continue;
-                if (type.IsEnum)
-                    return type;
-            }
-            return null;
+            return AppDomain.CurrentDomain.GetAssemblies().Select(assembly => assembly.GetType(enumName)).Where(type => type != null).FirstOrDefault(type => type.IsEnum);
         }
     }
 }

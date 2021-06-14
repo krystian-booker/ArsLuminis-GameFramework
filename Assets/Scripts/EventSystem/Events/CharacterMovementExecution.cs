@@ -1,56 +1,54 @@
-﻿using System.Collections;
-using EventSystem.Events.interfaces;
-using EventSystem.Events.Models;
-using EventSystem.Models;
+﻿using System;
+using System.Collections;
+using EventSystem.Models.interfaces;
 using UnityEngine;
 using UnityEngine.AI;
+using XNode;
 
 namespace EventSystem.Events
 {
     public class CharacterMovementExecution : IEventExecution
     {
-        private CharacterMovement _characterMovement;
+        private CharacterMovementNode _characterMovementNode;
         private NavMeshAgent _targetNavMeshAgent;
-        
-        public IEnumerator Execute(GameEvent gameEvent)
+
+        public IEnumerator Execute(Node node)
         {
-            //Copy object before delay to prevent a null on IsFinished check
-            _characterMovement = gameEvent.characterMovement;
-            
-            //Initial delay
-            yield return (gameEvent.initialDelayTime > 0 ? new WaitForSeconds(gameEvent.initialDelayTime) : null);
-            
-            //Create navMeshAgent
-            _targetNavMeshAgent = _characterMovement.target.GetComponent<NavMeshAgent>();
-            if (_targetNavMeshAgent == null)
+            _characterMovementNode = node as CharacterMovementNode;
+            if (_characterMovementNode != null)
             {
-                Debug.LogError($"{nameof(CharacterMovementExecution)}: Missing component {nameof(NavMeshAgent)}");
+                //Get navMeshAgent
+                _targetNavMeshAgent = _characterMovementNode.target.GetComponent<NavMeshAgent>();
+                if (_targetNavMeshAgent == null)
+                {
+                    Debug.LogError($"{nameof(CharacterMovementExecution)}: Missing component {nameof(NavMeshAgent)}");
+                }
+
+                //Set navmeshagent properties
+                _targetNavMeshAgent.speed = _characterMovementNode.speed;
+                _targetNavMeshAgent.updateRotation = !_characterMovementNode.disableRotation;
+
+                //Teleport if starting position given
+                if (_characterMovementNode.startingPosition != null)
+                {
+                    _targetNavMeshAgent.Warp(_characterMovementNode.startingPosition.transform.position);
+                }
+
+                //Move to position
+                _targetNavMeshAgent.SetDestination(_characterMovementNode.targetPosition.transform.position);
                 yield return null;
             }
-
-            //Set navmeshagent properties
-            _targetNavMeshAgent.updateRotation = !_characterMovement.disableRotation;
-            
-            //Teleport if starting position given
-            if (_characterMovement.startingPosition != null)
+            else
             {
-                _targetNavMeshAgent.Warp(_characterMovement.startingPosition.transform.position);
+                Debug.LogException(new Exception($"{nameof(CharacterMovementExecution)}: Invalid setup on {nameof(CharacterMovementNode)}."));
             }
-
-            //Move to position
-            _targetNavMeshAgent.SetDestination(_characterMovement.targetPosition.transform.position);
         }
 
         //Check if objects position is within range of the target position
         public bool IsFinished()
         {
-            return (_targetNavMeshAgent != null && _targetNavMeshAgent.remainingDistance <=
-                _targetNavMeshAgent.stoppingDistance + _characterMovement.distanceThreshold);
-        }
-
-        public void Dispose()
-        {
-            throw new System.NotImplementedException();
+            return _targetNavMeshAgent != null && _targetNavMeshAgent.hasPath && _targetNavMeshAgent.remainingDistance <=
+                _targetNavMeshAgent.stoppingDistance + _characterMovementNode.distanceThreshold;
         }
     }
 }
