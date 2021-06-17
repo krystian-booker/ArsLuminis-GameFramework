@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "6cba54f3d40e9f4340309787c9ed7ca4ac09d019"
     },
+    "com.github.siccity.xnodegroups": {
+      "version": "https://github.com/Siccity/xNodeGroups.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "4420ad7ecee5c58494db5ad5289ad5afe77c0f27"
+    },
     "com.unity.cinemachine": {
       "version": "2.7.3",
       "depth": 0,

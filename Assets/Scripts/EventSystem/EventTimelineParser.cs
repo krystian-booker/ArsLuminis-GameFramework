@@ -3,6 +3,8 @@ using System.Linq;
 using EventSystem.Events;
 using EventSystem.Models;
 using EventSystem.VisualEditor.Graphs;
+using EventSystem.VisualEditor.Nodes.Actions;
+using EventSystem.VisualEditor.Nodes.Flow;
 using UnityEngine;
 using XNode;
 
@@ -39,7 +41,12 @@ namespace EventSystem
 
             //perform action for node type
             var currentNodeType = node.GetType();
-            if (currentNodeType == typeof(CameraNode))
+            if (currentNodeType != typeof(StartNode) && currentNodeType != typeof(EndNode) &&
+                node is BaseNode {skip: true} cur)
+            {
+                NextNode(node);
+            }
+            else if (currentNodeType == typeof(CameraNode))
             {
                 var cameraExecution = new CameraExecution(primaryCamera);
                 StartCoroutine(cameraExecution.Execute(node));

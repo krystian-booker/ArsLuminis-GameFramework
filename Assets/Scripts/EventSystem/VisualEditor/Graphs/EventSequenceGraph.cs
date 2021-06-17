@@ -3,7 +3,7 @@ using XNode;
 
 namespace EventSystem.VisualEditor.Graphs
 {
-    [CreateAssetMenu]
+    [CreateAssetMenu(menuName = "CheddyShakes/EventSequence", order = 0)]
     public class EventSequenceGraph : NodeGraph
     {
     }

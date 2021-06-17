@@ -5,9 +5,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
-//Namespace is used as path in option menu
-// ReSharper disable once CheckNamespace
-namespace EventSystem
+namespace EventSystem.VisualEditor.Nodes.Actions
 {
     /// <summary>
     /// I'm not a cinemachine expert, I expect this class will need to be modified heavily
@@ -16,17 +14,10 @@ namespace EventSystem
     /// </summary>
     public class CameraNode : BaseNode
     {
-        [Input] public Empty entry;
-        [Output] public Empty exit;
-        
         [Tooltip("Documentation purposes only")] [TextArea]
         public string description;
         
-        [Tooltip("Skip camera event in sequence, helpful for debugging")]
-        public bool skip;
-        
-        [OdinSerialize] 
-        public CinemachineVirtualCamera virtualCamera;
+        [OdinSerialize] public CinemachineVirtualCamera virtualCamera;
 
         [OdinSerialize] [Tooltip("Note: Custom does not work here, you would need to create it as a ScriptableObject")]
         public CinemachineBlendDefinition.Style blend;

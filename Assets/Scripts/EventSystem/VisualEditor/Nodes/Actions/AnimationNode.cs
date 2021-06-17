@@ -4,18 +4,16 @@ using EventSystem.Models;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-//Namespace is used as path in option menu
-// ReSharper disable once CheckNamespace
-namespace EventSystem
+namespace EventSystem.VisualEditor.Nodes.Actions
 {
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
     public class AnimationNode : BaseNode
     {
-        [Input] public Empty entry;
-        [Output] public Empty exit;
-
+        [Tooltip("Documentation purposes only")] [TextArea]
+        public string description;
+        
         [Tooltip("GameObject you want the animation to run on.")] [OnValueChanged(nameof(GETAnimationTriggers))]
         public GameObject animationTarget;
 
@@ -47,7 +45,7 @@ namespace EventSystem
                         $"{nameof(AnimationNode)}: Missing ${nameof(RuntimeAnimatorController)} on {animationTarget.name}");
                 }
 
-                var animatorType = Tools.GetEnumType($"Animations.{runtimeAnimatorController.name}");
+                var animatorType = Tools.GetEnumType($"Models.Animations.{runtimeAnimatorController.name}");
                 if (animatorType == null)
                 {
                     Debug.LogError($"{nameof(AnimationNode)}: Unable to find matching enum of " +

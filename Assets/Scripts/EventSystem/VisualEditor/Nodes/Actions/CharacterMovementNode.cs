@@ -3,9 +3,7 @@ using EventSystem.Models;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-//Namespace is used as path in option menu
-// ReSharper disable once CheckNamespace
-namespace EventSystem
+namespace EventSystem.VisualEditor.Nodes.Actions
 {
     /// <summary>
     /// Expects a navmesh agent has already been configured for our object.
@@ -16,22 +14,16 @@ namespace EventSystem
     /// </summary>
     public class CharacterMovementNode : BaseNode
     {
-        [Input] public Empty entry;
-        [Output] public Empty exit;
-        
         [Tooltip("Documentation purposes only")] [TextArea]
         public string description;
         
         [Tooltip("Not required, will be prefixed to generated targets names")]
         public string shortName;
-        
-        [Tooltip("Skip camera event in sequence, helpful for debugging")]
-        public bool skip;
-        
+
         [Tooltip("Gameobject that will be moved")]
         public GameObject target;
 
-        [Tooltip("Position gameobject will be moved to")] 
+        [Tooltip("Position gameobject will be moved to")]
         public GameObject targetPosition;
 
         [Tooltip("Override the gameobjects current position")]

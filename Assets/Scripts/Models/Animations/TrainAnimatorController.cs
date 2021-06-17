@@ -1,4 +1,4 @@
-﻿namespace Animations
+﻿namespace Models.Animations
 {
     public enum TrainAnimatorController
     {

@@ -11,7 +11,7 @@ namespace Localization
             var uiTMPTexts = GetComponentsInChildren<TMP_Text>();
             foreach (var uiTMPText in uiTMPTexts)
             {
-                uiTMPText.text = Localization.Instance.GetTranslatedString(uiTMPText.text);
+                uiTMPText.text =GameManager.Instance.localizationManager.GetTranslatedString(uiTMPText.text);
             }
         }
     }
