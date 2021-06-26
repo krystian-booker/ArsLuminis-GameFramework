@@ -14,10 +14,15 @@ namespace EventSystem.VisualEditor.Nodes.Actions
     public class DialogNode : BaseNode
     {
         [Input] public NodeLink entry;
-
+        
         [Output, HideIf("@this.options.Count > 0")]
         public NodeLink exit;
 
+        [Header("Dialog behaviour")]
+        [LabelWidth(150), Tooltip("Once the user has clicked continue, the dialog box will be hidden")]
+        public bool hideUIOnComplete;
+        
+        [Header("Character speaking")]
         // [LabelWidth(100), Tooltip("Used for character name, arrow position")]
         // public GameObject character;
 
@@ -28,9 +33,6 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         // [LabelWidth(100),
         //  Tooltip("Not required, if character is provided details will be used from there. Can be used to override.")]
         // public GameObject arrowPosition;
-
-        [LabelWidth(100), Tooltip("Once the user has clicked continue, the dialog box will be hidden")]
-        public bool hideAfter;
 
         [LabelWidth(100), Tooltip("User for localization")] [DelayedProperty, OnValueChanged("GetMessage")]
         public string key;

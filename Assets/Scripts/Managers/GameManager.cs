@@ -1,4 +1,5 @@
 ﻿using Localization;
+using Saving;
 using UnityEngine;
 
 namespace Managers
@@ -30,6 +31,7 @@ namespace Managers
     
         public LocalizationManager localizationManager;
 
+        public GameStates saveState;
         private void Initialize()
         {
             localizationManager = new LocalizationManager(language);

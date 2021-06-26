@@ -7,6 +7,7 @@ using EventSystem.VisualEditor.Graphs;
 using EventSystem.VisualEditor.Nodes.Actions;
 using EventSystem.VisualEditor.Nodes.Flow;
 using Managers;
+using Saving.Models;
 using UnityEngine;
 using XNode;
 
@@ -18,22 +19,24 @@ namespace EventSystem
         public Camera primaryCamera;
 
         [Tooltip("Ability to get components from the game manager, ie: localization, dialog")]
-        public GameObject gameManager;
+        public GameObject gameManagerGameObject;
 
+        private GameManager _gameManager;
         private DialogManager _dialogManager;
 
         private void Awake()
         {
-            if (gameManager == null)
+            if (gameManagerGameObject == null)
             {
                 Debug.LogError(
-                    $"{nameof(EventTimelineParser)}: Missing reference to {nameof(gameManager)} game object");
+                    $"{nameof(EventTimelineParser)}: Missing reference to {nameof(gameManagerGameObject)} game object");
             }
         }
 
         private void Start()
         {
-            _dialogManager = gameManager.GetComponent<DialogManager>();
+            _dialogManager = gameManagerGameObject.GetComponent<DialogManager>();
+            _gameManager = gameManagerGameObject.GetComponent<GameManager>();
 
             //TODO: Remove, debug only.
             StartTimeLine();
@@ -74,7 +77,8 @@ namespace EventSystem
 
             //perform action for node type
             var currentNodeType = node.GetType();
-            if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode) || node is BaseNode {skip: true})
+            if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode) ||
+                node is BaseNode {skip: true})
             {
                 NextNode(node);
             }
@@ -128,7 +132,7 @@ namespace EventSystem
             yield return new WaitUntil(cameraExecution.IsFinished);
             NextNode(node);
         }
-        
+
         /// <summary>
         /// Runs the objectMovement execution based on the objectMovement node parameters 
         /// </summary>
@@ -154,7 +158,7 @@ namespace EventSystem
             yield return new WaitUntil(characterMovementExecution.IsFinished);
             NextNode(node);
         }
-        
+
         /// <summary>
         /// Runs the animation execution based on the animation node parameters
         /// </summary>
@@ -167,7 +171,7 @@ namespace EventSystem
             yield return new WaitUntil(animationExecution.IsFinished);
             NextNode(node);
         }
-        
+
         /// <summary>
         /// Waits n seconds defined in the node
         /// </summary>
@@ -179,7 +183,7 @@ namespace EventSystem
             yield return new WaitForSeconds(waitNode ? waitNode.delayTime : 0);
             NextNode(node);
         }
-        
+
         /// <summary>
         /// From the state defined in the node, get the current saves state value.
         /// Select next node from the state value retrieved.
@@ -187,27 +191,35 @@ namespace EventSystem
         /// <param name="node"></param>
         private void NextStateNodeExecution(Node node)
         {
-            //Get event state
-            var currentEventState = false;
             var stateNode = node as StateNode;
             if (stateNode == null)
                 return;
 
-            //TODO: Complete functionality, this doesn't currently work.
-            var eventState = new EventStates();
-            var eventStateProps = typeof(EventStates).GetProperty(stateNode.eventState);
-            if (eventStateProps == null)
+            var eventState =
+                _gameManager.saveState.states.FirstOrDefault(eventStateValue =>
+                    eventStateValue.name == stateNode.eventState);
+            if (eventState == null)
+            {
+                Debug.LogError(
+                    $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.eventState}' in gameManager states");
                 return;
+            }
 
-            currentEventState = (bool) eventStateProps.GetValue(eventState, null);
+            //Port selection
+            var portName = eventState.complete ? "stateTrue" : "stateFalse";
 
             //Execute port based on state
-            var nodePorts = node.Ports
-                .FirstOrDefault(portNode => portNode.fieldName == (currentEventState ? "stateTrue" : "stateFalse"))
-                ?.GetConnections();
+            var nodePort = node.Ports.FirstOrDefault(portNode => portNode.fieldName == portName);
+            if (nodePort == null)
+            {
+                Debug.LogError($"{nameof(EventTimelineParser)}: Unable to find node port for {portName}");
+                return;
+            }
+
+            var nodePorts = nodePort.GetConnections();
             ExecuteNodePorts(nodePorts);
         }
-        
+
         /// <summary>
         /// Executes the configuration of the current dialogNode
         /// If this dialog has options, the node attached to the selected option will be ran
@@ -232,7 +244,7 @@ namespace EventSystem
                 NextNode(node);
             }
         }
-        
+
         /// <summary>
         /// Find a node's exit port based on our constant name "exit" 
         /// </summary>
@@ -242,7 +254,7 @@ namespace EventSystem
             var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
             ExecuteNodePorts(nodePorts);
         }
-        
+
         /// <summary>
         /// From a list of nodePorts, execute all the linked nodes simultaneously (not threaded)
         /// </summary>

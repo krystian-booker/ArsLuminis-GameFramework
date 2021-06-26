@@ -65,7 +65,7 @@ namespace Managers
 
             //Node states
             _dialogOptions = dialogNode.options;
-            _hideDialogBoxOnComplete = dialogNode.hideAfter;
+            _hideDialogBoxOnComplete = dialogNode.hideUIOnComplete;
 
             if (nameText != null && !string.IsNullOrEmpty(dialogNode.characterName))
             {
