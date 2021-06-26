@@ -18,16 +18,16 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [Output, HideIf("@this.options.Count > 0")]
         public NodeLink exit;
 
-        [LabelWidth(100), Tooltip("Used for character name, arrow position")]
-        public GameObject character;
+        // [LabelWidth(100), Tooltip("Used for character name, arrow position")]
+        // public GameObject character;
 
         [LabelWidth(100),
          Tooltip("Not required, if character is provided details will be used from there. Can be used to override.")]
         public string characterName;
 
-        [LabelWidth(100),
-         Tooltip("Not required, if character is provided details will be used from there. Can be used to override.")]
-        public GameObject arrowPosition;
+        // [LabelWidth(100),
+        //  Tooltip("Not required, if character is provided details will be used from there. Can be used to override.")]
+        // public GameObject arrowPosition;
 
         [LabelWidth(100), Tooltip("Once the user has clicked continue, the dialog box will be hidden")]
         public bool hideAfter;
@@ -46,12 +46,13 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [ReadOnly, ShowIf("@this.textEditable == false"), TextArea]
         public string localizedText;
 
-        [SerializeField, Output(dynamicPortList = true), Tooltip("Options user has to select")]
-        public List<DialogOption> options;
+        //The maximum ports is a soft limit. This is defined by the amount of options setup in the dialog manager
+        [SerializeField, Output(dynamicPortList = true), Tooltip("Options user has to select, maximum ports depends on amount defined on UI")]
+        public List<DialogOption> options = new List<DialogOption>();
         
         //These aren't ideal but are required as a result of the xNode cloning element issue
         [HideInInspector] public int nCount;
-        [HideInInspector] public List<string> optionsKeyTracker;
+        [HideInInspector] public List<string> optionsKeyTracker = new List<string>();
         
         public override object GetValue(NodePort port)
         {

@@ -1,37 +1,39 @@
 ﻿using Localization;
-using Managers;
 using UnityEngine;
 
-[RequireComponent(typeof(DialogManager))]
-public class GameManager : MonoBehaviour
+namespace Managers
 {
-    #region Singleton
-
-    public static GameManager Instance { get; private set; }
-    private void Awake()
+    [RequireComponent(typeof(DialogManager))]
+    public class GameManager : MonoBehaviour
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            Initialize();
-        }
-    }
+        #region Singleton
 
-    #endregion
+        public static GameManager Instance { get; private set; }
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+                Initialize();
+            }
+        }
 
-    [SerializeField]
-    public Languages language;
+        #endregion
+
+        [SerializeField]
+        public Languages language;
     
-    public LocalizationManager localizationManager;
+        public LocalizationManager localizationManager;
 
-    private void Initialize()
-    {
-        localizationManager = new LocalizationManager(language);
-        localizationManager.Initialize();
+        private void Initialize()
+        {
+            localizationManager = new LocalizationManager(language);
+            localizationManager.Initialize();
+        }
     }
 }

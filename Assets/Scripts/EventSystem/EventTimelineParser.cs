@@ -35,9 +35,14 @@ namespace EventSystem
         {
             _dialogManager = gameManager.GetComponent<DialogManager>();
 
+            //TODO: Remove, debug only.
             StartTimeLine();
         }
 
+        /// <summary>
+        /// Start parsing the xNode timeLine.
+        /// Currently this is called from Start() will be moved over to events 
+        /// </summary>
         private void StartTimeLine()
         {
             var essg = gameObject.GetComponent<EventSequenceSceneGraph>();
@@ -56,6 +61,12 @@ namespace EventSystem
             StartCoroutine(ParseNode(startNode.FirstOrDefault()));
         }
 
+        /// <summary>
+        /// All nodes are the type of BaseNode, from there they are extended as needed.
+        /// Here the specific type of the node is checked and executed as needed.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private IEnumerator ParseNode(Node node)
         {
             if (node == null)
@@ -63,55 +74,37 @@ namespace EventSystem
 
             //perform action for node type
             var currentNodeType = node.GetType();
-            if (currentNodeType != typeof(StartNode) && currentNodeType != typeof(EndNode) &&
-                node is BaseNode {skip: true})
+            if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode) || node is BaseNode {skip: true})
             {
                 NextNode(node);
             }
             else if (currentNodeType == typeof(CameraNode))
             {
-                var cameraExecution = new CameraExecution(primaryCamera);
-                StartCoroutine(cameraExecution.Execute(node));
-                yield return new WaitUntil(cameraExecution.IsFinished);
-                NextNode(node);
+                yield return CameraNodeExecution(node);
             }
             else if (currentNodeType == typeof(ObjectMovementNode))
             {
-                var objectMovementExecution = new ObjectMovementExecution();
-                StartCoroutine(objectMovementExecution.Execute(node));
-                yield return new WaitUntil(objectMovementExecution.IsFinished);
-                NextNode(node);
+                yield return ObjectMovementNodeExecution(node);
             }
             else if (currentNodeType == typeof(CharacterMovementNode))
             {
-                var characterMovementExecution = new CharacterMovementExecution();
-                StartCoroutine(characterMovementExecution.Execute(node));
-                yield return new WaitUntil(characterMovementExecution.IsFinished);
-                NextNode(node);
+                yield return CharacterMovementNodeExecution(node);
             }
             else if (currentNodeType == typeof(AnimationNode))
             {
-                var animationExecution = new AnimationExecution();
-                StartCoroutine(animationExecution.Execute(node));
-                yield return new WaitUntil(animationExecution.IsFinished);
-                NextNode(node);
+                yield return AnimationNodeExecution(node);
             }
             else if (currentNodeType == typeof(WaitNode))
             {
-                var waitNode = node as WaitNode;
-                yield return new WaitForSeconds(waitNode ? waitNode.delayTime : 0);
-                NextNode(node);
+                yield return WaitNodeExecution(node);
             }
             else if (currentNodeType == typeof(DialogNode))
             {
-                var dialogNode = node as DialogNode;
-                _dialogManager.StartDialog(dialogNode);
-                yield return new WaitUntil(_dialogManager.IsContinueClicked);
-                NextNode(node);
+                yield return DialogNodeExecution(node);
             }
             else if (currentNodeType == typeof(StateNode))
             {
-                NextStateNode(node);
+                NextStateNodeExecution(node);
             }
             else if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode))
             {
@@ -123,13 +116,76 @@ namespace EventSystem
             }
         }
 
-        private void NextNode(Node node)
+        /// <summary>
+        /// Runs the camera execution based on the camera node parameters 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator CameraNodeExecution(Node node)
         {
-            var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
-            ExecuteNodePorts(nodePorts);
+            var cameraExecution = new CameraExecution(primaryCamera);
+            StartCoroutine(cameraExecution.Execute(node));
+            yield return new WaitUntil(cameraExecution.IsFinished);
+            NextNode(node);
+        }
+        
+        /// <summary>
+        /// Runs the objectMovement execution based on the objectMovement node parameters 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator ObjectMovementNodeExecution(Node node)
+        {
+            var objectMovementExecution = new ObjectMovementExecution();
+            StartCoroutine(objectMovementExecution.Execute(node));
+            yield return new WaitUntil(objectMovementExecution.IsFinished);
+            NextNode(node);
         }
 
-        private void NextStateNode(Node node)
+        /// <summary>
+        /// Runs the characterMovement execution based on the characterMovement node parameters
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator CharacterMovementNodeExecution(Node node)
+        {
+            var characterMovementExecution = new CharacterMovementExecution();
+            StartCoroutine(characterMovementExecution.Execute(node));
+            yield return new WaitUntil(characterMovementExecution.IsFinished);
+            NextNode(node);
+        }
+        
+        /// <summary>
+        /// Runs the animation execution based on the animation node parameters
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator AnimationNodeExecution(Node node)
+        {
+            var animationExecution = new AnimationExecution();
+            StartCoroutine(animationExecution.Execute(node));
+            yield return new WaitUntil(animationExecution.IsFinished);
+            NextNode(node);
+        }
+        
+        /// <summary>
+        /// Waits n seconds defined in the node
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator WaitNodeExecution(Node node)
+        {
+            var waitNode = node as WaitNode;
+            yield return new WaitForSeconds(waitNode ? waitNode.delayTime : 0);
+            NextNode(node);
+        }
+        
+        /// <summary>
+        /// From the state defined in the node, get the current saves state value.
+        /// Select next node from the state value retrieved.
+        /// </summary>
+        /// <param name="node"></param>
+        private void NextStateNodeExecution(Node node)
         {
             //Get event state
             var currentEventState = false;
@@ -142,7 +198,7 @@ namespace EventSystem
             var eventStateProps = typeof(EventStates).GetProperty(stateNode.eventState);
             if (eventStateProps == null)
                 return;
-            
+
             currentEventState = (bool) eventStateProps.GetValue(eventState, null);
 
             //Execute port based on state
@@ -151,17 +207,57 @@ namespace EventSystem
                 ?.GetConnections();
             ExecuteNodePorts(nodePorts);
         }
-
+        
+        /// <summary>
+        /// Executes the configuration of the current dialogNode
+        /// If this dialog has options, the node attached to the selected option will be ran
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator DialogNodeExecution(Node node)
+        {
+            var dialogNode = node as DialogNode;
+            _dialogManager.StartDialog(dialogNode);
+            yield return new WaitUntil(_dialogManager.IsContinueClicked);
+            if (dialogNode.options.Count > 0)
+            {
+                var selectedOptionIndex = _dialogManager.GetSelectedOption();
+                var dynamicPorts = dialogNode.DynamicPorts.ToList();
+                var optionNode = dynamicPorts[selectedOptionIndex];
+                var selectedNodes = optionNode.GetConnections();
+                ExecuteNodePorts(selectedNodes);
+            }
+            else
+            {
+                NextNode(node);
+            }
+        }
+        
+        /// <summary>
+        /// Find a node's exit port based on our constant name "exit" 
+        /// </summary>
+        /// <param name="node">current executing node</param>
+        private void NextNode(Node node)
+        {
+            var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
+            ExecuteNodePorts(nodePorts);
+        }
+        
+        /// <summary>
+        /// From a list of nodePorts, execute all the linked nodes simultaneously (not threaded)
+        /// </summary>
+        /// <param name="nodePorts"></param>
         private void ExecuteNodePorts(List<NodePort> nodePorts)
         {
             if (nodePorts == null) return;
-            foreach (var portNode in nodePorts)
+            foreach (var nodePort in nodePorts)
             {
-                var baseNode = portNode.node as BaseNode;
-                if (baseNode == null || baseNode is {started: true}) continue;
+                var baseNode = nodePort.node as BaseNode;
+                if (baseNode == null || baseNode is {started: true})
+                    return;
 
                 baseNode.started = true;
-                StartCoroutine(ParseNode(portNode.node));
+                StartCoroutine(ParseNode(nodePort.node));
             }
         }
     }
