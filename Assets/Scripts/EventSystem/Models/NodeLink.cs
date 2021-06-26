@@ -1,9 +1,10 @@
 ﻿using System;
+using XNode;
 
 namespace EventSystem.Models
 {
     [Serializable]
-    public class Empty
+    public class NodeLink
     {
         
     }

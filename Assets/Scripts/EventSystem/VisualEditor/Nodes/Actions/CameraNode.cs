@@ -12,8 +12,12 @@ namespace EventSystem.VisualEditor.Nodes.Actions
     ///
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
+    [NodeTint("#43AA8B")]
     public class CameraNode : BaseNode
     {
+        [Input] public NodeLink entry;
+        [Output] public NodeLink exit;
+
         [Tooltip("Documentation purposes only")] [TextArea]
         public string description;
         

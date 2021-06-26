@@ -14,6 +14,9 @@ namespace EventSystem.VisualEditor.Nodes.Actions
     /// </summary>
     public class ObjectMovementNode : BaseNode
     {
+        [Input] public NodeLink entry;
+        [Output] public NodeLink exit;
+
         [Tooltip("Documentation purposes only")] [TextArea]
         public string description;
         

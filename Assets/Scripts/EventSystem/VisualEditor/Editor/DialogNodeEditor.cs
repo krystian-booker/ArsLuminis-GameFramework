@@ -2,7 +2,7 @@
 using System.Linq;
 using EditorTools;
 using EventSystem.Models;
-using EventSystem.VisualEditor.Nodes.Dialog;
+using EventSystem.VisualEditor.Nodes.Actions;
 using XNode;
 using XNodeEditor;
 

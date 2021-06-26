@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EditorTools;
 using EventSystem.Models;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
 
-namespace EventSystem.VisualEditor.Nodes.Dialog
+namespace EventSystem.VisualEditor.Nodes.Actions
 {
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    [NodeTint("#2c687a")]
-    public class DialogNode : Node
+    [NodeTint("#277DA1")]
+    public class DialogNode : BaseNode
     {
-        [Input] public DialogNode entry;
+        [Input] public NodeLink entry;
 
         [Output, HideIf("@this.options.Count > 0")]
-        public DialogNode exit;
+        public NodeLink exit;
 
         [LabelWidth(100), Tooltip("Used for character name, arrow position")]
         public GameObject character;
@@ -29,6 +28,9 @@ namespace EventSystem.VisualEditor.Nodes.Dialog
         [LabelWidth(100),
          Tooltip("Not required, if character is provided details will be used from there. Can be used to override.")]
         public GameObject arrowPosition;
+
+        [LabelWidth(100), Tooltip("Once the user has clicked continue, the dialog box will be hidden")]
+        public bool hideAfter;
 
         [LabelWidth(100), Tooltip("User for localization")] [DelayedProperty, OnValueChanged("GetMessage")]
         public string key;

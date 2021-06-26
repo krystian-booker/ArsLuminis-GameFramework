@@ -1,7 +1,8 @@
 ﻿using Localization;
+using Managers;
 using UnityEngine;
 
-// [RequireComponent(typeof(LocalizationManager))]
+[RequireComponent(typeof(DialogManager))]
 public class GameManager : MonoBehaviour
 {
     #region Singleton

@@ -135,4 +135,7 @@
   <data name="Dialog_No" xml:space="preserve">
     <value>No</value>
   </data>
+  <data name="Dialog_Cloud" xml:space="preserve">
+    <value>I've... been thinking, too... about the universe... people... the planet... How wide and big... No matter where I go and what I do, it won't change a thing</value>
+  </data>
 </root>

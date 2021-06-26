@@ -9,8 +9,12 @@ namespace EventSystem.VisualEditor.Nodes.Actions
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
+    [NodeTint("#577590")]
     public class AnimationNode : BaseNode
     {
+        [Input] public NodeLink entry;
+        [Output] public NodeLink exit;
+
         [Tooltip("Documentation purposes only")] [TextArea]
         public string description;
         
@@ -24,8 +28,8 @@ namespace EventSystem.VisualEditor.Nodes.Actions
 #if UNITY_EDITOR
         private string[] _animationTriggers; //IS USED BY ODIN
 
-        //I'm either brilliant or an idiot
         [Button("Refresh")]
+        [OnInspectorGUI("GETAnimationTriggers")]
         private void GETAnimationTriggers()
         {
             try

@@ -2,8 +2,9 @@
 
 namespace EventSystem.VisualEditor.Nodes.Flow
 {
+    [NodeTint("#F94144")]
     public class EndNode : FlowNode
     {
-        [Input] public Empty entry;
+        [Input] public NodeLink entry;
     }
 }
