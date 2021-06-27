@@ -6,12 +6,14 @@ Features are based around PS1 era Final Fantasy games.
 - Odin - Inspector and Serializer : Plan to remove this as a hard requirement in the future.
 
 ## Features
-- Node based state machine
+- Node based state machine & event sequencer
 - Dialog System
-- Localization support 
+- Localization support
+- Save manager 
 
 ## Planned functionality
 - Character creation
+- Party manager
 - Battle system
 - Inventory system
 - Customizable dialog
