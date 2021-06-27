@@ -7,7 +7,6 @@ using EventSystem.VisualEditor.Graphs;
 using EventSystem.VisualEditor.Nodes.Actions;
 using EventSystem.VisualEditor.Nodes.Flow;
 using Managers;
-using Saving.Models;
 using UnityEngine;
 using XNode;
 
@@ -196,7 +195,7 @@ namespace EventSystem
                 return;
 
             var eventState =
-                _gameManager.saveState.states.FirstOrDefault(eventStateValue =>
+                _gameManager.gameState.states.FirstOrDefault(eventStateValue =>
                     eventStateValue.name == stateNode.eventState);
             if (eventState == null)
             {

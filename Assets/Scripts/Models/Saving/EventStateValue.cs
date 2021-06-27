@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Saving.Models
+namespace Models.Saving
 {
     [Serializable]
     public class EventStateValue

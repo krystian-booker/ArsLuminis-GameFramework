@@ -3819,7 +3819,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   language: 0
-  saveState: {fileID: 11400000, guid: 9f1abc9dd4540b342b876eaff2229afc, type: 2}
+  gameState:
+    playerName: Cloud
+    sceneId: 5
+    states:
+    - name: 0
+      complete: 1
+    - name: 1
+      complete: 1
+    - name: 2
+      complete: 0
+    - name: 3
+      complete: 0
 --- !u!1 &1158544434
 GameObject:
   m_ObjectHideFlags: 0
