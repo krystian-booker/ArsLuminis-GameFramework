@@ -23,17 +23,22 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         public bool hideUIOnComplete;
         
         [Header("Character speaking")]
+        
+        //TODO: Add back once character work is complete
         // [LabelWidth(100), Tooltip("Used for character name, arrow position")]
         // public GameObject character;
 
+        //TODO: Remove once character work is complete
         [LabelWidth(100),
          Tooltip("Not required, if character is provided details will be used from there. Can be used to override.")]
         public string characterName;
 
+        //TODO: Add back once character work is complete
         // [LabelWidth(100),
         //  Tooltip("Not required, if character is provided details will be used from there. Can be used to override.")]
         // public GameObject arrowPosition;
 
+        //TODO: Remove 'OnValueChanged', change to OnValidate
         [LabelWidth(100), Tooltip("User for localization")] [DelayedProperty, OnValueChanged("GetMessage")]
         public string key;
 
@@ -41,6 +46,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
          Tooltip("Allows user to edit the field localized text. Warning this will edit everywhere this key is used.")]
         public bool textEditable = true;
 
+        //TODO: Remove 'OnValueChanged', change to OnValidate
         [OnValueChanged("UpdateLocalizationFile"), TextArea]
         [ShowIf("@this.textEditable == true")]
         public string text;
@@ -56,12 +62,22 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [HideInInspector] public int nCount;
         [HideInInspector] public List<string> optionsKeyTracker = new List<string>();
         
+        /// <summary>
+        /// Unused, required by xNode
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
         public override object GetValue(NodePort port)
         {
             return null;
         }
 
 #if UNITY_EDITOR
+        /// <summary>
+        /// Once a key has been entered, check if it exists in the (default)messages.xml
+        /// If it does, load the text.
+        /// If not create the entry
+        /// </summary>
         private void GetMessage()
         {
             var message = Tools.GetMessage(key);
@@ -84,8 +100,10 @@ namespace EventSystem.VisualEditor.Nodes.Actions
             }
         }
 
-        //NOTICE: Options are not updated via the DialogNode class, unfortunately it had to be done in the  
-        //        DialogNodeEditor as the ODIN OnValueChanged is blocked by xNodes dynamicPortList
+        /// <summary>
+        /// NOTICE: Options are not updated via the DialogNode class, unfortunately it had to be done in the
+        /// DialogNodeEditor as the ODIN OnValueChanged is blocked by xNodes dynamicPortList 
+        /// </summary>
         private void UpdateLocalizationFile()
         {
             Tools.UpdateMessage(key, text);

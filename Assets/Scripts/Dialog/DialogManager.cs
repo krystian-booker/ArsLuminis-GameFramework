@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Managers
+namespace Dialog
 {
     public class DialogManager : MonoBehaviour
     {

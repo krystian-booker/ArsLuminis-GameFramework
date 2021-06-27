@@ -1,6 +1,4 @@
-﻿using System;
-using Managers;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace Localization
@@ -9,10 +7,26 @@ namespace Localization
     {
         private void Start()
         {
+            UpdateKeysWithText();
+        }
+
+        /// <summary>
+        /// Used to refresh UI text when language has changed
+        /// </summary>
+        public void RefreshText()
+        {
+            UpdateKeysWithText();
+        }
+        
+        /// <summary>
+        /// Will find all UI elements and replace the keys with the localized text 
+        /// </summary>
+        private void UpdateKeysWithText()
+        {
             var uiTMPTexts = GetComponentsInChildren<TMP_Text>();
             foreach (var uiTMPText in uiTMPTexts)
             {
-                uiTMPText.text =GameManager.Instance.localizationManager.GetTranslatedString(uiTMPText.text);
+                uiTMPText.text = LocalizationManager.GetTranslatedString(uiTMPText.text);
             }
         }
     }

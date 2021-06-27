@@ -1,4 +1,4 @@
-﻿namespace Models.Saving
+﻿namespace Saving.Models
 {
     //DEMO DATA
     public enum EventStates

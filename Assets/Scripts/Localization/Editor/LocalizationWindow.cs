@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Localization.Models;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Tools = EditorTools.Tools;
 
 namespace Localization.Editor
 {
     public class LocalizationWindow : EditorWindow
     {
-        private LocalizationManager _localizationManager;
-
         private List<LocalizedText> _localizedTexts = new List<LocalizedText>();
         public string filterValue;
         public Vector2 scroll;
@@ -25,13 +21,18 @@ namespace Localization.Editor
             window.Show();
         }
 
-
+        /// <summary>
+        /// Loads localized dictionary from the (default)Messages.xml 
+        /// </summary>
         private void OnEnable()
         {
-            _localizationManager = new LocalizationManager(Languages.En);
-            _localizedTexts = _localizationManager.LoadAll();
+            _localizedTexts = LocalizationManager.LoadLocalizedDictionary();
         }
 
+        /// <summary>
+        /// Generates Unity UI from "Localization" window
+        /// Using data dictionary from the localizationManager
+        /// </summary>
         public void OnGUI()
         {
             EditorGUILayout.BeginHorizontal("Box");
@@ -41,13 +42,17 @@ namespace Localization.Editor
             if (GUILayout.Button("Refresh"))
             {
                 _localizedTexts.Clear();
-                _localizedTexts = _localizationManager.LoadAll();
+                _localizedTexts = LocalizationManager.LoadLocalizedDictionary();
             }
 
             EditorGUILayout.EndHorizontal();
             GetSearchResults();
         }
 
+        /// <summary>
+        /// Generates Unity UI from "Localization" window, specifically the scroll section
+        /// Using data dictionary from the localizationManager
+        /// </summary>
         private void GetSearchResults()
         {
             EditorGUILayout.BeginVertical();
@@ -87,7 +92,7 @@ namespace Localization.Editor
                             "Cancel"))
                         {
                             Tools.DeleteMessage(element.key);
-                            _localizedTexts = _localizationManager.LoadAll();
+                            _localizedTexts = LocalizationManager.LoadLocalizedDictionary();
                         }
                     }
 

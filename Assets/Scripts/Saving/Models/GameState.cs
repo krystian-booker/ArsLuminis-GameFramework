@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Models.Saving
+namespace Saving.Models
 {
     [Serializable]
     [XmlRoot("GameState", IsNullable = false)]

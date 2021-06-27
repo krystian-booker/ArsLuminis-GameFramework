@@ -21,13 +21,20 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [Tooltip("GameObject you want the animation to run on.")] [OnValueChanged(nameof(GETAnimationTriggers))]
         public GameObject animationTarget;
 
+        //TODO: Remove 'ValueDropdown', create custom UI 
         [ValueDropdown("_animationTriggers")]
         [DisableIf("@this._animationTriggers == null || this._animationTriggers.Length == 0")]
         public string animationTrigger;
         
 #if UNITY_EDITOR
+        
         private string[] _animationTriggers; //IS USED BY ODIN
 
+        /// <summary>
+        /// This will automatically get the link of animations for the provided gameObject
+        /// The animations must first be defined in the Models/Animations folder
+        /// </summary>
+        //TODO: Remove 'Button', create custom UI 
         [Button("Refresh")]
         [OnInspectorGUI("GETAnimationTriggers")]
         private void GETAnimationTriggers()

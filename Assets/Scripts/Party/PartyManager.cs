@@ -13,7 +13,5 @@ namespace Party
         [SerializeField] 
         [Tooltip("Party member that will be seen on the map")]
         public Character primaryMember;
-
-
     }
 }

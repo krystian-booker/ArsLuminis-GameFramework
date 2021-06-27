@@ -17,6 +17,12 @@ namespace EventSystem.VisualEditor.Editor
             onUpdateNode += UpdateLocalizationFileOption;
         }
 
+        /// <summary>
+        /// Due to a bug in xNode, when adding a new element to our Options list, we need to remove the new element and
+        /// add a new value again.
+        /// Once this has been completed we check if any text needs to be updated in the Localization files
+        /// </summary>
+        /// <param name="node"></param>
         private void UpdateLocalizationFileOption(Node node)
         {
             var dialogNode = node as DialogNode;

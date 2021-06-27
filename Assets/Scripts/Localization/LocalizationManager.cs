@@ -6,74 +6,68 @@ using UnityEngine;
 
 namespace Localization
 {
-    public class LocalizationManager
+    public static class LocalizationManager
     {
-        private Languages _localization;
+        private static readonly Languages Localization; //currently set language
 
-        private TextAsset _messageDefaultResource;
-        private XmlDocument _messageDefaultResourceDoc;
+        private static TextAsset _languagesResource; //Languages.xml text to be parsed
+        private static XmlDocument _languagesResourceDoc; //parsed Languages.xml
+        
+        private static TextAsset _messageDefaultResource; //messages.xml text to be parsed
+        private static XmlDocument _messageDefaultResourceDoc; //parsed messages.xml
 
-        private TextAsset _languagesResource;
-        private XmlDocument _languagesResourceDoc;
+        private static TextAsset _messageLocalizedResource; //selected language .xml text to be parsed
+        private static XmlDocument _messageLocalizedResourceDoc; //parsed selected language .xml
 
-        private TextAsset _messageLocalizedResource;
-        private XmlDocument _messageLocalizedResourceDoc;
-
-        public LocalizationManager(Languages initialLanguage)
+        
+        private const string LanguagePrefKey = "language"; //PlayerPrefs key 
+        
+        static LocalizationManager()
         {
-            _localization = initialLanguage;
+            var languagePref = PlayerPrefs.GetString(LanguagePrefKey, "En");
+            Localization = (Languages)Enum.Parse(typeof(Languages), languagePref);
+            Initialize();
         }
 
-        public void Initialize()
+        /// <summary>
+        /// Used to load a newly selected language into memory.
+        /// This should typically only be called by the GameManager as this only reloads data in memory,
+        /// UI refreshes are still needed, which is handled in the GameManager
+        /// </summary>
+        /// <param name="language"></param>
+        public static void ChangeLanguage(Languages language)
         {
-            //Load default language into memory
-            _messageDefaultResource = Resources.Load<TextAsset>("Localization/Messages/Messages");
-            _messageDefaultResourceDoc = new XmlDocument();
-            _messageDefaultResourceDoc.LoadXml(_messageDefaultResource.text);
-            _messageLocalizedResourceDoc = _messageDefaultResourceDoc;
-
-            //Load language options
-            _languagesResource = Resources.Load<TextAsset>("Localization/Languages");
-            _languagesResourceDoc = new XmlDocument();
-            _languagesResourceDoc.LoadXml(_languagesResource.text);
-            //TODO: Could probably create a dictionary of these values to be selected in game to replace the enum.
-
-            if (_localization == Languages.En)
-                return;
-
-            //Load selected language into memory
-            var languageTag = GetLanguageTag(_localization);
-            _messageLocalizedResource = Resources.Load<TextAsset>($"Localization/Messages/Messages.{languageTag}");
-            if (_messageLocalizedResource == null)
-            {
-                Debug.LogError(
-                    $"{nameof(Localization)}: Language file not found for {_localization.ToString()} tag: {languageTag}");
-                _messageLocalizedResourceDoc = _messageDefaultResourceDoc; //Default language to english
-            }
-            else
-            {
-                _messageLocalizedResourceDoc = new XmlDocument();
-                _messageLocalizedResourceDoc.LoadXml(_messageLocalizedResource.text);
-            }
+            PlayerPrefs.SetString(LanguagePrefKey, language.ToString());
+            Initialize();
         }
-
-        public string GetTranslatedString(string dataName)
+        
+        /// <summary>
+        /// Gets the translated text in the set language based on the provided key parameter.
+        /// </summary>
+        /// <param name="key">Key of text</param>
+        /// <returns>String of the localized text</returns>
+        public static string GetTranslatedString(string key)
         {
             //Localized
-            var localizedValueTag = _messageLocalizedResourceDoc.SelectSingleNode($"//data[@name='{dataName}']/value");
+            var localizedValueTag = _messageLocalizedResourceDoc.SelectSingleNode($"//data[@name='{key}']/value");
             if (!string.IsNullOrEmpty(localizedValueTag?.InnerText)) return localizedValueTag.InnerText;
 
             //Default to english
-            TextNotFoundError(dataName);
-            localizedValueTag = _messageDefaultResourceDoc.SelectSingleNode($"//data[@name='{dataName}']/value");
+            TextNotFoundError(key);
+            localizedValueTag = _messageDefaultResourceDoc.SelectSingleNode($"//data[@name='{key}']/value");
             if (!string.IsNullOrEmpty(localizedValueTag?.InnerText)) return localizedValueTag?.InnerText;
 
             //Default text not found
-            DefaultTextNotFoundError(dataName);
+            DefaultTextNotFoundError(key);
             return "TEXT_MISSING";
         }
 
-        public List<LocalizedText> LoadAll()
+        /// <summary>
+        /// This method is not used in game, unity editor use only.
+        /// Creates a dictionary of all the keys and text in the (default) Messages.xml file.
+        /// </summary>
+        /// <returns></returns>
+        public static List<LocalizedText> LoadLocalizedDictionary()
         {
             //Load file
             var doc = new XmlDocument();
@@ -99,19 +93,68 @@ namespace Localization
             return localizationDictionary;
         }
 
-        private string GetLanguageTag(Languages language)
+        /// <summary>
+        /// Loads both the default language and set language into memory from the localization files in Resources
+        /// </summary>
+        private static void Initialize()
+        {
+            //Load default language into memory
+            _messageDefaultResource = Resources.Load<TextAsset>("Localization/Messages/Messages");
+            _messageDefaultResourceDoc = new XmlDocument();
+            _messageDefaultResourceDoc.LoadXml(_messageDefaultResource.text);
+            _messageLocalizedResourceDoc = _messageDefaultResourceDoc;
+
+            //Load language options
+            _languagesResource = Resources.Load<TextAsset>("Localization/Languages");
+            _languagesResourceDoc = new XmlDocument();
+            _languagesResourceDoc.LoadXml(_languagesResource.text);
+            //TODO: Could probably create a dictionary of these values to be selected in game to replace the enum.
+
+            if (Localization == Languages.En)
+                return;
+
+            //Load selected language into memory
+            var languageTag = GetLanguageTag(Localization);
+            _messageLocalizedResource = Resources.Load<TextAsset>($"Localization/Messages/Messages.{languageTag}");
+            if (_messageLocalizedResource == null)
+            {
+                Debug.LogError(
+                    $"{nameof(Localization)}: Language file not found for {Localization.ToString()} tag: {languageTag}");
+                _messageLocalizedResourceDoc = _messageDefaultResourceDoc; //Default language to english
+            }
+            else
+            {
+                _messageLocalizedResourceDoc = new XmlDocument();
+                _messageLocalizedResourceDoc.LoadXml(_messageLocalizedResource.text);
+            }
+        }
+        
+        /// <summary>
+        /// Load the language details based on the parameter from the Languages.xml file in Resources
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        private static string GetLanguageTag(Languages language)
         {
             var valueTag = _languagesResourceDoc.SelectSingleNode($"//data[@name='{language.ToString()}']/value");
             return valueTag?.InnerText;
         }
 
-        private void TextNotFoundError(string dataName)
+        /// <summary>
+        /// Error when translation is missing from localized file
+        /// </summary>
+        /// <param name="dataName"></param>
+        private static void TextNotFoundError(string dataName)
         {
             Debug.LogError(
-                $"{nameof(Localization)}: Translation not found for {dataName} in {_localization.ToString()}");
+                $"{nameof(Localization)}: Translation not found for {dataName} in {Localization.ToString()}");
         }
 
-        private void DefaultTextNotFoundError(string dataName)
+        /// <summary>
+        /// Error when default text is missing from the default localization file
+        /// </summary>
+        /// <param name="dataName"></param>
+        private static void DefaultTextNotFoundError(string dataName)
         {
             Debug.LogError($"{nameof(Localization)}: Default text not found for {dataName} in En");
         }

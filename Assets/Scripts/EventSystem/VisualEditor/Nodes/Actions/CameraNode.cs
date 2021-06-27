@@ -30,6 +30,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         public float blendTime = 2;
 
 #if UNITY_EDITOR
+        //TODO: Remove 'Button', create custom UI 
         [Button("Create Virtual Cam")]
         private void GenerateNewVirtualCamera()
         {

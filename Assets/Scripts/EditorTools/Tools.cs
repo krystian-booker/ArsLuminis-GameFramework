@@ -137,6 +137,12 @@ namespace EditorTools
             }
         }
 
+        /// <summary>
+        /// Used to get the text for a key from the (default)Messages.xml
+        /// in the Unity editor
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static string GetMessage(string key)
         {
             //Load document
@@ -154,6 +160,11 @@ namespace EditorTools
             return null;
         }
         
+        /// <summary>
+        /// Removes the specified key/text from the Messages.xml file
+        /// This does not remove it from the other localized files if they exist
+        /// </summary>
+        /// <param name="key"></param>
         public static void DeleteMessage(string key)
         {
             //Load document

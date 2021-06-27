@@ -3818,8 +3818,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 670c162d19c53e54ab92df7f3c7f4d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  language: 0
   gameState:
+    language: 0
     playerName: Cloud
     sceneId: 5
     states:

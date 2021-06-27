@@ -48,6 +48,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         public float navMeshRadius = 0.5f;
 
 #if UNITY_EDITOR
+        //TODO: Remove 'Button', create custom UI 
         [Button("Create Target Position")]
         private void GenerateTargetPosition()
         {
@@ -61,6 +62,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
             targetPosition = instantiatedTarget;
         }
 
+        //TODO: Remove 'Button', create custom UI 
         [Button("Create Starting Position")]
         private void GenerateStartingPosition()
         {
