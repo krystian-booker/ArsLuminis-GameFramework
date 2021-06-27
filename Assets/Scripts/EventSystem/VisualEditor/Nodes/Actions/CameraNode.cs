@@ -13,7 +13,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
     [NodeTint("#43AA8B")]
-    public class CameraNode : BaseNode
+    public class CameraNode : BaseNodeExtended
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;

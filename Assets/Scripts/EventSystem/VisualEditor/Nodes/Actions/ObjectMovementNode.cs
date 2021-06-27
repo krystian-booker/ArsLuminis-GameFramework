@@ -12,7 +12,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
     ///
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    public class ObjectMovementNode : BaseNode
+    public class ObjectMovementNode : BaseNodeExtended
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;

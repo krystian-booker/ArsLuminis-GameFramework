@@ -7,8 +7,7 @@ namespace EventSystem.Models
     {
         [HideInInspector] public bool started;
 
-        [Tooltip("Skip camera event in sequence, helpful for debugging")]
-        public bool skip;
+
         
         /// <summary>
         /// Required by xNode

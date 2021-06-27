@@ -13,7 +13,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
     [NodeTint("#4D908E")]
-    public class CharacterMovementNode : BaseNode
+    public class CharacterMovementNode : BaseNodeExtended
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;

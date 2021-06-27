@@ -52,12 +52,14 @@ namespace EventSystem
             if (!startNode.Any())
             {
                 Debug.LogError($"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
+                return;
             }
 
             if (startNode.Count > 1)
             {
                 Debug.LogError(
                     $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
+                return;
             }
 
             StartCoroutine(ParseNode(startNode.FirstOrDefault()));
@@ -77,7 +79,7 @@ namespace EventSystem
             //perform action for node type
             var currentNodeType = node.GetType();
             if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode) ||
-                node is BaseNode {skip: true})
+                node is BaseNodeExtended {skip: true})
             {
                 NextNode(node);
             }

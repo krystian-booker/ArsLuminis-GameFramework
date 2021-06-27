@@ -825,37 +825,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151034740}
   m_CullTransparentMesh: 1
---- !u!114 &249134760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f775c702ba64226814997d4ecd28396, type: 3}
-  m_Name: Start
-  m_EditorClassIdentifier: 
-  graph: {fileID: 355474472}
-  position: {x: 1480, y: 152}
-  ports:
-    keys:
-    - exit
-    values:
-    - _fieldName: exit
-      _node: {fileID: 249134760}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 907574730}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
 --- !u!1 &251885089
 GameObject:
   m_ObjectHideFlags: 0
@@ -1276,7 +1245,6 @@ MonoBehaviour:
   m_Name: '[EventSequencer]-graph'
   m_EditorClassIdentifier: 
   nodes:
-  - {fileID: 249134760}
   - {fileID: 909111847}
   - {fileID: 1906729950}
   - {fileID: 1483746326}
@@ -1286,6 +1254,7 @@ MonoBehaviour:
   - {fileID: 844626572}
   - {fileID: 1022413717}
   - {fileID: 730748246}
+  - {fileID: 1388067212}
 --- !u!1 &435083965
 GameObject:
   m_ObjectHideFlags: 0
@@ -2768,7 +2737,6 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   started: 0
-  skip: 0
   hideUIOnComplete: 1
   characterName: Cloud
   key: Dialog_Cloud
@@ -2960,7 +2928,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   started: 0
-  skip: 0
+  skip: 1
   description: 
   animationTarget: {fileID: 1303509004}
   animationTrigger: TrainStart
@@ -3059,7 +3027,6 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   started: 0
-  skip: 0
   hideUIOnComplete: 0
   characterName: Tifa
   key: Dialog_Yes
@@ -3224,7 +3191,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: exit
-        node: {fileID: 249134760}
+        node: {fileID: 1483746326}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -3255,7 +3222,6 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   started: 0
-  skip: 0
   eventState: 0
 --- !u!114 &909111847
 MonoBehaviour:
@@ -3281,7 +3247,10 @@ MonoBehaviour:
       _node: {fileID: 909111847}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: exit
+        node: {fileID: 1388067212}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -3309,7 +3278,6 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   started: 0
-  skip: 0
   hideUIOnComplete: 0
   characterName: Kupo
   key: Dialog_KupoNoMail
@@ -3589,7 +3557,6 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   started: 0
-  skip: 0
   hideUIOnComplete: 0
   characterName: Tifa
   key: Dialog_No
@@ -3819,7 +3786,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameState:
-    language: 0
     playerName: Cloud
     sceneId: 5
     states:
@@ -4329,6 +4295,37 @@ Transform:
   m_Father: {fileID: 1114811038}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1388067212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f775c702ba64226814997d4ecd28396, type: 3}
+  m_Name: Start
+  m_EditorClassIdentifier: 
+  graph: {fileID: 355474472}
+  position: {x: -328, y: -8}
+  ports:
+    keys:
+    - exit
+    values:
+    - _fieldName: exit
+      _node: {fileID: 1388067212}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 909111847}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!1 &1402244669
 GameObject:
   m_ObjectHideFlags: 0
@@ -5008,7 +5005,10 @@ MonoBehaviour:
       _node: {fileID: 1483746326}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: entry
+        node: {fileID: 907574730}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -5024,11 +5024,10 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   started: 0
-  skip: 0
   hideUIOnComplete: 1
   characterName: NOOOOO?
   key: Dialog_KupoSad
-  textEditable: 0
+  textEditable: 1
   text: I'm so sad, kupo...
   localizedText: I'm so sad, kupo...
   options: []
