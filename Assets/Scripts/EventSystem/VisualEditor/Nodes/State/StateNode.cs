@@ -1,7 +1,7 @@
 ﻿using EventSystem.Models;
 using Saving.Models;
 
-namespace EventSystem.VisualEditor.Nodes.Actions
+namespace EventSystem.VisualEditor.Nodes.State
 {
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE

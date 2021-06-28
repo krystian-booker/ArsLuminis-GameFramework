@@ -3,11 +3,16 @@ using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.Flow
 {
-    public class WaitNode : FlowNode
+
+    [NodeTint("#AD39B8")]
+    public class WaitNode : BaseNodeExtended
     {
-        [Tooltip("Documentation purposes only")] [TextArea]
+        [Input] public NodeLink entry;
+        [Output] public NodeLink exit;
         
-        public string description;
         [SerializeField] public float delayTime;
+        
+        [Tooltip("Documentation purposes only")] [TextArea]
+        public string description;
     }
 }

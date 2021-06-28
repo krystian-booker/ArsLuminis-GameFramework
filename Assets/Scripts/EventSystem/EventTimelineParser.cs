@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,10 @@ using EventSystem.Models;
 using EventSystem.VisualEditor.Graphs;
 using EventSystem.VisualEditor.Nodes.Actions;
 using EventSystem.VisualEditor.Nodes.Flow;
+using EventSystem.VisualEditor.Nodes.State;
 using Saving;
 using UnityEngine;
+using UnityEngine.Assertions;
 using XNode;
 
 namespace EventSystem
@@ -26,11 +29,8 @@ namespace EventSystem
 
         private void Awake()
         {
-            if (gameManagerGameObject == null)
-            {
-                Debug.LogError(
-                    $"{nameof(EventTimelineParser)}: Missing reference to {nameof(gameManagerGameObject)} game object");
-            }
+            Assert.IsNotNull(gameManagerGameObject,
+                $"{nameof(EventTimelineParser)}: Missing reference to {nameof(gameManagerGameObject)} game object");
         }
 
         private void Start()
@@ -107,6 +107,10 @@ namespace EventSystem
             else if (currentNodeType == typeof(DialogNode))
             {
                 yield return DialogNodeExecution(node);
+            }
+            else if (currentNodeType == typeof(UpdateStateNode))
+            {
+                yield return UpdateStateNodeExecution(node);
             }
             else if (currentNodeType == typeof(StateNode))
             {
@@ -191,6 +195,46 @@ namespace EventSystem
         }
 
         /// <summary>
+        /// Executes the configuration of the current dialogNode
+        /// If this dialog has options, the node attached to the selected option will be ran
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator DialogNodeExecution(Node node)
+        {
+            var dialogNode = node as DialogNode;
+            _dialogManager.StartDialog(dialogNode);
+            yield return new WaitUntil(_dialogManager.IsContinueClicked);
+            if (dialogNode.options.Count > 0)
+            {
+                var selectedOptionIndex = _dialogManager.GetSelectedOption();
+                var dynamicPorts = dialogNode.DynamicPorts.ToList();
+                var optionNode = dynamicPorts[selectedOptionIndex];
+                var selectedNodes = optionNode.GetConnections();
+                ExecuteNodePorts(selectedNodes);
+            }
+            else
+            {
+                NextNode(node);
+            }
+        }
+
+        private IEnumerator UpdateStateNodeExecution(Node node)
+        {
+            var updateStateNode = node as UpdateStateNode;
+            Assert.IsNotNull(updateStateNode);
+
+            var eventStateValues =
+                _gameManager.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
+
+            if (eventStateValues != null)
+                eventStateValues.complete = updateStateNode.stateComplete;
+
+            yield return null;
+            NextNode(node);
+        }
+
+        /// <summary>
         /// From the state defined in the node, get the current saves state value.
         /// Select next node from the state value retrieved.
         /// </summary>
@@ -231,31 +275,6 @@ namespace EventSystem
             SaveManager.SaveGame(_gameManager.gameState, true);
             yield return null;
             NextNode(node);
-        }
-        
-        /// <summary>
-        /// Executes the configuration of the current dialogNode
-        /// If this dialog has options, the node attached to the selected option will be ran
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        private IEnumerator DialogNodeExecution(Node node)
-        {
-            var dialogNode = node as DialogNode;
-            _dialogManager.StartDialog(dialogNode);
-            yield return new WaitUntil(_dialogManager.IsContinueClicked);
-            if (dialogNode.options.Count > 0)
-            {
-                var selectedOptionIndex = _dialogManager.GetSelectedOption();
-                var dynamicPorts = dialogNode.DynamicPorts.ToList();
-                var optionNode = dynamicPorts[selectedOptionIndex];
-                var selectedNodes = optionNode.GetConnections();
-                ExecuteNodePorts(selectedNodes);
-            }
-            else
-            {
-                NextNode(node);
-            }
         }
 
         /// <summary>

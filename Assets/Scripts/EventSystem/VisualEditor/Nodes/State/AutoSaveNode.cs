@@ -1,7 +1,7 @@
 using EventSystem.Models;
 using UnityEngine;
 
-namespace EventSystem.VisualEditor.Nodes.Actions
+namespace EventSystem.VisualEditor.Nodes.State
 {
     [NodeTint("#F9844A")]
     public class AutoSaveNode : BaseNode

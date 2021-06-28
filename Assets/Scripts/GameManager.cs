@@ -1,4 +1,5 @@
-﻿using Dialog;
+﻿using System.Linq;
+using Dialog;
 using Saving;
 using Saving.Models;
 using UnityEngine;
@@ -30,8 +31,12 @@ public class GameManager : MonoBehaviour
         
     private void Initialize()
     {
-        // SaveManager.SaveGame(gameState, true);
-        // SaveManager.SaveGame(gameState);
-        // SaveManager.GetSaveFilesDetails();
+        //TODO: Remove. Loading the auto save file is just for testing
+        var files = SaveManager.GetSaveFilesDetails();
+        var autoFile = files.FirstOrDefault(x => x.fileName == "auto.el");
+        if (autoFile != null)
+        {
+            gameState = SaveManager.LoadGame(autoFile.filePath);
+        }
     }
 }
