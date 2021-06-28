@@ -7,6 +7,7 @@ using EventSystem.Models;
 using EventSystem.VisualEditor.Graphs;
 using EventSystem.VisualEditor.Nodes.Actions;
 using EventSystem.VisualEditor.Nodes.Flow;
+using Saving;
 using UnityEngine;
 using XNode;
 
@@ -110,6 +111,10 @@ namespace EventSystem
             else if (currentNodeType == typeof(StateNode))
             {
                 NextStateNodeExecution(node);
+            }
+            else if (currentNodeType == typeof(AutoSaveNode))
+            {
+                yield return AutoSaveNodeExecution(node);
             }
             else if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode))
             {
@@ -221,6 +226,13 @@ namespace EventSystem
             ExecuteNodePorts(nodePorts);
         }
 
+        private IEnumerator AutoSaveNodeExecution(Node node)
+        {
+            SaveManager.SaveGame(_gameManager.gameState, true);
+            yield return null;
+            NextNode(node);
+        }
+        
         /// <summary>
         /// Executes the configuration of the current dialogNode
         /// If this dialog has options, the node attached to the selected option will be ran
