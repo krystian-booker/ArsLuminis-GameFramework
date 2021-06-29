@@ -3,7 +3,7 @@ A Unity base project with all the neccesary systems and tools to create an old s
 Features are based around PS1 era Final Fantasy games.
 
 ### Asset Requirements
-- Odin - Inspector and Serializer : Plan to remove this as a hard requirement in the future.
+- Odin - Inspector and Serializer : (In the process of removing this as a requirement)
 
 ## Features
 - Node based state machine & event sequencer
@@ -12,8 +12,10 @@ Features are based around PS1 era Final Fantasy games.
 - Save manager 
 
 ## Planned functionality
+### [Trello](https://trello.com/b/H51PWGcy/jrpg-system)
 - Character creation
 - Party manager
 - Battle system
 - Inventory system
 - Customizable dialog
+
