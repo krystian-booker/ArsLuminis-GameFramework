@@ -15,7 +15,7 @@
       "hash": "4420ad7ecee5c58494db5ad5289ad5afe77c0f27"
     },
     "com.unity.cinemachine": {
-      "version": "2.7.3",
+      "version": "2.7.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -57,6 +57,13 @@
     },
     "com.unity.ide.vscode": {
       "version": "1.2.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.inputsystem": {
+      "version": "1.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
