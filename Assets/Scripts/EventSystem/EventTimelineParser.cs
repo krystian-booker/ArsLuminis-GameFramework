@@ -27,6 +27,12 @@ namespace EventSystem
         private GameManager _gameManager;
         private DialogManager _dialogManager;
 
+        //WIP
+        public bool debugger;
+        
+        [SerializeField]
+        private bool _step;
+        
         private void Awake()
         {
             Assert.IsNotNull(gameManagerGameObject,
@@ -82,7 +88,7 @@ namespace EventSystem
             if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode) ||
                 node is BaseNodeExtended {skip: true})
             {
-                NextNode(node);
+                yield return NextNode(node);
             }
             else if (currentNodeType == typeof(CameraNode))
             {
@@ -122,7 +128,7 @@ namespace EventSystem
             }
             else if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode))
             {
-                NextNode(node);
+                yield return NextNode(node);
             }
             else
             {
@@ -140,7 +146,7 @@ namespace EventSystem
             var cameraExecution = new CameraExecution(primaryCamera);
             StartCoroutine(cameraExecution.Execute(node));
             yield return new WaitUntil(cameraExecution.IsFinished);
-            NextNode(node);
+            yield return NextNode(node);
         }
 
         /// <summary>
@@ -153,7 +159,7 @@ namespace EventSystem
             var objectMovementExecution = new ObjectMovementExecution();
             StartCoroutine(objectMovementExecution.Execute(node));
             yield return new WaitUntil(objectMovementExecution.IsFinished);
-            NextNode(node);
+            yield return NextNode(node);
         }
 
         /// <summary>
@@ -166,7 +172,7 @@ namespace EventSystem
             var characterMovementExecution = new CharacterMovementExecution();
             StartCoroutine(characterMovementExecution.Execute(node));
             yield return new WaitUntil(characterMovementExecution.IsFinished);
-            NextNode(node);
+            yield return NextNode(node);
         }
 
         /// <summary>
@@ -179,7 +185,7 @@ namespace EventSystem
             var animationExecution = new AnimationExecution();
             StartCoroutine(animationExecution.Execute(node));
             yield return new WaitUntil(animationExecution.IsFinished);
-            NextNode(node);
+            yield return NextNode(node);
         }
 
         /// <summary>
@@ -191,7 +197,7 @@ namespace EventSystem
         {
             var waitNode = node as WaitNode;
             yield return new WaitForSeconds(waitNode ? waitNode.delayTime : 0);
-            NextNode(node);
+            yield return NextNode(node);
         }
 
         /// <summary>
@@ -215,7 +221,7 @@ namespace EventSystem
             }
             else
             {
-                NextNode(node);
+                yield return NextNode(node);
             }
         }
 
@@ -230,8 +236,7 @@ namespace EventSystem
             if (eventStateValues != null)
                 eventStateValues.complete = updateStateNode.stateComplete;
 
-            yield return null;
-            NextNode(node);
+            yield return NextNode(node);
         }
 
         /// <summary>
@@ -273,16 +278,21 @@ namespace EventSystem
         private IEnumerator AutoSaveNodeExecution(Node node)
         {
             SaveManager.SaveGame(_gameManager.gameState, true);
-            yield return null;
-            NextNode(node);
+            yield return NextNode(node);
         }
 
         /// <summary>
         /// Find a node's exit port based on our constant name "exit" 
         /// </summary>
         /// <param name="node">current executing node</param>
-        private void NextNode(Node node)
+        private IEnumerator NextNode(Node node)
         {
+            if (debugger)
+            {
+                yield return new WaitUntil(UserSteppedToNextNode);
+                _step = false;
+            }
+            
             var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
             ExecuteNodePorts(nodePorts);
         }
@@ -303,6 +313,11 @@ namespace EventSystem
                 baseNode.started = true;
                 StartCoroutine(ParseNode(nodePort.node));
             }
+        }
+
+        private bool UserSteppedToNextNode()
+        {
+            return _step;
         }
     }
 }
