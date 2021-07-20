@@ -12,50 +12,29 @@ using EventSystem.VisualEditor.Nodes.State;
 using Saving;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Serialization;
 using XNode;
 
 namespace EventSystem
 {
     public class EventTimelineParser : MonoBehaviour
     {
-        [Tooltip("Only required if the event sequence will be altering the camera state.")]
-        public Camera primaryCamera;
-
-        [Tooltip("Ability to get components from the game manager, ie: localization, dialog")]
-        public GameObject gameManagerGameObject;
-
-        private GameManager _gameManager;
-        private DialogManager _dialogManager;
+        private EventSequenceSceneGraph _eventSequenceSceneGraph;
 
         //WIP
         public bool debugger;
         
-        [SerializeField]
-        private bool _step;
-        
-        private void Awake()
-        {
-            Assert.IsNotNull(gameManagerGameObject,
-                $"{nameof(EventTimelineParser)}: Missing reference to {nameof(gameManagerGameObject)} game object");
-        }
-
-        private void Start()
-        {
-            _dialogManager = gameManagerGameObject.GetComponent<DialogManager>();
-            _gameManager = gameManagerGameObject.GetComponent<GameManager>();
-
-            //TODO: Remove, debug only.
-            StartTimeLine();
-        }
+        //TODO: Replace with in game UI
+        [HideInInspector] public bool step;
 
         /// <summary>
         /// Start parsing the xNode timeLine.
         /// Currently this is called from Start() will be moved over to events 
         /// </summary>
-        private void StartTimeLine()
+        public void StartEventSequence(EventSequenceSceneGraph eventSequenceSceneGraph)
         {
-            var essg = gameObject.GetComponent<EventSequenceSceneGraph>();
-            var startNode = essg.graph.nodes.Where(x => x.GetType() == typeof(StartNode)).ToList();
+            _eventSequenceSceneGraph = eventSequenceSceneGraph;
+            var startNode = _eventSequenceSceneGraph.graph.nodes.Where(x => x.GetType() == typeof(StartNode)).ToList();
             if (!startNode.Any())
             {
                 Debug.LogError($"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
@@ -126,6 +105,10 @@ namespace EventSystem
             {
                 yield return AutoSaveNodeExecution(node);
             }
+            else if (currentNodeType == typeof(InputActionMapNode))
+            {
+                yield return InputActionMapNode(node);
+            }
             else if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode))
             {
                 yield return NextNode(node);
@@ -143,7 +126,7 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator CameraNodeExecution(Node node)
         {
-            var cameraExecution = new CameraExecution(primaryCamera);
+            var cameraExecution = new CameraExecution(GameManager.Instance.mainCamera);
             StartCoroutine(cameraExecution.Execute(node));
             yield return new WaitUntil(cameraExecution.IsFinished);
             yield return NextNode(node);
@@ -209,11 +192,11 @@ namespace EventSystem
         private IEnumerator DialogNodeExecution(Node node)
         {
             var dialogNode = node as DialogNode;
-            _dialogManager.StartDialog(dialogNode);
-            yield return new WaitUntil(_dialogManager.IsContinueClicked);
+            GameManager.Instance.dialogManager.StartDialog(dialogNode);
+            yield return new WaitUntil(GameManager.Instance.dialogManager.IsContinueClicked);
             if (dialogNode.options.Count > 0)
             {
-                var selectedOptionIndex = _dialogManager.GetSelectedOption();
+                var selectedOptionIndex = GameManager.Instance.dialogManager.GetSelectedOption();
                 var dynamicPorts = dialogNode.DynamicPorts.ToList();
                 var optionNode = dynamicPorts[selectedOptionIndex];
                 var selectedNodes = optionNode.GetConnections();
@@ -225,13 +208,18 @@ namespace EventSystem
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private IEnumerator UpdateStateNodeExecution(Node node)
         {
             var updateStateNode = node as UpdateStateNode;
             Assert.IsNotNull(updateStateNode);
 
             var eventStateValues =
-                _gameManager.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
+                GameManager.Instance.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
 
             if (eventStateValues != null)
                 eventStateValues.complete = updateStateNode.stateComplete;
@@ -251,7 +239,7 @@ namespace EventSystem
                 return;
 
             var eventState =
-                _gameManager.gameState.states.FirstOrDefault(eventStateValue =>
+                GameManager.Instance.gameState.states.FirstOrDefault(eventStateValue =>
                     eventStateValue.name == stateNode.eventState);
             if (eventState == null)
             {
@@ -275,12 +263,29 @@ namespace EventSystem
             ExecuteNodePorts(nodePorts);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private IEnumerator AutoSaveNodeExecution(Node node)
         {
-            SaveManager.SaveGame(_gameManager.gameState, true);
+            SaveManager.SaveGame(GameManager.Instance.gameState, true);
             yield return NextNode(node);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator InputActionMapNode(Node node)
+        {
+            var inputActionMapNode = node as InputActionMapNode;
+            GameManager.Instance.inputManager.ChangeActionMap(inputActionMapNode.actionMap);
+            yield return NextNode(node);
+        }
+        
         /// <summary>
         /// Find a node's exit port based on our constant name "exit" 
         /// </summary>
@@ -290,9 +295,9 @@ namespace EventSystem
             if (debugger)
             {
                 yield return new WaitUntil(UserSteppedToNextNode);
-                _step = false;
+                step = false;
             }
-            
+
             var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
             ExecuteNodePorts(nodePorts);
         }
@@ -317,7 +322,7 @@ namespace EventSystem
 
         private bool UserSteppedToNextNode()
         {
-            return _step;
+            return step;
         }
     }
 }
