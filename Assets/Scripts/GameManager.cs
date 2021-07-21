@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Cinemachine;
 using Dialog;
+using EventSystem;
 using Input;
 using Saving;
 using Saving.Models;
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public DialogManager dialogManager;
     [HideInInspector] public CinemachineBrain cinemachineBrain;
+    [HideInInspector] public EventSystemManager eventSystemManager;
 
     private void Initialize() //Awake
     {
@@ -60,11 +62,13 @@ public class GameManager : MonoBehaviour
         //Get component
         inputManager = GetComponent<InputManager>();
         dialogManager = GetComponent<DialogManager>();
+        eventSystemManager = GetComponent<EventSystemManager>();
         cinemachineBrain = mainCamera.GetComponent<CinemachineBrain>();
-
+            
         //Validate components
         Assert.IsNotNull(inputManager);
         Assert.IsNotNull(dialogManager);
+        Assert.IsNotNull(eventSystemManager);
         Assert.IsNotNull(cinemachineBrain);
 
         //TODO: Remove. Loading the auto save file is just for testing

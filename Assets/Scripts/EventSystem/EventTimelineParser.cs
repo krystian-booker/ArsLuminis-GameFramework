@@ -5,6 +5,7 @@ using System.Linq;
 using Dialog;
 using EventSystem.Events;
 using EventSystem.Models;
+using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Graphs;
 using EventSystem.VisualEditor.Nodes.Actions;
 using EventSystem.VisualEditor.Nodes.Flow;
@@ -19,36 +20,41 @@ namespace EventSystem
 {
     public class EventTimelineParser : MonoBehaviour
     {
+        public EventSequenceState eventSequenceState = EventSequenceState.Awaiting;
         private EventSequenceSceneGraph _eventSequenceSceneGraph;
 
         //WIP
         public bool debugger;
-        
+
         //TODO: Replace with in game UI
         [HideInInspector] public bool step;
 
+        //HMM
+        private List<IPauseEventExecution> _PauseEventExecutions = new List<IPauseEventExecution>();
+        
         /// <summary>
         /// Start parsing the xNode timeLine.
         /// Currently this is called from Start() will be moved over to events 
         /// </summary>
-        public void StartEventSequence(EventSequenceSceneGraph eventSequenceSceneGraph)
+        public IEnumerator StartEventSequence(EventSequenceSceneGraph eventSequenceSceneGraph)
         {
             _eventSequenceSceneGraph = eventSequenceSceneGraph;
             var startNode = _eventSequenceSceneGraph.graph.nodes.Where(x => x.GetType() == typeof(StartNode)).ToList();
             if (!startNode.Any())
             {
                 Debug.LogError($"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
-                return;
+                yield return null;
             }
 
             if (startNode.Count > 1)
             {
                 Debug.LogError(
                     $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
-                return;
+                yield return null;
             }
 
-            StartCoroutine(ParseNode(startNode.FirstOrDefault()));
+            eventSequenceState = EventSequenceState.Started;
+            yield return ParseNode(startNode.FirstOrDefault());
         }
 
         /// <summary>
@@ -64,8 +70,7 @@ namespace EventSystem
 
             //perform action for node type
             var currentNodeType = node.GetType();
-            if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode) ||
-                node is BaseNodeExtended {skip: true})
+            if (currentNodeType == typeof(StartNode) || node is BaseNodeExtended {skip: true})
             {
                 yield return NextNode(node);
             }
@@ -109,13 +114,34 @@ namespace EventSystem
             {
                 yield return InputActionMapNode(node);
             }
-            else if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode))
+            else if (currentNodeType == typeof(EndNode))
             {
-                yield return NextNode(node);
+                eventSequenceState = EventSequenceState.Ended;
             }
             else
             {
                 Debug.LogError($"{nameof(EventTimelineParser)}: Unknown node type {currentNodeType}");
+            }
+        }
+
+        public bool IsEventSequenceFinished()
+        {
+            return eventSequenceState == EventSequenceState.Ended;
+        }
+
+        public void PauseEventSequence()
+        {
+            foreach (var pauseExecution in _PauseEventExecutions)
+            {
+                pauseExecution.PauseExecution();
+            }
+        }
+        
+        public void ResumeEventSequence()
+        {
+            foreach (var pauseExecution in _PauseEventExecutions)
+            {
+                pauseExecution.ResumeExecution();
             }
         }
 
@@ -127,7 +153,7 @@ namespace EventSystem
         private IEnumerator CameraNodeExecution(Node node)
         {
             var cameraExecution = new CameraExecution(GameManager.Instance.mainCamera);
-            StartCoroutine(cameraExecution.Execute(node));
+            cameraExecution.Execute(node);
             yield return new WaitUntil(cameraExecution.IsFinished);
             yield return NextNode(node);
         }
@@ -140,8 +166,12 @@ namespace EventSystem
         private IEnumerator ObjectMovementNodeExecution(Node node)
         {
             var objectMovementExecution = new ObjectMovementExecution();
-            StartCoroutine(objectMovementExecution.Execute(node));
+            objectMovementExecution.Execute(node);
+            
+            _PauseEventExecutions.Add(objectMovementExecution);
             yield return new WaitUntil(objectMovementExecution.IsFinished);
+            _PauseEventExecutions.Remove(objectMovementExecution);
+            
             yield return NextNode(node);
         }
 
@@ -153,8 +183,12 @@ namespace EventSystem
         private IEnumerator CharacterMovementNodeExecution(Node node)
         {
             var characterMovementExecution = new CharacterMovementExecution();
-            StartCoroutine(characterMovementExecution.Execute(node));
+            characterMovementExecution.Execute(node);
+            
+            _PauseEventExecutions.Add(characterMovementExecution);
             yield return new WaitUntil(characterMovementExecution.IsFinished);
+            _PauseEventExecutions.Remove(characterMovementExecution);
+            
             yield return NextNode(node);
         }
 
@@ -166,7 +200,7 @@ namespace EventSystem
         private IEnumerator AnimationNodeExecution(Node node)
         {
             var animationExecution = new AnimationExecution();
-            StartCoroutine(animationExecution.Execute(node));
+            animationExecution.Execute(node);
             yield return new WaitUntil(animationExecution.IsFinished);
             yield return NextNode(node);
         }
@@ -285,7 +319,7 @@ namespace EventSystem
             GameManager.Instance.inputManager.ChangeActionMap(inputActionMapNode.actionMap);
             yield return NextNode(node);
         }
-        
+
         /// <summary>
         /// Find a node's exit port based on our constant name "exit" 
         /// </summary>
@@ -311,11 +345,16 @@ namespace EventSystem
             if (nodePorts == null) return;
             foreach (var nodePort in nodePorts)
             {
+                //Only check for status tracking nodes. 
+                //Non tracking nodes are entry and exit nodes ATM.
                 var baseNode = nodePort.node as BaseNode;
-                if (baseNode == null || baseNode is {started: true})
-                    return;
+                if (baseNode != null)
+                {
+                    if(baseNode.started)
+                        return;
+                    baseNode.started = true;
+                }
 
-                baseNode.started = true;
                 StartCoroutine(ParseNode(nodePort.node));
             }
         }

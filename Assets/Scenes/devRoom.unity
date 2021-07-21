@@ -3881,6 +3881,7 @@ GameObject:
   - component: {fileID: 1141624370}
   - component: {fileID: 1141624369}
   - component: {fileID: 1141624371}
+  - component: {fileID: 1141624373}
   - component: {fileID: 1141624372}
   m_Layer: 0
   m_Name: '[GameManager]'
@@ -3958,6 +3959,7 @@ MonoBehaviour:
   inputManager: {fileID: 0}
   dialogManager: {fileID: 0}
   cinemachineBrain: {fileID: 0}
+  eventSystemManager: {fileID: 0}
 --- !u!114 &1141624371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4126,6 +4128,18 @@ MonoBehaviour:
   m_DefaultActionMap: Movement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1141624373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141624367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7228cc635e574e1488d8f11ab8c88a6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1142948442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4238,6 +4252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a16ef3e0202fbfb4a9a9f80d79b45104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eventSequenceState: 0
   debugger: 0
   step: 0
 --- !u!1 &1176715929
@@ -6843,7 +6858,6 @@ GameObject:
   - component: {fileID: 2004799663}
   - component: {fileID: 2004799662}
   - component: {fileID: 2004799661}
-  - component: {fileID: 2004799667}
   - component: {fileID: 2004799668}
   - component: {fileID: 2004799660}
   - component: {fileID: 2004799669}
@@ -6985,20 +6999,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -276.128, z: 0}
---- !u!114 &2004799667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2004799659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a16ef3e0202fbfb4a9a9f80d79b45104, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debugger: 0
-  step: 0
 --- !u!114 &2004799668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7013,6 +7013,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultEventSequence: {fileID: 2004799660}
   triggerEventSequence: {fileID: 2004799669}
+  resetTriggerSequence: 1
+  triggerFocusOnPlayer: 1
 --- !u!114 &2004799669
 MonoBehaviour:
   m_ObjectHideFlags: 0

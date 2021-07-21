@@ -5,6 +5,8 @@ namespace Characters
 {
     public class CharacterManager : MonoBehaviour
     {
+        //Create a bool to focus on our trigger ie: player looks at NPC
+        
         private void OnTriggerStay(Collider other)
         {
             //Only want events triggered on active player
@@ -19,7 +21,7 @@ namespace Characters
 
             //How can we avoid this GetComponent?
             var npcEventTrigger = other.gameObject.GetComponent<NpcEventTrigger>();
-            npcEventTrigger.BeginTriggerEvent();
+            StartCoroutine(npcEventTrigger.BeginTriggerEvent(gameObject));
         }
     }
 }
