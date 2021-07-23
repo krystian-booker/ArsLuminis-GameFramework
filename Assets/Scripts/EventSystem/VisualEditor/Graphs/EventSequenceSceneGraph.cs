@@ -1,3 +1,4 @@
+using UnityEngine;
 using XNode;
 
 namespace EventSystem.VisualEditor.Graphs
@@ -7,6 +8,6 @@ namespace EventSystem.VisualEditor.Graphs
     /// </summary>
     public class EventSequenceSceneGraph : SceneGraph<EventSequenceGraph>
     {
-        
+        [TextArea, Tooltip("No code usage")] public string description;
     }
 }

@@ -39,6 +39,8 @@ namespace Dialog
         
         private Coroutine _previousSentenceState;
 
+        private string _sentence;
+        
         private void Awake()
         {
             dialogBox.SetActive(false);
@@ -62,7 +64,8 @@ namespace Dialog
         public void StartDialog(DialogNode dialogNode)
         {
             InitializeDialog(dialogNode);
-
+            _sentence = dialogNode.text;
+            
             //Node states
             _dialogOptions = dialogNode.options;
             _hideDialogBoxOnComplete = dialogNode.hideUIOnComplete;
@@ -71,7 +74,7 @@ namespace Dialog
             {
                 nameText.text = dialogNode.characterName;
             }
-            _previousSentenceState = StartCoroutine(TypeSentence(dialogNode.text));
+            _previousSentenceState = StartCoroutine(TypeSentence(_sentence));
         }
 
         /// <summary>
@@ -79,7 +82,19 @@ namespace Dialog
         /// </summary>
         public void ContinueClicked()
         {
-            _continueClicked = true;
+            if (_previousSentenceState != null)
+            {
+                StopCoroutine(_previousSentenceState);
+            }
+
+            if (dialogText.text != _sentence)
+            {
+                dialogText.text = _sentence;
+            }
+            else
+            {
+                _continueClicked = true;
+            }
         }
         
         /// <summary>

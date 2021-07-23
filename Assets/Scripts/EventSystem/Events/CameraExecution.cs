@@ -28,7 +28,7 @@ namespace EventSystem.Events
             }
         }
 
-        public IEnumerator Execute(Node node)
+        public void Execute(Node node)
         {
             //Cast
             var cameraNode = node as CameraNode;
@@ -44,7 +44,6 @@ namespace EventSystem.Events
                 //Set active camera state
                 _timeStarted = Time.time;
                 cameraNode.virtualCamera.Priority = (int) CameraPriorityState.Active;
-                yield return null; 
             }
             else
             {

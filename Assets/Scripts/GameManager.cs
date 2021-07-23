@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Cinemachine;
 using Dialog;
+using EventSystem;
 using Input;
 using Saving;
 using Saving.Models;
@@ -41,20 +42,35 @@ public class GameManager : MonoBehaviour
     #endregion
 
     public Camera mainCamera;
-    public CinemachineBrain cinemachineBrain;
 
+    //TODO: Remove, this is for debugging until decide what to do
     public GameObject activePlayer;
 
     [SerializeField] public GameState gameState;
 
+    [HideInInspector] public InputManager inputManager;
+    [HideInInspector] public DialogManager dialogManager;
+    [HideInInspector] public CinemachineBrain cinemachineBrain;
+    [HideInInspector] public EventSystemManager eventSystemManager;
+
     private void Initialize() //Awake
     {
+        //Validations
         Assert.IsNotNull(mainCamera);
         Assert.IsNotNull(activePlayer);
-        
+
+        //Get component
+        inputManager = GetComponent<InputManager>();
+        dialogManager = GetComponent<DialogManager>();
+        eventSystemManager = GetComponent<EventSystemManager>();
         cinemachineBrain = mainCamera.GetComponent<CinemachineBrain>();
+            
+        //Validate components
+        Assert.IsNotNull(inputManager);
+        Assert.IsNotNull(dialogManager);
+        Assert.IsNotNull(eventSystemManager);
         Assert.IsNotNull(cinemachineBrain);
-        
+
         //TODO: Remove. Loading the auto save file is just for testing
         var files = SaveManager.GetSaveFilesDetails();
         var autoFile = files.FirstOrDefault(x => x.fileName == "auto.el");
@@ -66,10 +82,18 @@ public class GameManager : MonoBehaviour
         ChangeCharacter(activePlayer);
     }
 
-    public void ChangeCharacter(GameObject newCharacter)
+    private void ChangeCharacter(GameObject newCharacter)
     {
+        //Set past character to obstacle avoidance
+        if (ActiveCharacterNavMeshAgent != null)
+        {
+            ActiveCharacterNavMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+        }
+
+        //Update character
         ActiveCharacter = newCharacter;
         ActiveCharacterNavMeshAgent = ActiveCharacter.GetComponent<NavMeshAgent>();
         ActiveCharacterNavMeshAgent.updateRotation = true;
+        ActiveCharacterNavMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
     }
 }

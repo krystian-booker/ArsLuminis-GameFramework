@@ -10,7 +10,7 @@ namespace EventSystem.Models.interfaces
         /// CharacterMovement class as an example
         /// </summary>
         /// <param name="gameEvent">Event running containing parameters for the execution</param>
-        public IEnumerator Execute(Node gameEvent);
+        public void Execute(Node gameEvent);
         
         /// <summary>
         /// Returns true if the event is finished. Definition of "finished" will depend on the event that is being run

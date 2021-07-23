@@ -9,12 +9,12 @@ using XNode;
 
 namespace EventSystem.Events
 {
-    public class ObjectMovementExecution : IEventExecution
+    public class ObjectMovementExecution : IPauseEventExecution
     {
         private ObjectMovementNode _objectMovementNode;
         private NavMeshAgent _targetNavMeshAgent;
 
-        public IEnumerator Execute(Node node)
+        public void Execute(Node node)
         {
             _objectMovementNode = node as ObjectMovementNode;
             if (_objectMovementNode != null)
@@ -41,7 +41,6 @@ namespace EventSystem.Events
 
                 //Move to position
                 _targetNavMeshAgent.SetDestination(_objectMovementNode.targetPosition.transform.position);
-                yield return null;
             }
             else
             {
@@ -60,6 +59,17 @@ namespace EventSystem.Events
             //Remove Navmesh
             Tools.DestroyComponent(_targetNavMeshAgent);
             return true;
+        }
+
+        public void PauseExecution()
+        {
+            _targetNavMeshAgent.isStopped = true;
+        }
+
+        public void ResumeExecution()
+        {
+            _targetNavMeshAgent.isStopped = false;
+            _targetNavMeshAgent.SetDestination(_objectMovementNode.targetPosition.transform.position);
         }
     }
 }

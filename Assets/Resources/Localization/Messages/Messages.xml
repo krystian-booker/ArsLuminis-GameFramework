@@ -140,4 +140,7 @@
 
 Test 2 3</value>
   </data>
+  <data name="DEMO_Shop" xml:space="preserve">
+    <value>Hello, welcome to my store, what would you like to buy? I've got lots of goodies!</value>
+  </data>
 </root>

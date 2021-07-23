@@ -12,7 +12,7 @@ namespace EventSystem.Events
         private AnimationNode _animationNode;
         private Animator _animator;
 
-        public IEnumerator Execute(Node node)
+        public void Execute(Node node)
         {
             _animationNode = node as AnimationNode;
             if (_animationNode != null)
@@ -22,7 +22,6 @@ namespace EventSystem.Events
             
                 //Start animation
                 _animator.SetTrigger(_animationNode.animationTrigger);
-                yield return null;
             }
             else
             {

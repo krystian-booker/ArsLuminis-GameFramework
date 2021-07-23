@@ -8,12 +8,12 @@ using XNode;
 
 namespace EventSystem.Events
 {
-    public class CharacterMovementExecution : IEventExecution
+    public class CharacterMovementExecution : IPauseEventExecution
     {
         private CharacterMovementNode _characterMovementNode;
         private NavMeshAgent _targetNavMeshAgent;
 
-        public IEnumerator Execute(Node node)
+        public void Execute(Node node)
         {
             _characterMovementNode = node as CharacterMovementNode;
             if (_characterMovementNode != null)
@@ -37,7 +37,6 @@ namespace EventSystem.Events
 
                 //Move to position
                 _targetNavMeshAgent.SetDestination(_characterMovementNode.targetPosition.transform.position);
-                yield return null;
             }
             else
             {
@@ -50,6 +49,16 @@ namespace EventSystem.Events
         {
             return _targetNavMeshAgent != null && _targetNavMeshAgent.hasPath && _targetNavMeshAgent.remainingDistance <=
                 _targetNavMeshAgent.stoppingDistance + _characterMovementNode.distanceThreshold;
+        }
+        
+        public void PauseExecution()
+        {
+            _targetNavMeshAgent.isStopped = true;
+        }
+
+        public void ResumeExecution()
+        {
+            _targetNavMeshAgent.isStopped = false;
         }
     }
 }

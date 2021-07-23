@@ -5,6 +5,7 @@ using System.Linq;
 using Dialog;
 using EventSystem.Events;
 using EventSystem.Models;
+using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Graphs;
 using EventSystem.VisualEditor.Nodes.Actions;
 using EventSystem.VisualEditor.Nodes.Flow;
@@ -12,64 +13,48 @@ using EventSystem.VisualEditor.Nodes.State;
 using Saving;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Serialization;
 using XNode;
 
 namespace EventSystem
 {
     public class EventTimelineParser : MonoBehaviour
     {
-        [Tooltip("Only required if the event sequence will be altering the camera state.")]
-        public Camera primaryCamera;
-
-        [Tooltip("Ability to get components from the game manager, ie: localization, dialog")]
-        public GameObject gameManagerGameObject;
-
-        private GameManager _gameManager;
-        private DialogManager _dialogManager;
+        public EventSequenceState eventSequenceState = EventSequenceState.Awaiting;
+        private EventSequenceSceneGraph _eventSequenceSceneGraph;
 
         //WIP
         public bool debugger;
+
+        //TODO: Replace with in game UI
+        [HideInInspector] public bool step;
+
+        //HMM
+        private List<IPauseEventExecution> _PauseEventExecutions = new List<IPauseEventExecution>();
         
-        [SerializeField]
-        private bool _step;
-        
-        private void Awake()
-        {
-            Assert.IsNotNull(gameManagerGameObject,
-                $"{nameof(EventTimelineParser)}: Missing reference to {nameof(gameManagerGameObject)} game object");
-        }
-
-        private void Start()
-        {
-            _dialogManager = gameManagerGameObject.GetComponent<DialogManager>();
-            _gameManager = gameManagerGameObject.GetComponent<GameManager>();
-
-            //TODO: Remove, debug only.
-            StartTimeLine();
-        }
-
         /// <summary>
         /// Start parsing the xNode timeLine.
         /// Currently this is called from Start() will be moved over to events 
         /// </summary>
-        private void StartTimeLine()
+        public IEnumerator StartEventSequence(EventSequenceSceneGraph eventSequenceSceneGraph)
         {
-            var essg = gameObject.GetComponent<EventSequenceSceneGraph>();
-            var startNode = essg.graph.nodes.Where(x => x.GetType() == typeof(StartNode)).ToList();
+            _eventSequenceSceneGraph = eventSequenceSceneGraph;
+            var startNode = _eventSequenceSceneGraph.graph.nodes.Where(x => x.GetType() == typeof(StartNode)).ToList();
             if (!startNode.Any())
             {
                 Debug.LogError($"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
-                return;
+                yield return null;
             }
 
             if (startNode.Count > 1)
             {
                 Debug.LogError(
                     $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
-                return;
+                yield return null;
             }
 
-            StartCoroutine(ParseNode(startNode.FirstOrDefault()));
+            eventSequenceState = EventSequenceState.Started;
+            yield return ParseNode(startNode.FirstOrDefault());
         }
 
         /// <summary>
@@ -85,8 +70,7 @@ namespace EventSystem
 
             //perform action for node type
             var currentNodeType = node.GetType();
-            if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode) ||
-                node is BaseNodeExtended {skip: true})
+            if (currentNodeType == typeof(StartNode) || node is BaseNodeExtended {skip: true})
             {
                 yield return NextNode(node);
             }
@@ -126,13 +110,38 @@ namespace EventSystem
             {
                 yield return AutoSaveNodeExecution(node);
             }
-            else if (currentNodeType == typeof(StartNode) || currentNodeType == typeof(EndNode))
+            else if (currentNodeType == typeof(InputActionMapNode))
             {
-                yield return NextNode(node);
+                yield return InputActionMapNode(node);
+            }
+            else if (currentNodeType == typeof(EndNode))
+            {
+                eventSequenceState = EventSequenceState.Ended;
             }
             else
             {
                 Debug.LogError($"{nameof(EventTimelineParser)}: Unknown node type {currentNodeType}");
+            }
+        }
+
+        public bool IsEventSequenceFinished()
+        {
+            return eventSequenceState == EventSequenceState.Ended;
+        }
+
+        public void PauseEventSequence()
+        {
+            foreach (var pauseExecution in _PauseEventExecutions)
+            {
+                pauseExecution.PauseExecution();
+            }
+        }
+        
+        public void ResumeEventSequence()
+        {
+            foreach (var pauseExecution in _PauseEventExecutions)
+            {
+                pauseExecution.ResumeExecution();
             }
         }
 
@@ -143,8 +152,8 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator CameraNodeExecution(Node node)
         {
-            var cameraExecution = new CameraExecution(primaryCamera);
-            StartCoroutine(cameraExecution.Execute(node));
+            var cameraExecution = new CameraExecution(GameManager.Instance.mainCamera);
+            cameraExecution.Execute(node);
             yield return new WaitUntil(cameraExecution.IsFinished);
             yield return NextNode(node);
         }
@@ -157,8 +166,12 @@ namespace EventSystem
         private IEnumerator ObjectMovementNodeExecution(Node node)
         {
             var objectMovementExecution = new ObjectMovementExecution();
-            StartCoroutine(objectMovementExecution.Execute(node));
+            objectMovementExecution.Execute(node);
+            
+            _PauseEventExecutions.Add(objectMovementExecution);
             yield return new WaitUntil(objectMovementExecution.IsFinished);
+            _PauseEventExecutions.Remove(objectMovementExecution);
+            
             yield return NextNode(node);
         }
 
@@ -170,8 +183,12 @@ namespace EventSystem
         private IEnumerator CharacterMovementNodeExecution(Node node)
         {
             var characterMovementExecution = new CharacterMovementExecution();
-            StartCoroutine(characterMovementExecution.Execute(node));
+            characterMovementExecution.Execute(node);
+            
+            _PauseEventExecutions.Add(characterMovementExecution);
             yield return new WaitUntil(characterMovementExecution.IsFinished);
+            _PauseEventExecutions.Remove(characterMovementExecution);
+            
             yield return NextNode(node);
         }
 
@@ -183,7 +200,7 @@ namespace EventSystem
         private IEnumerator AnimationNodeExecution(Node node)
         {
             var animationExecution = new AnimationExecution();
-            StartCoroutine(animationExecution.Execute(node));
+            animationExecution.Execute(node);
             yield return new WaitUntil(animationExecution.IsFinished);
             yield return NextNode(node);
         }
@@ -209,11 +226,11 @@ namespace EventSystem
         private IEnumerator DialogNodeExecution(Node node)
         {
             var dialogNode = node as DialogNode;
-            _dialogManager.StartDialog(dialogNode);
-            yield return new WaitUntil(_dialogManager.IsContinueClicked);
+            GameManager.Instance.dialogManager.StartDialog(dialogNode);
+            yield return new WaitUntil(GameManager.Instance.dialogManager.IsContinueClicked);
             if (dialogNode.options.Count > 0)
             {
-                var selectedOptionIndex = _dialogManager.GetSelectedOption();
+                var selectedOptionIndex = GameManager.Instance.dialogManager.GetSelectedOption();
                 var dynamicPorts = dialogNode.DynamicPorts.ToList();
                 var optionNode = dynamicPorts[selectedOptionIndex];
                 var selectedNodes = optionNode.GetConnections();
@@ -225,13 +242,18 @@ namespace EventSystem
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private IEnumerator UpdateStateNodeExecution(Node node)
         {
             var updateStateNode = node as UpdateStateNode;
             Assert.IsNotNull(updateStateNode);
 
             var eventStateValues =
-                _gameManager.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
+                GameManager.Instance.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
 
             if (eventStateValues != null)
                 eventStateValues.complete = updateStateNode.stateComplete;
@@ -251,7 +273,7 @@ namespace EventSystem
                 return;
 
             var eventState =
-                _gameManager.gameState.states.FirstOrDefault(eventStateValue =>
+                GameManager.Instance.gameState.states.FirstOrDefault(eventStateValue =>
                     eventStateValue.name == stateNode.eventState);
             if (eventState == null)
             {
@@ -275,9 +297,26 @@ namespace EventSystem
             ExecuteNodePorts(nodePorts);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private IEnumerator AutoSaveNodeExecution(Node node)
         {
-            SaveManager.SaveGame(_gameManager.gameState, true);
+            SaveManager.SaveGame(GameManager.Instance.gameState, true);
+            yield return NextNode(node);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator InputActionMapNode(Node node)
+        {
+            var inputActionMapNode = node as InputActionMapNode;
+            GameManager.Instance.inputManager.ChangeActionMap(inputActionMapNode.actionMap);
             yield return NextNode(node);
         }
 
@@ -290,9 +329,9 @@ namespace EventSystem
             if (debugger)
             {
                 yield return new WaitUntil(UserSteppedToNextNode);
-                _step = false;
+                step = false;
             }
-            
+
             var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
             ExecuteNodePorts(nodePorts);
         }
@@ -306,18 +345,23 @@ namespace EventSystem
             if (nodePorts == null) return;
             foreach (var nodePort in nodePorts)
             {
+                //Only check for status tracking nodes. 
+                //Non tracking nodes are entry and exit nodes ATM.
                 var baseNode = nodePort.node as BaseNode;
-                if (baseNode == null || baseNode is {started: true})
-                    return;
+                if (baseNode != null)
+                {
+                    if(baseNode.started)
+                        return;
+                    baseNode.started = true;
+                }
 
-                baseNode.started = true;
                 StartCoroutine(ParseNode(nodePort.node));
             }
         }
 
         private bool UserSteppedToNextNode()
         {
-            return _step;
+            return step;
         }
     }
 }
