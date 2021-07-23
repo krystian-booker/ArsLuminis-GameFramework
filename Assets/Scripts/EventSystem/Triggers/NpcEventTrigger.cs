@@ -1,53 +1,24 @@
 using System.Collections;
+using Characters;
 using EventSystem.VisualEditor.Graphs;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace EventSystem.Triggers
 {
+    [RequireComponent(typeof(CharacterManager))]
     public class NpcEventTrigger : MonoBehaviour
     {
-        public EventSequenceSceneGraph defaultEventSequence;
-        private EventTimelineParser _defaultEventTimelineParser;
-
+        private CharacterManager _characterManager;
+        
         public EventSequenceSceneGraph triggerEventSequence;
         private EventTimelineParser _triggerEventTimelineParser;
         
         [Tooltip("Should the trigger event sequence be replayable? If unchecked event sequence can only run once.")]
         public bool resetTriggerSequence = true;
 
-        [Tooltip("If set to true this gameObject will turn towards the triggering game object (player)")]
-        public bool triggerFocusOnPlayer = true;
-        
-        private GameObject _triggerGameObject;
-        private bool _focusActive;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        private void Awake()
-        {
-            Assert.IsNotNull(defaultEventSequence);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         private void Start()
         {
-            _defaultEventTimelineParser = gameObject.AddComponent<EventTimelineParser>();
-            StartCoroutine(_defaultEventTimelineParser.StartEventSequence(defaultEventSequence));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void Update()
-        {
-            if (_focusActive && _triggerGameObject != null)
-            {
-                FocusOnTrigger();
-            }
+            _characterManager = GetComponent<CharacterManager>();
         }
 
         /**
@@ -60,13 +31,13 @@ namespace EventSystem.Triggers
          * 3: FIXED: The default event sequence is still running in the background bc coroutines. We need a way to PAUSE, then
          * start the coroutine. We do not want to restart the sequence from the beginning.
          */
-        public IEnumerator BeginTriggerEvent(GameObject triggerGO)
+        public IEnumerator BeginTriggerEvent(GameObject triggerObject, CharacterManager triggerCharacterManager)
         {
             if (triggerEventSequence == null)
                 yield return null;
             
             //Pause events of main sequence
-            _defaultEventTimelineParser.PauseEventSequence();
+            _characterManager.PauseEventSequence();
 
             //Add trigger event timeline parser
             if (_triggerEventTimelineParser == null)
@@ -76,13 +47,16 @@ namespace EventSystem.Triggers
             
             //Start trigger event sequence
             StartCoroutine(_triggerEventTimelineParser.StartEventSequence(triggerEventSequence));
-            if (triggerFocusOnPlayer)
-            {
-                _focusActive = true;
-                _triggerGameObject = triggerGO;
-            }
+            
+            //TODO: thought: Should these focus events be a setting on the eventSequence?
+            _characterManager.SetFocus(triggerObject);
+            triggerCharacterManager.SetFocus(this.gameObject);
+            
             yield return new WaitUntil(_triggerEventTimelineParser.IsEventSequenceFinished);
-            _focusActive = false;
+            
+            //Remove focus Events
+            triggerCharacterManager.LoseFocus();
+            _characterManager.LoseFocus();
             
             //Reset trigger event sequence 
             if (resetTriggerSequence)
@@ -91,17 +65,7 @@ namespace EventSystem.Triggers
             }
             
             //Resume events
-            _defaultEventTimelineParser.ResumeEventSequence();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void FocusOnTrigger()
-        {
-            var direction  = (_triggerGameObject.transform.position - gameObject.transform.position).normalized;
-            var lookRotation = Quaternion.LookRotation(direction);
-            gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 8);
+            _characterManager.ResumeEventSequence();
         }
     }
 }

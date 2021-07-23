@@ -1691,6 +1691,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97bd714e7ee54c208b24f085c3c05b69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEventSequence: {fileID: 0}
+  focusOnTrigger: 1
+  focusRotationSpeed: 8
 --- !u!1 &571805844
 GameObject:
   m_ObjectHideFlags: 0
@@ -4189,7 +4192,7 @@ MonoBehaviour:
   shortName: shopKeeper
   target: {fileID: 2004799659}
   targetPosition: {fileID: 840201296}
-  startingPosition: {fileID: 2022690974}
+  startingPosition: {fileID: 0}
   distanceThreshold: 1
   speed: 3.5
   disableRotation: 0
@@ -6858,6 +6861,7 @@ GameObject:
   - component: {fileID: 2004799663}
   - component: {fileID: 2004799662}
   - component: {fileID: 2004799661}
+  - component: {fileID: 2004799667}
   - component: {fileID: 2004799668}
   - component: {fileID: 2004799660}
   - component: {fileID: 2004799669}
@@ -6992,13 +6996,28 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2004799659}
   m_LocalRotation: {x: -0, y: -0.66829944, z: -0, w: -0.74389243}
-  m_LocalPosition: {x: 8.752561, y: 1, z: 8.009433}
+  m_LocalPosition: {x: 26.46, y: 1, z: 10.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 313571868}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -276.128, z: 0}
+--- !u!114 &2004799667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004799659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97bd714e7ee54c208b24f085c3c05b69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultEventSequence: {fileID: 2004799660}
+  focusOnTrigger: 1
+  focusRotationSpeed: 8
 --- !u!114 &2004799668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7011,10 +7030,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a47acf4875fb45b4d99fcd9f1209f71e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultEventSequence: {fileID: 2004799660}
   triggerEventSequence: {fileID: 2004799669}
   resetTriggerSequence: 1
-  triggerFocusOnPlayer: 1
 --- !u!114 &2004799669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7029,49 +7046,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graph: {fileID: 1428709658}
   description: Dialog
---- !u!1 &2022690974
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2022690976}
-  - component: {fileID: 2022690975}
-  m_Layer: 0
-  m_Name: shopKeeperStartingPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2022690975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2022690974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 388b3e44f32b23c41978be946714ff24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &2022690976
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2022690974}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.01, y: 0, z: 3.18}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2047315414
 GameObject:
   m_ObjectHideFlags: 0
