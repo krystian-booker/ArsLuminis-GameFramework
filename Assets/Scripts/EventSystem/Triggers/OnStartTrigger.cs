@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections;
 using EventSystem.VisualEditor.Graphs;
 using UnityEngine;
@@ -5,27 +6,29 @@ using UnityEngine;
 namespace EventSystem.Triggers
 {
     /// <summary>
-    /// Attach to a gameObject with a trigger collider, will be triggered on Player character entry
+    /// The triggerEventSequence will begin when this component is initialized.
+    /// This should be added to a gameObject to start at the beginning a scene
+    /// or when a gameObject in instantiated 
     /// </summary>
-    public class EntryTrigger : MonoBehaviour
+    public class OnStartTrigger : MonoBehaviour
     {
+        [Tooltip("Event Sequence to be triggered")]
         public EventSequenceSceneGraph triggerEventSequence;
         private EventTimelineParser _triggerEventTimelineParser;
 
-        [Tooltip("Should the trigger event sequence be replayable? If unchecked event sequence can only run once.")]
-        public bool resetTriggerSequence;
+        private void Start()
+        {
+            StartCoroutine(BeginTriggerEvent());
+        }
 
-        private bool _hasTriggered;
-
-        public IEnumerator BeginTriggerEvent()
+        /// <summary>
+        /// Triggers the event sequence as part of a coroutine
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator BeginTriggerEvent()
         {
             if (triggerEventSequence == null)
                 yield return null;
-
-            if (resetTriggerSequence && _hasTriggered)
-                yield return null;
-
-            _hasTriggered = true;
 
             //Add trigger event timeline parser
             if (_triggerEventTimelineParser == null)
@@ -36,12 +39,6 @@ namespace EventSystem.Triggers
             //Start trigger event sequence
             StartCoroutine(_triggerEventTimelineParser.StartEventSequence(triggerEventSequence));
             yield return new WaitUntil(_triggerEventTimelineParser.IsEventSequenceFinished);
-
-            //Reset trigger event sequence 
-            if (resetTriggerSequence)
-            {
-                GameManager.Instance.eventSystemManager.ResetEventSequenceSceneGraph(triggerEventSequence);
-            }
         }
     }
 }

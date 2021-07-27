@@ -5,11 +5,17 @@ using UnityEngine;
 
 namespace EventSystem.Triggers
 {
+    /// <summary>
+    /// Attach to an NPC character to provide default and triggered behaviour for the NPC gameObject
+    /// The player must be within range and press the confirm button
+    /// </summary>
     [RequireComponent(typeof(CharacterManager))]
     public class NpcEventTrigger : MonoBehaviour
     {
+        //Used to control focus
         private CharacterManager _characterManager;
         
+        [Tooltip("Event Sequence to be triggered")]
         public EventSequenceSceneGraph triggerEventSequence;
         private EventTimelineParser _triggerEventTimelineParser;
         
