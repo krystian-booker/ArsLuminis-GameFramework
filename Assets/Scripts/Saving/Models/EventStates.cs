@@ -3,9 +3,6 @@
     //DEMO DATA
     public enum EventStates
     {
-       IntroCompleted,
-       TutorialCompleted,
-       SecretOneFound,
-       SecretTwoFound
+       TrainMoved
     }
 }

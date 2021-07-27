@@ -6,6 +6,7 @@ TagManager:
   tags:
   - NPC
   - PC
+  - Trigger
   layers:
   - Default
   - TransparentFX

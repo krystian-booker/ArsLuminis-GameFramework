@@ -5,11 +5,9 @@ using EventSystem;
 using Input;
 using Saving;
 using Saving.Models;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(DialogManager), typeof(InputManager))]
 public class GameManager : MonoBehaviour

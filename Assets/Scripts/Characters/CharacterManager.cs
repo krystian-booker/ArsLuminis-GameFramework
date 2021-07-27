@@ -1,7 +1,9 @@
-﻿using EventSystem;
+﻿using System;
+using EventSystem;
 using EventSystem.Triggers;
 using EventSystem.VisualEditor.Graphs;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Characters
 {
@@ -50,6 +52,18 @@ namespace Characters
             _defaultEventTimelineParser.ResumeEventSequence();
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            //Only want events triggered on active player
+            if (GameManager.Instance.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
+
+            //TODO: Remove both nameToLayer and CompareTag, replace of enum for both
+            if (!other.gameObject.CompareTag("Trigger")) return;
+
+            var entryTrigger = other.gameObject.GetComponent<EntryTrigger>();
+            StartCoroutine(entryTrigger.BeginTriggerEvent());
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -62,7 +76,7 @@ namespace Characters
             //TODO: Remove both nameToLayer and CompareTag, replace of enum for both
             if (other.gameObject.layer != LayerMask.NameToLayer("Character") ||
                 !other.gameObject.CompareTag("NPC")) return;
-
+            
             //InputManager wait for a confirm
             if (!GameManager.Instance.inputManager.onConfirmValue.started) return;
 

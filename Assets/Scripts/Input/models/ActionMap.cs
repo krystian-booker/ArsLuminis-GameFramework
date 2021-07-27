@@ -4,6 +4,7 @@
     {
         Movement,
         Menu,
-        Dialog
+        Dialog,
+        Disabled
     }
 }

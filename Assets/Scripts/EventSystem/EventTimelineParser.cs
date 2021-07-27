@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Dialog;
 using EventSystem.Events;
 using EventSystem.Models;
 using EventSystem.Models.interfaces;
@@ -13,7 +11,6 @@ using EventSystem.VisualEditor.Nodes.State;
 using Saving;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 using XNode;
 
 namespace EventSystem
