@@ -38,8 +38,8 @@ namespace Dialog
         private List<TMP_Text> _optionText; //Synced with options, contains text gameobject
         
         private Coroutine _previousSentenceState;
-
         private string _sentence;
+        private bool _invisibleCharacters = true;
         
         private void Awake()
         {
@@ -179,9 +179,15 @@ namespace Dialog
             else
             {
                 dialogText.text = "";
-                foreach (var letter in sentence.ToCharArray())
+
+                for (var i = 0; i < sentence.Length; i++)
                 {
-                    dialogText.text += letter;
+                    dialogText.text = sentence.Substring(0, i);
+                    if (_invisibleCharacters)
+                    {
+                        dialogText.text += $"<alpha=#00>{sentence.Substring(i)}";
+                    }
+                    
                     yield return new WaitForSeconds(typeSpeed);
                 }
             }
