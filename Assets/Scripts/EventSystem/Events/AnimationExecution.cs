@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using Animations;
 using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Actions;
 using UnityEngine;
+using UnityEngine.Assertions;
 using XNode;
 
 namespace EventSystem.Events
@@ -11,6 +13,7 @@ namespace EventSystem.Events
     {
         private AnimationNode _animationNode;
         private Animator _animator;
+        private AnimatorLink _animatorLink;
 
         public void Execute(Node node)
         {
@@ -19,7 +22,15 @@ namespace EventSystem.Events
             {
                 //Get animator
                 _animator = _animationNode.animationTarget.GetComponent<Animator>();
-            
+                _animatorLink = _animationNode.animationTarget.GetComponent<AnimatorLink>();
+                
+                //Asserts
+                Assert.IsNotNull(_animator, $"{nameof(AnimationExecution)}: Animator required for playing animations on ${_animationNode.animationTarget.name}");
+                Assert.IsNotNull(_animatorLink, $"{nameof(AnimationExecution)}: AnimatorLink required for playing animations on ${_animationNode.animationTarget.name}");
+                
+                //Clear previous states
+                _animatorLink.ResetAnimationState();
+                
                 //Start animation
                 _animator.SetTrigger(_animationNode.animationTrigger);
             }
@@ -31,8 +42,7 @@ namespace EventSystem.Events
 
         public bool IsFinished()
         {
-            return true;
-            //Animation event :o
+            return !_animationNode.continueOnAnimationEvent || _animatorLink.IsAnimationComplete();
         }
     }
 }
