@@ -34,10 +34,10 @@ namespace Input
 
         public void dialogOnConfirm(InputAction.CallbackContext value)
         {
-            if (value.started)
-            {
-                GameManager.Instance.dialogManager.ContinueClicked();
-            }
+            // if (value.started)
+            // {
+            //     GameManager.Instance.dialogManager.ContinueClicked();
+            // }
         }
 
         public void dialogOnUI(InputAction.CallbackContext value)

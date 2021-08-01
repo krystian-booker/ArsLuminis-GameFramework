@@ -222,21 +222,21 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator DialogNodeExecution(Node node)
         {
-            var dialogNode = node as DialogNode;
-            GameManager.Instance.dialogManager.StartDialog(dialogNode);
-            yield return new WaitUntil(GameManager.Instance.dialogManager.IsContinueClicked);
-            if (dialogNode.options.Count > 0)
-            {
-                var selectedOptionIndex = GameManager.Instance.dialogManager.GetSelectedOption();
-                var dynamicPorts = dialogNode.DynamicPorts.ToList();
-                var optionNode = dynamicPorts[selectedOptionIndex];
-                var selectedNodes = optionNode.GetConnections();
-                ExecuteNodePorts(selectedNodes);
-            }
-            else
-            {
+            // var dialogNode = node as DialogNode;
+            // GameManager.Instance.dialogManager.StartDialog(dialogNode);
+            // yield return new WaitUntil(GameManager.Instance.dialogManager.IsContinueClicked);
+            // if (dialogNode.options.Count > 0)
+            // {
+                // var selectedOptionIndex = GameManager.Instance.dialogManager.GetSelectedOption();
+                // var dynamicPorts = dialogNode.DynamicPorts.ToList();
+                // var optionNode = dynamicPorts[selectedOptionIndex];
+                // var selectedNodes = optionNode.GetConnections();
+                // ExecuteNodePorts(selectedNodes);
+            // }
+            // else
+            // {
                 yield return NextNode(node);
-            }
+            // }
         }
 
         /// <summary>
