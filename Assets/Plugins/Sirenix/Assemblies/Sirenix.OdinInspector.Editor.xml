@@ -444,9 +444,18 @@
             A prefab tree for the prefabs of this property tree's prefab instances, if any exist.
             </summary>
         </member>
+        <member name="M:Sirenix.OdinInspector.Editor.PrefabModificationHandler.GetUnityPropertyModification(Sirenix.Utilities.Editor.StringSlice,System.Int32,System.Boolean@)">
+            <summary>
+            Gets the Unity PropertyModification for the property at this path, if there are any.
+            </summary>
+            <param name="path">The property path to get the modification for.</param>
+            <param name="selectionIndex">The index of the tree target to get the modification for.</param>
+            <param name="childrenHaveModifications">Whether any children of the path have modifications registered.</param>
+            <returns></returns>
+        </member>
         <member name="M:Sirenix.OdinInspector.Editor.PrefabModificationHandler.GetPrefabModificationType(Sirenix.OdinInspector.Editor.InspectorProperty,System.Boolean)">
             <summary>
-            Gets the prefab modification type of a given property, if any.
+            Gets the Odin prefab modification type of a given property, if any.
             </summary>
             <param name="property">The property to check.</param>
             <param name="forceAutoRegister"></param>
@@ -5380,6 +5389,26 @@
             Specify whether or not lists should show item count.
             </summary>
         </member>
+        <member name="P:Sirenix.OdinInspector.Editor.GeneralDrawerConfig.ListItemColorEvenDarkSkin">
+            <summary>
+            Specify the color of even list elements when in the dark skin.
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.Editor.GeneralDrawerConfig.ListItemColorOddDarkSkin">
+            <summary>
+            Specify the color of odd list elements when in the dark skin.
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.Editor.GeneralDrawerConfig.ListItemColorEvenLightSkin">
+            <summary>
+            Specify the color of even list elements when in the light skin.
+            </summary>
+        </member>
+        <member name="P:Sirenix.OdinInspector.Editor.GeneralDrawerConfig.ListItemColorOddLightSkin">
+            <summary>
+            Specify the color of odd list elements when in the light skin.
+            </summary>
+        </member>
         <member name="P:Sirenix.OdinInspector.Editor.GeneralDrawerConfig.SquareUnityObjectFieldHeight">
             <summary>
             Gets or sets the default size of the preview object field.
@@ -8108,6 +8137,13 @@
             <param name="name">The name of the child to get.</param>
             <returns>The child, if a child was found; otherwise, null.</returns>
         </member>
+        <member name="P:Sirenix.OdinInspector.Editor.PropertyChildren.Item(Sirenix.Utilities.Editor.StringSlice)">
+            <summary>
+            Gets a child by name. This is an alias for <see cref="!:Get(StringSlice)" />.
+            </summary>
+            <param name="name">The name of the child to get.</param>
+            <returns>The child, if a child was found; otherwise, null.</returns>
+        </member>
         <member name="M:Sirenix.OdinInspector.Editor.PropertyChildren.#ctor(Sirenix.OdinInspector.Editor.InspectorProperty)">
             <summary>
             Initializes a new instance of the <see cref="T:Sirenix.OdinInspector.Editor.PropertyChildren"/> class.
@@ -8126,6 +8162,14 @@
             </summary>
         </member>
         <member name="M:Sirenix.OdinInspector.Editor.PropertyChildren.Get(System.String)">
+            <summary>
+            Gets a child by name.
+            </summary>
+            <param name="name">The name of the child to get.</param>
+            <returns>The child, if a child was found; otherwise, null.</returns>
+            <exception cref="T:System.ArgumentNullException">name</exception>
+        </member>
+        <member name="M:Sirenix.OdinInspector.Editor.PropertyChildren.Get(Sirenix.Utilities.Editor.StringSlice@)">
             <summary>
             Gets a child by name.
             </summary>
