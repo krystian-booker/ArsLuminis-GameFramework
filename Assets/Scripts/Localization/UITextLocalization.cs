@@ -7,7 +7,10 @@ namespace Localization
     {
         private void Start()
         {
-            UpdateKeysWithText();
+            if (GameManager.Instance.enableLocalization)
+            {
+                UpdateKeysWithText();
+            }
         }
 
         /// <summary>
@@ -15,9 +18,12 @@ namespace Localization
         /// </summary>
         public void RefreshText()
         {
-            UpdateKeysWithText();
+            if (GameManager.Instance.enableLocalization)
+            {
+                UpdateKeysWithText();
+            }
         }
-        
+
         /// <summary>
         /// Will find all UI elements and replace the keys with the localized text 
         /// </summary>

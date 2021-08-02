@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Xml;
 using Localization.Models;
 using UnityEngine;
@@ -12,20 +13,20 @@ namespace Localization
 
         private static TextAsset _languagesResource; //Languages.xml text to be parsed
         private static XmlDocument _languagesResourceDoc; //parsed Languages.xml
-        
+
         private static TextAsset _messageDefaultResource; //messages.xml text to be parsed
         private static XmlDocument _messageDefaultResourceDoc; //parsed messages.xml
 
         private static TextAsset _messageLocalizedResource; //selected language .xml text to be parsed
         private static XmlDocument _messageLocalizedResourceDoc; //parsed selected language .xml
 
-        
+
         private const string LanguagePrefKey = "language"; //PlayerPrefs key 
-        
+
         static LocalizationManager()
         {
             var languagePref = PlayerPrefs.GetString(LanguagePrefKey, "En");
-            Localization = (Languages)Enum.Parse(typeof(Languages), languagePref);
+            Localization = (Languages) Enum.Parse(typeof(Languages), languagePref);
             Initialize();
         }
 
@@ -40,7 +41,7 @@ namespace Localization
             PlayerPrefs.SetString(LanguagePrefKey, language.ToString());
             Initialize();
         }
-        
+
         /// <summary>
         /// Gets the translated text in the set language based on the provided key parameter.
         /// </summary>
@@ -48,6 +49,17 @@ namespace Localization
         /// <returns>String of the localized text</returns>
         public static string GetTranslatedString(string key)
         {
+            
+#if (UNITY_EDITOR)
+            var regexItem = new Regex("^[a-zA-Z0-9_-]*$");
+            if (!regexItem.IsMatch(key))
+            {
+                Debug.LogError(
+                    $"{nameof(Localization)}: Localization Keys can only contain a-z, 0-9, '_', and '-' \n  {key}");
+                return "LOCALIZATION_KEY_ERROR";
+            }
+#endif
+
             //Localized
             var localizedValueTag = _messageLocalizedResourceDoc.SelectSingleNode($"//data[@name='{key}']/value");
             if (!string.IsNullOrEmpty(localizedValueTag?.InnerText)) return localizedValueTag.InnerText;
@@ -90,6 +102,7 @@ namespace Localization
                     });
                 }
             }
+
             return localizationDictionary;
         }
 
@@ -128,7 +141,7 @@ namespace Localization
                 _messageLocalizedResourceDoc.LoadXml(_messageLocalizedResource.text);
             }
         }
-        
+
         /// <summary>
         /// Load the language details based on the parameter from the Languages.xml file in Resources
         /// </summary>

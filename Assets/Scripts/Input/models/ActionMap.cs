@@ -3,8 +3,7 @@
     public enum ActionMap
     {
         Movement,
-        Menu,
-        Dialog,
+        UI,
         Disabled
     }
 }

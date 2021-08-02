@@ -222,9 +222,11 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator DialogNodeExecution(Node node)
         {
-            // var dialogNode = node as DialogNode;
-            // GameManager.Instance.dialogManager.StartDialog(dialogNode);
-            // yield return new WaitUntil(GameManager.Instance.dialogManager.IsContinueClicked);
+            var dialogNode = node as DialogNode;
+            var dialogWriter = GameManager.Instance.dialogManager.NewDialog(dialogNode);
+            yield return new WaitUntil(dialogWriter.IsNodeFinished);
+            
+            //TODO: Implement dialog options
             // if (dialogNode.options.Count > 0)
             // {
                 // var selectedOptionIndex = GameManager.Instance.dialogManager.GetSelectedOption();

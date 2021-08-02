@@ -34,15 +34,10 @@ namespace Input
 
         public void dialogOnConfirm(InputAction.CallbackContext value)
         {
-            // if (value.started)
-            // {
-            //     GameManager.Instance.dialogManager.ContinueClicked();
-            // }
-        }
-
-        public void dialogOnUI(InputAction.CallbackContext value)
-        {
-            var inputMovement = value.ReadValue<Vector2>();
+            if (value.started)
+            {
+                GameManager.Instance.dialogManager.ContinueClicked();
+            }
         }
 
         #endregion
