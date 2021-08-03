@@ -35,11 +35,6 @@ namespace EventSystem.VisualEditor.Nodes.Actions
 
         #region Speaker
 
-        //TODO: Reimplement? This might not be needed if we pool the dialogInstances
-        // [Header("Dialog behaviour")]
-        // [LabelWidth(150), Tooltip("Once the user has clicked continue, the dialog box will be hidden")]
-        // public bool hideUIOnComplete;
-
         //TODO: Add back once character work is complete
         // [Header("Character speaking")]
         // [LabelWidth(100), Tooltip("Used for character name, arrow position")]
@@ -51,35 +46,39 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         // public GameObject arrowPosition;
 
         //TODO: Remove once character work is complete
-        [LabelWidth(100)]
-        [Tooltip("Not required, if character is provided details will be used from there. Can be used to override.")]
+        [LabelWidth(200), Tooltip("Temporary, will be removed once character work is complete")]
         public string characterName;
 
-        [LabelWidth(100)] [Tooltip("Used to set a custom time per character, if not set default will be used")]
-        public int? timePerCharacter;
+        [LabelWidth(200), Tooltip("Enable for timePerCharacter to be used")]
+        public bool customTimePerCharacter;
+
+        [LabelWidth(200), Tooltip("Used to set a custom time per character, if not set default will be used")]
+        public int timePerCharacter;
 
         #endregion
 
         #region DialogLayout
 
-        [LabelWidth(100)] [Tooltip("Used to set the X position in the canvas of the dialog instance")]
-        public int? dialogPositionX;
+        [LabelWidth(200), Tooltip("Enable for dialogPosition to be used")]
+        public bool customDialogPosition;
 
-        [ShowInInspector] [LabelWidth(100)] [Tooltip("Used to set the Y position in the canvas of the dialog instance")]
-        public int? dialogPositionY;
+        [ShowInInspector, LabelWidth(200), Tooltip("Used to set the X position in the canvas of the dialog instance")]
+        public int dialogPositionX = -1;
 
-        [ShowInInspector] [LabelWidth(100)] [Tooltip("Sets the width of the dialog window")]
-        public int? dialogWidth;
+        [ShowInInspector, LabelWidth(200), Tooltip("Used to set the Y position in the canvas of the dialog instance")]
+        public int dialogPositionY = -1;
 
-        [ShowInInspector] [LabelWidth(100)] [Tooltip("Sets the height of the dialog window")]
-        public int? dialogHeight;
+        [ShowInInspector, LabelWidth(200), Tooltip("Sets the width of the dialog window, when 0 default will be used")]
+        public int dialogWidth;
+
+        [ShowInInspector, LabelWidth(200), Tooltip("Sets the height of the dialog window, when 0 default will be used")]
+        public int dialogHeight;
 
         #endregion
 
         #region DialogTextLocalization
 
-        //TODO: Remove 'OnValueChanged', change to OnValidate
-        [LabelWidth(100)] [Tooltip("User for localization")] //[DelayedProperty, OnValueChanged("GetMessage")]
+        [LabelWidth(100)] [Tooltip("User for localization")]
         public string key;
 
         private string _lastKey; //Used to store the last state of the key
@@ -130,6 +129,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
                     }
                 }
             }
+
             _lastKey = key;
         }
 #endif

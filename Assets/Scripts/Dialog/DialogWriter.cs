@@ -18,8 +18,9 @@ namespace Dialog
         {
             _dialogNode = dialogNode;
             _dialogComponents = dialogComponents;
-            _timePerCharacter = dialogNode.timePerCharacter ??
-                                GameManager.Instance.dialogManager.defaultTimePerCharacter;
+            _timePerCharacter = dialogNode.customTimePerCharacter
+                ? dialogNode.timePerCharacter
+                : GameManager.Instance.dialogManager.defaultTimePerCharacter;
 
             //Reset from previous runs
             _characterIndex = 0;
@@ -38,13 +39,21 @@ namespace Dialog
             _dialogComponents.dialogTMPText.text = string.Empty;
 
             //Set size of dialog window
-            var width = _dialogNode.dialogWidth ?? GameManager.Instance.dialogManager.defaultWidth;
-            var height = _dialogNode.dialogHeight ?? GameManager.Instance.dialogManager.defaultHeight;
+            var width = _dialogNode.dialogWidth != 0
+                ? _dialogNode.dialogWidth
+                : GameManager.Instance.dialogManager.defaultWidth;
+            var height = _dialogNode.dialogHeight != 0
+                ? _dialogNode.dialogHeight
+                : GameManager.Instance.dialogManager.defaultHeight;
             _dialogComponents.rectTransform.sizeDelta = new Vector2(width, height);
 
             //Move dialog to position
-            var positionX = _dialogNode.dialogPositionX ?? GameManager.Instance.dialogManager.defaultPositionX;
-            var positionY = _dialogNode.dialogPositionY ?? GameManager.Instance.dialogManager.defaultPositionY;
+            var positionX = _dialogNode.customDialogPosition
+                ? _dialogNode.dialogPositionX
+                : GameManager.Instance.dialogManager.defaultPositionX;
+            var positionY = _dialogNode.customDialogPosition
+                ? _dialogNode.dialogPositionY
+                : GameManager.Instance.dialogManager.defaultPositionY;
             _dialogComponents.rectTransform.anchoredPosition = new Vector2(positionX, positionY);
         }
 
