@@ -344,16 +344,6 @@ namespace EventSystem
             if (nodePorts == null) return;
             foreach (var nodePort in nodePorts)
             {
-                //Only check for status tracking nodes. 
-                //Non tracking nodes are entry and exit nodes ATM.
-                var baseNode = nodePort.node as BaseNode;
-                if (baseNode != null)
-                {
-                    if(baseNode.started)
-                        return;
-                    baseNode.started = true;
-                }
-
                 StartCoroutine(ParseNode(nodePort.node));
             }
         }
