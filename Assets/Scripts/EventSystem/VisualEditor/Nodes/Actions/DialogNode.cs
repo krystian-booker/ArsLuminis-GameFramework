@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EditorTools;
 using EventSystem.Models;
 using Sirenix.OdinInspector;
@@ -35,20 +34,18 @@ namespace EventSystem.VisualEditor.Nodes.Actions
 
         #region Speaker
 
-        //TODO: Add back once character work is complete
-        // [Header("Character speaking")]
-        // [LabelWidth(100), Tooltip("Used for character name, arrow position")]
-        // public GameObject character;
-
-        //TODO: Add back once character work is complete
-        // [LabelWidth(100),
-        //  Tooltip("Not required, if character is provided details will be used from there. Can be used to override.")]
-        // public GameObject arrowPosition;
+        [Header("Speaker properties")]
+        
+        [LabelWidth(100), Tooltip("Used for character name, arrow position")]
+        public GameObject character;
 
         //TODO: Remove once character work is complete
         [LabelWidth(200), Tooltip("Temporary, will be removed once character work is complete")]
         public string characterName;
-
+        
+        [LabelWidth(200), Tooltip("When enabled the dialog box will follow the speaker")]
+        public bool followCharacter;
+        
         [LabelWidth(200), Tooltip("Enable for timePerCharacter to be used")]
         public bool customTimePerCharacter;
 
@@ -59,6 +56,8 @@ namespace EventSystem.VisualEditor.Nodes.Actions
 
         #region DialogLayout
 
+        [Header("Dialog box properties")]
+        
         [LabelWidth(200), Tooltip("Enable for dialogPosition to be used")]
         public bool customDialogPosition;
 

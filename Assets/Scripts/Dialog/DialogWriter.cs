@@ -14,6 +14,8 @@ namespace Dialog
         private readonly DialogComponents _dialogComponents;
         private readonly float _timePerCharacter;
 
+        private Vector3 offset;
+
         public DialogWriter(DialogNode dialogNode, DialogComponents dialogComponents)
         {
             _dialogNode = dialogNode;
@@ -32,6 +34,10 @@ namespace Dialog
         /// </summary>
         public void Initialize()
         {
+            var characterOriginalPosition = _dialogNode.character.transform.position;
+            var canvasPosition = GameManager.Instance.mainCamera.ScreenToWorldPoint(_dialogComponents.rectTransform.position);
+            offset = characterOriginalPosition + canvasPosition;
+            
             _dialogComponents.dialogGameObject.SetActive(true);
 
             //Set text
@@ -55,6 +61,14 @@ namespace Dialog
                 ? _dialogNode.dialogPositionY
                 : GameManager.Instance.dialogManager.defaultPositionY;
             _dialogComponents.rectTransform.anchoredPosition = new Vector2(positionX, positionY);
+
+            //
+
+            
+            
+            Debug.Log(characterOriginalPosition);
+            Debug.Log(canvasPosition);
+            Debug.Log(offset);
         }
 
         /// <summary>
@@ -62,24 +76,8 @@ namespace Dialog
         /// <returns>True on complete</returns>
         public void Update()
         {
-            if (_dialogNode.text.Length <= 0 || _characterIndex >= _dialogNode.text.Length)
-                return;
-
-            _timer -= Time.deltaTime;
-            while (_timer <= 0f)
-            {
-                //Display next character
-                _timer += _timePerCharacter;
-                _characterIndex++;
-
-                //Display all characters, change alpha on unwritten to prevent character format changes
-                var text = _dialogNode.text.Substring(0, _characterIndex);
-                text += $"<alpha=#00>{_dialogNode.text.Substring(_characterIndex)}";
-                _dialogComponents.dialogTMPText.text = text;
-
-                if (_characterIndex < _dialogNode.text.Length) continue;
-                return;
-            }
+            UpdateDialogPosition();
+            UpdateText();
         }
 
         /// <summary>
@@ -127,6 +125,44 @@ namespace Dialog
         public DialogComponents GetDialogComponent()
         {
             return _dialogComponents;
+        }
+
+        /// <summary>
+        /// Allows the dialog box to follow the player around during movement
+        /// </summary>
+        private void UpdateDialogPosition()
+        {
+            if (_dialogNode.followCharacter)
+            {
+                var characterPosition = GameManager.Instance.mainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
+                characterPosition += offset;
+                _dialogComponents.rectTransform.position = characterPosition;
+            }
+        }
+
+        /// <summary>
+        /// Updates the text on the UI with a typing animation
+        /// </summary>
+        private void UpdateText()
+        {
+            if (_dialogNode.text.Length <= 0 || _characterIndex >= _dialogNode.text.Length)
+                return;
+
+            _timer -= Time.deltaTime;
+            while (_timer <= 0f)
+            {
+                //Display next character
+                _timer += _timePerCharacter;
+                _characterIndex++;
+
+                //Display all characters, change alpha on unwritten to prevent character format changes
+                var text = _dialogNode.text.Substring(0, _characterIndex);
+                text += $"<alpha=#00>{_dialogNode.text.Substring(_characterIndex)}";
+                _dialogComponents.dialogTMPText.text = text;
+
+                if (_characterIndex < _dialogNode.text.Length) continue;
+                return;
+            }
         }
     }
 }
