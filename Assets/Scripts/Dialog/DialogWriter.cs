@@ -34,10 +34,6 @@ namespace Dialog
         /// </summary>
         public void Initialize()
         {
-            var characterOriginalPosition = _dialogNode.character.transform.position;
-            var canvasPosition = GameManager.Instance.mainCamera.ScreenToWorldPoint(_dialogComponents.rectTransform.position);
-            offset = characterOriginalPosition + canvasPosition;
-            
             _dialogComponents.dialogGameObject.SetActive(true);
 
             //Set text
@@ -62,13 +58,10 @@ namespace Dialog
                 : GameManager.Instance.dialogManager.defaultPositionY;
             _dialogComponents.rectTransform.anchoredPosition = new Vector2(positionX, positionY);
 
-            //
-
-            
-            
-            Debug.Log(characterOriginalPosition);
-            Debug.Log(canvasPosition);
-            Debug.Log(offset);
+            //Initial Offset 
+            var characterOriginalPosition = GameManager.Instance.mainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
+            var canvasPosition = _dialogComponents.rectTransform.position;
+            offset = canvasPosition - characterOriginalPosition;
         }
 
         /// <summary>
