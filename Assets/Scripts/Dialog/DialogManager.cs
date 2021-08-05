@@ -79,7 +79,8 @@ namespace Dialog
         /// </summary>
         private void Update()
         {
-            for (var i = 0; i < _activeDialogWriters.Count; i++)
+            //Iterate over list in reverse to allow us to remove elements without breaking indices 
+            for (var i = _activeDialogWriters.Count - 1; i >= 0; i--)
             {
                 _activeDialogWriters[i].Update();
                 if (_activeDialogWriters[i].IsTimedDialog() && _activeDialogWriters[i].HasDisplayedForRequiredTime())
@@ -111,7 +112,8 @@ namespace Dialog
         /// </summary>
         public void ContinueClicked()
         {
-            for (var i = 0; i < _activeDialogWriters.Count; i++)
+            //Iterate over list in reverse to allow us to remove elements without breaking indices 
+            for (var i = _activeDialogWriters.Count - 1; i >= 0; i--) 
             {
                 if (_activeDialogWriters[i].IsTimedDialog())
                     return;

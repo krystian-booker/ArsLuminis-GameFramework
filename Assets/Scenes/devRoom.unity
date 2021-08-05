@@ -974,6 +974,9 @@ MonoBehaviour:
       - fieldName: exit
         node: {fileID: 985681506}
         reroutePoints: []
+      - fieldName: exit
+        node: {fileID: 1569455042}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -1748,6 +1751,9 @@ MonoBehaviour:
       - fieldName: entry
         node: {fileID: 1333864882}
         reroutePoints: []
+      - fieldName: entry
+        node: {fileID: 1569455042}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -1942,6 +1948,8 @@ MonoBehaviour:
   character: {fileID: 2004799659}
   characterName: ShopKeeper
   followCharacter: 1
+  displayForNTime: 0
+  displayTime: 0
   customTimePerCharacter: 0
   timePerCharacter: 0
   customDialogPosition: 1
@@ -1973,6 +1981,7 @@ MonoBehaviour:
   - {fileID: 849194953}
   - {fileID: 1202601094}
   - {fileID: 985681506}
+  - {fileID: 1569455042}
 --- !u!1 &1431880049
 GameObject:
   m_ObjectHideFlags: 0
@@ -2182,6 +2191,79 @@ Transform:
   m_Father: {fileID: 1201522738}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1569455042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdee1f13ff814bd1b5328654627540a3, type: 3}
+  m_Name: Dialog
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1428709658}
+  position: {x: -136, y: -600}
+  ports:
+    keys:
+    - entry
+    - exit
+    - options
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1569455042}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 1202601094}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 1569455042}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 849194953}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: options
+      _node: {fileID: 1569455042}
+      _typeQualifiedName: System.Collections.Generic.List`1[[EventSystem.Models.DialogOption,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  character: {fileID: 477216147}
+  characterName: Player
+  followCharacter: 0
+  displayForNTime: 0
+  displayTime: 0
+  customTimePerCharacter: 0
+  timePerCharacter: 0
+  customDialogPosition: 0
+  dialogPositionX: -1
+  dialogPositionY: -1
+  dialogWidth: 0
+  dialogHeight: 0
+  key: Dialog_Cloud
+  text: I've... been thinking, too... about the universe... people... the planet...
+    How wide and big... No matter where I go and what I do, it won't change a thing
+  options: []
+  nCount: 0
+  optionsKeyTracker: []
 --- !u!1 &1573384829
 GameObject:
   m_ObjectHideFlags: 3

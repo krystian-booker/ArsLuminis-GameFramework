@@ -34,7 +34,8 @@ namespace EventSystem.VisualEditor.Nodes.Actions
 
         #region Speaker
 
-        [Header("Speaker properties")] [LabelWidth(100), Tooltip("Used for character name, arrow position")]
+        [Header("Speaker properties")]
+        [LabelWidth(200), Tooltip("Required for dialog, used for tracking, names, sizing, location, etc.")]
         public GameObject character;
 
         //TODO: Remove once character work is complete
@@ -49,13 +50,16 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [LabelWidth(200), Tooltip("When enabled the dialog box will follow the speaker")]
         public bool followCharacter;
 
-        [LabelWidth(200), Tooltip("When enabled the dialog box will not require the user to click confirm, the dialog will display for 'n' amount of time.")]
+        [LabelWidth(200),
+         Tooltip(
+             "When enabled the dialog box will not require the user to click confirm, the dialog will display for 'n' amount of time.")]
         public bool displayForNTime;
-        
+
         //TODO: Hide if displayForNTime is false
-        [LabelWidth(200), Tooltip("Time that the dialog box will display in SECONDS, timer starts AFTER the text is fully displayed")]
+        [LabelWidth(200),
+         Tooltip("Time that the dialog box will display in SECONDS, timer starts AFTER the text is fully displayed")]
         public int displayTime;
-        
+
         [LabelWidth(200), Tooltip("Enable for timePerCharacter to be used")]
         public bool customTimePerCharacter;
 
