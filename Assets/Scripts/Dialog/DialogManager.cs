@@ -2,21 +2,22 @@
 using System.Linq;
 using Dialog.Models;
 using EventSystem.VisualEditor.Nodes.Actions;
-using Sirenix.OdinInspector;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 
 namespace Dialog
 {
     public class DialogManager : MonoBehaviour
     {
+        #region Prefabs
+
         [SerializeField, Tooltip("Used to instantiate dialog instances when needed")]
         private GameObject dialogPrefab;
 
         [SerializeField, Tooltip("Used to add options to dialog instances")]
         private GameObject dialogOptionPrefab;
+
+        #endregion
 
         #region Dialog Defaults
 
@@ -74,12 +75,18 @@ namespace Dialog
 
         /// <summary>
         /// Updates all dialog writers
+        /// For timed dialogs, checks if complete/removes if complete
         /// </summary>
         private void Update()
         {
-            foreach (var dialogWriter in _activeDialogWriters)
+            for (var i = 0; i < _activeDialogWriters.Count; i++)
             {
-                dialogWriter.Update();
+                _activeDialogWriters[i].Update();
+                if (_activeDialogWriters[i].IsTimedDialog() && _activeDialogWriters[i].HasDisplayedForRequiredTime())
+                {
+                    ReturnDialogToPool(_activeDialogWriters[i].GetDialogComponent());
+                    _activeDialogWriters.RemoveAt(i);
+                }
             }
         }
 
@@ -98,8 +105,6 @@ namespace Dialog
             return dialogWriter;
         }
 
-        #region PlayerInput
-
         /// <summary>
         /// When user has clicked continue, either finish displaying text
         /// or mark textWriter as complete depending on states
@@ -108,21 +113,21 @@ namespace Dialog
         {
             for (var i = 0; i < _activeDialogWriters.Count; i++)
             {
-                var dialogWriter = _activeDialogWriters[i];
-                if (dialogWriter.IsTextFinished())
+                if (_activeDialogWriters[i].IsTimedDialog())
+                    return;
+
+                if (_activeDialogWriters[i].IsTextFinished())
                 {
-                    dialogWriter.MarkAsFinished();
-                    ReturnDialogToPool(dialogWriter.GetDialogComponent());
+                    _activeDialogWriters[i].MarkAsFinished();
+                    ReturnDialogToPool(_activeDialogWriters[i].GetDialogComponent());
                     _activeDialogWriters.RemoveAt(i);
                 }
                 else
                 {
-                    dialogWriter.SkipTextAnimation();
+                    _activeDialogWriters[i].SkipTextAnimation();
                 }
             }
         }
-
-        #endregion
 
         /// <summary>
         /// Gets next available dialog from the pool, marks as enabled to prevent other dialogs from using the same

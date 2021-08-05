@@ -6,7 +6,7 @@ namespace Dialog
 {
     public class DialogWriter
     {
-        private float _timer;
+        private float _typingAnimationTimer;
         private int _characterIndex;
         private bool _continueClicked;
 
@@ -14,7 +14,8 @@ namespace Dialog
         private readonly DialogComponents _dialogComponents;
         private readonly float _timePerCharacter;
 
-        private Vector3 offset;
+        private Vector3 _followPlayerOffset;
+        private float _displayTimer;
 
         public DialogWriter(DialogNode dialogNode, DialogComponents dialogComponents)
         {
@@ -58,10 +59,14 @@ namespace Dialog
                 : GameManager.Instance.dialogManager.defaultPositionY;
             _dialogComponents.rectTransform.anchoredPosition = new Vector2(positionX, positionY);
 
-            //Initial Offset 
-            var characterOriginalPosition = GameManager.Instance.mainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
-            var canvasPosition = _dialogComponents.rectTransform.position;
-            offset = canvasPosition - characterOriginalPosition;
+            //Initial Offset, used when following a character
+            if (_dialogNode.followCharacter)
+            {
+                var characterOriginalPosition =
+                    GameManager.Instance.mainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
+                var canvasPosition = _dialogComponents.rectTransform.position;
+                _followPlayerOffset = canvasPosition - characterOriginalPosition;
+            }
         }
 
         /// <summary>
@@ -75,12 +80,13 @@ namespace Dialog
 
         /// <summary>
         /// When the text is fully displayed and the user has clicked continue
+        /// or if the dialog has displayed for the required amount of time
         /// then IsNodeFinished will return true
         /// </summary>
         /// <returns>bool</returns>
         public bool IsNodeFinished()
         {
-            return _continueClicked && _characterIndex >= _dialogNode.text.Length;
+            return (_continueClicked && IsTextFinished()) || (IsTimedDialog() && HasDisplayedForRequiredTime());
         }
 
         /// <summary>
@@ -97,6 +103,11 @@ namespace Dialog
         /// </summary>
         public void SkipTextAnimation()
         {
+            //If the dialog box is a timed display node, do not allow the player to skip
+            //This is traditionally used for cutscenes, we don't want to mess up timings
+            if (_dialogNode.displayForNTime)
+                return;
+
             _characterIndex = _dialogNode.text.Length;
             _dialogComponents.dialogTMPText.text = _dialogNode.text;
         }
@@ -121,14 +132,34 @@ namespace Dialog
         }
 
         /// <summary>
+        /// Returns if the dialog is a timed dialog or a user input dialog
+        /// </summary>
+        /// <returns></returns>
+        public bool IsTimedDialog()
+        {
+            return _dialogNode.displayForNTime;
+        }
+
+        /// <summary>
+        /// Returns if the dialog has displayed for the required time
+        /// </summary>
+        /// <returns>bool</returns>
+        public bool HasDisplayedForRequiredTime()
+        {
+            return _displayTimer >= _dialogNode.displayTime;
+        }
+
+        /// <summary>
         /// Allows the dialog box to follow the player around during movement
+        /// Offset calculated from initial offset before following player
         /// </summary>
         private void UpdateDialogPosition()
         {
             if (_dialogNode.followCharacter)
             {
-                var characterPosition = GameManager.Instance.mainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
-                characterPosition += offset;
+                var characterPosition =
+                    GameManager.Instance.mainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
+                characterPosition += _followPlayerOffset;
                 _dialogComponents.rectTransform.position = characterPosition;
             }
         }
@@ -138,23 +169,33 @@ namespace Dialog
         /// </summary>
         private void UpdateText()
         {
-            if (_dialogNode.text.Length <= 0 || _characterIndex >= _dialogNode.text.Length)
+            if (_dialogNode.text.Length <= 0)
                 return;
 
-            _timer -= Time.deltaTime;
-            while (_timer <= 0f)
+            if (_characterIndex >= _dialogNode.text.Length) //Finished typing
             {
-                //Display next character
-                _timer += _timePerCharacter;
-                _characterIndex++;
+                if (_dialogNode.displayForNTime)
+                {
+                    _displayTimer += Time.deltaTime;
+                }
+            }
+            else // Typing
+            {
+                _typingAnimationTimer -= Time.deltaTime;
+                while (_typingAnimationTimer <= 0f)
+                {
+                    //Display next character
+                    _typingAnimationTimer += _timePerCharacter;
+                    _characterIndex++;
 
-                //Display all characters, change alpha on unwritten to prevent character format changes
-                var text = _dialogNode.text.Substring(0, _characterIndex);
-                text += $"<alpha=#00>{_dialogNode.text.Substring(_characterIndex)}";
-                _dialogComponents.dialogTMPText.text = text;
+                    //Display all characters, change alpha on unwritten to prevent character format changes
+                    var text = _dialogNode.text.Substring(0, _characterIndex);
+                    text += $"<alpha=#00>{_dialogNode.text.Substring(_characterIndex)}";
+                    _dialogComponents.dialogTMPText.text = text;
 
-                if (_characterIndex < _dialogNode.text.Length) continue;
-                return;
+                    if (_characterIndex < _dialogNode.text.Length) continue;
+                    return;
+                }
             }
         }
     }
