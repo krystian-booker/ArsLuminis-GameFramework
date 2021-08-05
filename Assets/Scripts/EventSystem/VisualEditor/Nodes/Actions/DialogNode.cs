@@ -34,31 +34,40 @@ namespace EventSystem.VisualEditor.Nodes.Actions
 
         #region Speaker
 
-        [Header("Speaker properties")]
-        
-        [LabelWidth(100), Tooltip("Used for character name, arrow position")]
+        [Header("Speaker properties")] [LabelWidth(100), Tooltip("Used for character name, arrow position")]
         public GameObject character;
 
         //TODO: Remove once character work is complete
         [LabelWidth(200), Tooltip("Temporary, will be removed once character work is complete")]
         public string characterName;
-        
+
+        #endregion
+
+        #region Dialog Configuration
+
+        [Header("Dialog Configuration")]
         [LabelWidth(200), Tooltip("When enabled the dialog box will follow the speaker")]
         public bool followCharacter;
+
+        [LabelWidth(200), Tooltip("When enabled the dialog box will not require the user to click confirm, the dialog will display for 'n' amount of time.")]
+        public bool displayForNTime;
+        
+        //TODO: Hide if displayForNTime is false
+        [LabelWidth(200), Tooltip("Time that the dialog box will display in SECONDS, timer starts AFTER the text is fully displayed")]
+        public int displayTime;
         
         [LabelWidth(200), Tooltip("Enable for timePerCharacter to be used")]
         public bool customTimePerCharacter;
 
+        //TODO: Hide if customTimePerCharacter is false
         [LabelWidth(200), Tooltip("Used to set a custom time per character, if not set default will be used")]
         public int timePerCharacter;
 
         #endregion
 
-        #region DialogLayout
+        #region Dialog Layout
 
-        [Header("Dialog box properties")]
-        
-        [LabelWidth(200), Tooltip("Enable for dialogPosition to be used")]
+        [Header("Dialog properties")] [LabelWidth(200), Tooltip("Enable for dialogPosition to be used")]
         public bool customDialogPosition;
 
         [ShowInInspector, LabelWidth(200), Tooltip("Used to set the X position in the canvas of the dialog instance")]
