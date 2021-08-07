@@ -124,7 +124,38 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 9665e03131b8424438b44b43f90641ee, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 8a47e5215f90d2c448c876ae97157bb8, type: 2}
+--- !u!114 &94125958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 039c230e90b393740aeed30101050330, type: 3}
+  m_Name: Start
+  m_EditorClassIdentifier: 
+  graph: {fileID: 484139692}
+  position: {x: -200, y: -136}
+  ports:
+    keys:
+    - exit
+    values:
+    - _fieldName: exit
+      _node: {fileID: 94125958}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 479296081}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!1 &94909184
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &170448896
+--- !u!114 &214456749
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -260,112 +291,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d54ba3ea81a24bf086e27e422a05b42b, type: 3}
-  m_Name: Input Action Map
+  m_Script: {fileID: 11500000, guid: 950f6c5528e1fcf4c8c974428820fece, type: 3}
+  m_Name: Character Movement
   m_EditorClassIdentifier: 
-  graph: {fileID: 1015002982}
-  position: {x: 248, y: -8}
+  graph: {fileID: 2044343377}
+  position: {x: 2104, y: -8}
   ports:
     keys:
     - entry
     - exit
     values:
     - _fieldName: entry
-      _node: {fileID: 170448896}
+      _node: {fileID: 214456749}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: stateFalse
-        node: {fileID: 960206931}
+      - fieldName: exit
+        node: {fileID: 235624898}
+        reroutePoints: []
+      - fieldName: exit
+        node: {fileID: 1265261965}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: exit
-      _node: {fileID: 170448896}
+      _node: {fileID: 214456749}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: entry
-        node: {fileID: 1625879837}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  description: 
-  actionMap: 2
---- !u!114 &187000161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a879d1dd8e54e2d8c513164f6d6813a, type: 3}
-  m_Name: End
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1015002982}
-  position: {x: 2168, y: -8}
-  ports:
-    keys:
-    - entry
-    values:
-    - _fieldName: entry
-      _node: {fileID: 187000161}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 2111584108}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
---- !u!114 &192423043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d81ad2d3d7ee497580e8eb331168d5ca, type: 3}
-  m_Name: Update State
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1015002982}
-  position: {x: 1032, y: -8}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 192423043}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 1625879837}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 192423043}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 2111584108}
+        node: {fileID: 1265261965}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -373,8 +330,46 @@ MonoBehaviour:
       _dynamic: 0
   started: 0
   skip: 0
-  eventState: 0
-  stateComplete: 1
+  description: 
+  shortName: 
+  target: {fileID: 2004799659}
+  targetPosition: {fileID: 840201296}
+  startingPosition: {fileID: 0}
+  distanceThreshold: 1
+  speed: 3.5
+  disableRotation: 0
+  navMeshRadius: 0.5
+--- !u!114 &235624898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 039c230e90b393740aeed30101050330, type: 3}
+  m_Name: Start
+  m_EditorClassIdentifier: 
+  graph: {fileID: 2044343377}
+  position: {x: 1720, y: -8}
+  ports:
+    keys:
+    - exit
+    values:
+    - _fieldName: exit
+      _node: {fileID: 235624898}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 214456749}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!1 &253059591
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,10 +428,7 @@ MonoBehaviour:
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
-    ModeOverride: 0
     LensShift: {x: 0, y: 0}
-    GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -445,7 +437,7 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1573384830}
---- !u!114 &277533849
+--- !u!114 &285739805
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -454,44 +446,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d794aa497926f0b44a7432a3b0d4f1e9, type: 3}
-  m_Name: ShopKeeper-graph
+  m_Script: {fileID: 11500000, guid: cf23654e7218bce4f8c4f31159792f9a, type: 3}
+  m_Name: Input Action Map
   m_EditorClassIdentifier: 
-  nodes:
-  - {fileID: 646835846}
-  - {fileID: 1142948442}
-  - {fileID: 2077825942}
---- !u!114 &306814329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f775c702ba64226814997d4ecd28396, type: 3}
-  m_Name: Start
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1428709658}
-  position: {x: -680, y: -8}
+  graph: {fileID: 484139692}
+  position: {x: 1848, y: -8}
   ports:
     keys:
+    - entry
     - exit
     values:
+    - _fieldName: entry
+      _node: {fileID: 285739805}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 755336515}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
     - _fieldName: exit
-      _node: {fileID: 306814329}
+      _node: {fileID: 285739805}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: entry
-        node: {fileID: 1202601094}
+        node: {fileID: 1788729169}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
   started: 0
+  description: 
+  actionMap: 0
 --- !u!1 &313571867
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,7 +540,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -657,7 +647,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -666,7 +655,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dcc10a4013c08024687865a7f8df2b07, type: 2}
+  - {fileID: 2100000, guid: 098f59fa1317aa446aedf347f5bf66c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -736,13 +725,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 477216147}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97bd714e7ee54c208b24f085c3c05b69, type: 3}
+  m_Script: {fileID: 11500000, guid: 16c26fb07b3776947abb435a09e85ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   defaultEventSequence: {fileID: 0}
   focusOnTrigger: 1
   focusRotationSpeed: 8
---- !u!114 &553392815
+--- !u!114 &479296081
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -751,18 +740,98 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9121afa12c76244dbaf71a8b7fef928, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a897da5a8535ec43947fdde0ce9d326, type: 3}
+  m_Name: State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 484139692}
+  position: {x: 56, y: -136}
+  ports:
+    keys:
+    - entry
+    - stateTrue
+    - stateFalse
+    values:
+    - _fieldName: entry
+      _node: {fileID: 479296081}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 94125958}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: stateTrue
+      _node: {fileID: 479296081}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1748119133}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: stateFalse
+      _node: {fileID: 479296081}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1860660782}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  eventState: 0
+--- !u!114 &484139692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc499b44cc8e2c949b9d32e6c8f83954, type: 3}
+  m_Name: TrainTrigger-graph
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 94125958}
+  - {fileID: 479296081}
+  - {fileID: 1748119133}
+  - {fileID: 1860660782}
+  - {fileID: 853101502}
+  - {fileID: 755336515}
+  - {fileID: 607552141}
+  - {fileID: 285739805}
+  - {fileID: 1788729169}
+--- !u!114 &607552141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 912e405933e71c44594bdf7dd985ff38, type: 3}
   m_Name: Auto Save
   m_EditorClassIdentifier: 
-  graph: {fileID: 1015002982}
-  position: {x: 1416, y: -152}
+  graph: {fileID: 484139692}
+  position: {x: 1528, y: -216}
   ports:
     keys:
     - entry
     - exit
     values:
     - _fieldName: entry
-      _node: {fileID: 553392815}
+      _node: {fileID: 607552141}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections: []
@@ -771,7 +840,7 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: exit
-      _node: {fileID: 553392815}
+      _node: {fileID: 607552141}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections: []
@@ -781,7 +850,7 @@ MonoBehaviour:
       _dynamic: 0
   started: 0
   description: 
---- !u!114 &646835846
+--- !u!114 &673458285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -790,24 +859,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f775c702ba64226814997d4ecd28396, type: 3}
-  m_Name: Start
+  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
+  m_Name: End
   m_EditorClassIdentifier: 
-  graph: {fileID: 277533849}
-  position: {x: -200, y: -8}
+  graph: {fileID: 1285439127}
+  position: {x: 3592, y: -200}
   ports:
     keys:
-    - exit
+    - entry
     values:
-    - _fieldName: exit
-      _node: {fileID: 646835846}
+    - _fieldName: entry
+      _node: {fileID: 673458285}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: entry
-        node: {fileID: 1142948442}
+      - fieldName: exit
+        node: {fileID: 1465208039}
         reroutePoints: []
-      _direction: 1
+      - fieldName: exit
+        node: {fileID: 1172451213}
+        reroutePoints: []
+      _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
@@ -905,6 +977,84 @@ Transform:
   m_Father: {fileID: 1141624368}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &755336515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc78fab3a5249641b30aa424d54c398, type: 3}
+  m_Name: Update State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 484139692}
+  position: {x: 1208, y: -8}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 755336515}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 853101502}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 755336515}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 285739805}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  skip: 0
+  eventState: 0
+  stateComplete: 1
+--- !u!114 &833040358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 039c230e90b393740aeed30101050330, type: 3}
+  m_Name: Start
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1285439127}
+  position: {x: 1976, y: -136}
+  ports:
+    keys:
+    - exit
+    values:
+    - _fieldName: exit
+      _node: {fileID: 833040358}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1229608135}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!1 &840201296
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,7 +1081,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 840201296}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 388b3e44f32b23c41978be946714ff24, type: 3}
+  m_Script: {fileID: 11500000, guid: d233a01493a92344483ac081dd974693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &840201298
@@ -948,7 +1098,7 @@ Transform:
   m_Father: {fileID: 1201522738}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &849194953
+--- !u!114 &853101502
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -957,120 +1107,46 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a879d1dd8e54e2d8c513164f6d6813a, type: 3}
-  m_Name: End
+  m_Script: {fileID: 11500000, guid: 339bdc57e5719fb419d7e9fa4d037b2e, type: 3}
+  m_Name: Animation
   m_EditorClassIdentifier: 
-  graph: {fileID: 1428709658}
-  position: {x: 712, y: -8}
+  graph: {fileID: 484139692}
+  position: {x: 824, y: -8}
   ports:
     keys:
     - entry
+    - exit
     values:
     - _fieldName: entry
-      _node: {fileID: 849194953}
+      _node: {fileID: 853101502}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: exit
-        node: {fileID: 985681506}
-        reroutePoints: []
-      - fieldName: exit
-        node: {fileID: 1569455042}
+        node: {fileID: 1860660782}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  started: 0
---- !u!114 &858139910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a879d1dd8e54e2d8c513164f6d6813a, type: 3}
-  m_Name: End
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1015002982}
-  position: {x: 248, y: -136}
-  ports:
-    keys:
-    - entry
-    values:
-    - _fieldName: entry
-      _node: {fileID: 858139910}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: stateTrue
-        node: {fileID: 960206931}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
---- !u!114 &960206931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95cc0e06072f45cf878f9c5a62f15fae, type: 3}
-  m_Name: State
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1015002982}
-  position: {x: -136, y: -136}
-  ports:
-    keys:
-    - entry
-    - stateTrue
-    - stateFalse
-    values:
-    - _fieldName: entry
-      _node: {fileID: 960206931}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 1076414982}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: stateTrue
-      _node: {fileID: 960206931}
+    - _fieldName: exit
+      _node: {fileID: 853101502}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: entry
-        node: {fileID: 858139910}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: stateFalse
-      _node: {fileID: 960206931}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 170448896}
+        node: {fileID: 755336515}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
   started: 0
-  eventState: 0
+  skip: 0
+  description: 
+  continueOnAnimationEvent: 1
+  animationTarget: {fileID: 1303509004}
+  animationTrigger: TrainStart
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1207,52 +1283,6 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &985681506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d54ba3ea81a24bf086e27e422a05b42b, type: 3}
-  m_Name: Input Action Map
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1428709658}
-  position: {x: 392, y: -8}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 985681506}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 1333864882}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 985681506}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 849194953}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  description: 
-  actionMap: 0
 --- !u!1 &992654479
 GameObject:
   m_ObjectHideFlags: 0
@@ -1285,59 +1315,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1015002982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d794aa497926f0b44a7432a3b0d4f1e9, type: 3}
-  m_Name: TrainTrigger-graph
-  m_EditorClassIdentifier: 
-  nodes:
-  - {fileID: 1076414982}
-  - {fileID: 960206931}
-  - {fileID: 858139910}
-  - {fileID: 1625879837}
-  - {fileID: 192423043}
-  - {fileID: 553392815}
-  - {fileID: 187000161}
-  - {fileID: 170448896}
-  - {fileID: 2111584108}
---- !u!114 &1076414982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f775c702ba64226814997d4ecd28396, type: 3}
-  m_Name: Start
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1015002982}
-  position: {x: -392, y: -136}
-  ports:
-    keys:
-    - exit
-    values:
-    - _fieldName: exit
-      _node: {fileID: 1076414982}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 960206931}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
 --- !u!1 &1141624367
 GameObject:
   m_ObjectHideFlags: 0
@@ -1385,12 +1362,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1141624367}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3f82c48338441ad9b0faddecd140f83, type: 3}
+  m_Script: {fileID: 11500000, guid: a23fdb89188e69e44b45f3462c4d9cb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogPrefab: {fileID: 8946716563194125977, guid: e7eb2ca32acc9dd478214bc21f154d25,
+  dialogPrefab: {fileID: 8946716563194125977, guid: 4d61632ca353e3f4d83bc48a3a232452,
     type: 3}
-  dialogOptionPrefab: {fileID: 6936955344200681142, guid: eb9e945e761961049aae9aac73437e4a,
+  dialogOptionPrefab: {fileID: 6936955344200681142, guid: f7e064b48c3c583449b6506fcad3109e,
     type: 3}
   defaultPositionX: 0
   defaultPositionY: -330
@@ -1407,7 +1384,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1141624367}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670c162d19c53e54ab92df7f3c7f4d64, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ff454fd3181e5140864669b429b4761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 963194227}
@@ -1433,7 +1410,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1141624367}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a79028e78b4899c45bb695006a7c8078, type: 3}
+  m_Script: {fileID: 11500000, guid: c8f6acf8e31cbbe4cab337d1adc33f2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 1141624372}
@@ -1449,7 +1426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 5c1d4dcb5fdb3cd409852b024568f718,
+  m_Actions: {fileID: -944628639613478452, guid: 52cbab9c74c3c5c439191370a2007a54,
     type: 3}
   m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
@@ -1577,7 +1554,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1141624367}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7228cc635e574e1488d8f11ab8c88a6e, type: 3}
+  m_Script: {fileID: 11500000, guid: cda2bc16a17830041b50d5fd9846fb4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1141624374
@@ -1589,66 +1566,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1141624367}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 873979b9fa5c414cae29c7cea2eb2752, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c05720d13d4da940b36f2200556d372, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1142948442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5bfd9a309b84cb6aa3420110704f0e7, type: 3}
-  m_Name: Character Movement
-  m_EditorClassIdentifier: 
-  graph: {fileID: 277533849}
-  position: {x: 136, y: -8}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 1142948442}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 646835846}
-        reroutePoints: []
-      - fieldName: exit
-        node: {fileID: 2077825942}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 1142948442}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 2077825942}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  skip: 0
-  description: 
-  shortName: shopKeeper
-  target: {fileID: 2004799659}
-  targetPosition: {fileID: 840201296}
-  startingPosition: {fileID: 0}
-  distanceThreshold: 4.29
-  speed: 3.5
-  disableRotation: 0
-  navMeshRadius: 0.5
 --- !u!1 &1146394472
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,6 +1600,79 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1172451213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c043dfe5f61a3ef47a5fb4837fa5d5b3, type: 3}
+  m_Name: Dialog
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1285439127}
+  position: {x: 2616, y: -760}
+  ports:
+    keys:
+    - entry
+    - exit
+    - options
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1172451213}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 1229608135}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 1172451213}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 673458285}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: options
+      _node: {fileID: 1172451213}
+      _typeQualifiedName: System.Collections.Generic.List`1[[EventSystem.Models.DialogOption,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  character: {fileID: 477216147}
+  characterName: Player
+  followCharacter: 0
+  displayForNTime: 0
+  displayTime: 0
+  customTimePerCharacter: 0
+  timePerCharacter: 0
+  customDialogPosition: 0
+  dialogPositionX: -1
+  dialogPositionY: -1
+  dialogWidth: 0
+  dialogHeight: 0
+  key: Dialog_Cloud
+  text: I've... been thinking, too... about the universe... people... the planet...
+    How wide and big... No matter where I go and what I do, it won't change a thing
+  options: []
+  nCount: 0
+  optionsKeyTracker: []
 --- !u!1 &1201522737
 GameObject:
   m_ObjectHideFlags: 0
@@ -1712,7 +1705,7 @@ Transform:
   m_Father: {fileID: 1757685045}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1202601094
+--- !u!114 &1229608135
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1721,38 +1714,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d54ba3ea81a24bf086e27e422a05b42b, type: 3}
+  m_Script: {fileID: 11500000, guid: cf23654e7218bce4f8c4f31159792f9a, type: 3}
   m_Name: Input Action Map
   m_EditorClassIdentifier: 
-  graph: {fileID: 1428709658}
-  position: {x: -456, y: -8}
+  graph: {fileID: 1285439127}
+  position: {x: 2232, y: -136}
   ports:
     keys:
     - entry
     - exit
     values:
     - _fieldName: entry
-      _node: {fileID: 1202601094}
+      _node: {fileID: 1229608135}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: exit
-        node: {fileID: 306814329}
+        node: {fileID: 833040358}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: exit
-      _node: {fileID: 1202601094}
+      _node: {fileID: 1229608135}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: entry
-        node: {fileID: 1333864882}
+        node: {fileID: 1271913734}
         reroutePoints: []
       - fieldName: entry
-        node: {fileID: 1569455042}
+        node: {fileID: 1172451213}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -1761,6 +1754,152 @@ MonoBehaviour:
   started: 0
   description: 
   actionMap: 1
+--- !u!114 &1265261965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 950f6c5528e1fcf4c8c974428820fece, type: 3}
+  m_Name: Character Movement
+  m_EditorClassIdentifier: 
+  graph: {fileID: 2044343377}
+  position: {x: 2104, y: -440}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1265261965}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 214456749}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 1265261965}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 214456749}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  skip: 0
+  description: 
+  shortName: 
+  target: {fileID: 2004799659}
+  targetPosition: {fileID: 1497684354}
+  startingPosition: {fileID: 0}
+  distanceThreshold: 1
+  speed: 3.5
+  disableRotation: 0
+  navMeshRadius: 0.5
+--- !u!114 &1271913734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c043dfe5f61a3ef47a5fb4837fa5d5b3, type: 3}
+  m_Name: Dialog
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1285439127}
+  position: {x: 2616, y: -136}
+  ports:
+    keys:
+    - entry
+    - exit
+    - options
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1271913734}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 1229608135}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 1271913734}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1465208039}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: options
+      _node: {fileID: 1271913734}
+      _typeQualifiedName: System.Collections.Generic.List`1[[EventSystem.Models.DialogOption,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  character: {fileID: 2004799659}
+  characterName: ShopKeeper
+  followCharacter: 1
+  displayForNTime: 0
+  displayTime: 0
+  customTimePerCharacter: 0
+  timePerCharacter: 0
+  customDialogPosition: 1
+  dialogPositionX: -50
+  dialogPositionY: -100
+  dialogWidth: 421
+  dialogHeight: 222
+  key: DEMO_Shop
+  text: Hello, welcome to my store, what would you like to buy? I've got lots of
+    goodies!
+  options: []
+  nCount: 0
+  optionsKeyTracker: []
+--- !u!114 &1285439127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc499b44cc8e2c949b9d32e6c8f83954, type: 3}
+  m_Name: ShopKeeper-graph
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 833040358}
+  - {fileID: 1229608135}
+  - {fileID: 1271913734}
+  - {fileID: 1465208039}
+  - {fileID: 673458285}
+  - {fileID: 1172451213}
 --- !u!1 &1303509004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1792,7 +1931,7 @@ Animator:
   m_GameObject: {fileID: 1303509004}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 07b840966b7d47b498a87485a5038a03, type: 2}
+  m_Controller: {fileID: 9100000, guid: 67edf5f16bfa3dc4aaf9d141e0c093e6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -1825,7 +1964,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1887,101 +2025,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1303509004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56bfeb215e284e07add4a2ff6e4c60fb, type: 3}
+  m_Script: {fileID: 11500000, guid: b118fd2373b5b854fa2bc8482f3ceaca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1333864882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdee1f13ff814bd1b5328654627540a3, type: 3}
-  m_Name: Dialog
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1428709658}
-  position: {x: -136, y: -8}
-  ports:
-    keys:
-    - entry
-    - exit
-    - options
-    values:
-    - _fieldName: entry
-      _node: {fileID: 1333864882}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 1202601094}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 1333864882}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 985681506}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: options
-      _node: {fileID: 1333864882}
-      _typeQualifiedName: System.Collections.Generic.List`1[[EventSystem.Models.DialogOption,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  character: {fileID: 2004799659}
-  characterName: ShopKeeper
-  followCharacter: 1
-  displayForNTime: 0
-  displayTime: 0
-  customTimePerCharacter: 0
-  timePerCharacter: 0
-  customDialogPosition: 1
-  dialogPositionX: -50
-  dialogPositionY: -100
-  dialogWidth: 421
-  dialogHeight: 222
-  key: DEMO_Shop
-  text: Hello, welcome to my store, what would you like to buy? I've got lots of
-    goodies!
-  options: []
-  nCount: 0
-  optionsKeyTracker: []
---- !u!114 &1428709658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d794aa497926f0b44a7432a3b0d4f1e9, type: 3}
-  m_Name: ShopKeeper-graph
-  m_EditorClassIdentifier: 
-  nodes:
-  - {fileID: 306814329}
-  - {fileID: 1333864882}
-  - {fileID: 849194953}
-  - {fileID: 1202601094}
-  - {fileID: 985681506}
-  - {fileID: 1569455042}
 --- !u!1 &1431880049
 GameObject:
   m_ObjectHideFlags: 0
@@ -2040,10 +2086,7 @@ MonoBehaviour:
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
-    ModeOverride: 0
     LensShift: {x: 0, y: 0}
-    GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2109,7 +2152,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -2148,6 +2190,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1440564325}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1465208039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf23654e7218bce4f8c4f31159792f9a, type: 3}
+  m_Name: Input Action Map
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1285439127}
+  position: {x: 3208, y: -136}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1465208039}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 1271913734}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 1465208039}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 673458285}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  description: 
+  actionMap: 0
 --- !u!1 &1497684354
 GameObject:
   m_ObjectHideFlags: 0
@@ -2174,7 +2262,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1497684354}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 388b3e44f32b23c41978be946714ff24, type: 3}
+  m_Script: {fileID: 11500000, guid: d233a01493a92344483ac081dd974693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1497684356
@@ -2191,79 +2279,6 @@ Transform:
   m_Father: {fileID: 1201522738}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1569455042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdee1f13ff814bd1b5328654627540a3, type: 3}
-  m_Name: Dialog
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1428709658}
-  position: {x: -136, y: -600}
-  ports:
-    keys:
-    - entry
-    - exit
-    - options
-    values:
-    - _fieldName: entry
-      _node: {fileID: 1569455042}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 1202601094}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 1569455042}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 849194953}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: options
-      _node: {fileID: 1569455042}
-      _typeQualifiedName: System.Collections.Generic.List`1[[EventSystem.Models.DialogOption,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  character: {fileID: 477216147}
-  characterName: Player
-  followCharacter: 0
-  displayForNTime: 0
-  displayTime: 0
-  customTimePerCharacter: 0
-  timePerCharacter: 0
-  customDialogPosition: 0
-  dialogPositionX: -1
-  dialogPositionY: -1
-  dialogWidth: 0
-  dialogHeight: 0
-  key: Dialog_Cloud
-  text: I've... been thinking, too... about the universe... people... the planet...
-    How wide and big... No matter where I go and what I do, it won't change a thing
-  options: []
-  nCount: 0
-  optionsKeyTracker: []
 --- !u!1 &1573384829
 GameObject:
   m_ObjectHideFlags: 3
@@ -2358,55 +2373,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1625879837
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a509b39fbaac4cdb8d9124fa3d077837, type: 3}
-  m_Name: Animation
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1015002982}
-  position: {x: 632, y: -8}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 1625879837}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 170448896}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 1625879837}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 192423043}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  skip: 0
-  description: 
-  continueOnAnimationEvent: 1
-  animationTarget: {fileID: 1303509004}
-  animationTrigger: TrainStart
 --- !u!1 &1711201546
 GameObject:
   m_ObjectHideFlags: 0
@@ -2451,7 +2417,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -2460,7 +2425,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ca0942ef0ce830a4a9a509de2601a567, type: 2}
+  - {fileID: 2100000, guid: 4afb06a9eaa76c24b8f0a5bdd89f6260, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2504,6 +2469,37 @@ Transform:
   m_Father: {fileID: 1757685045}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1748119133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
+  m_Name: End
+  m_EditorClassIdentifier: 
+  graph: {fileID: 484139692}
+  position: {x: 440, y: -136}
+  ports:
+    keys:
+    - entry
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1748119133}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: stateTrue
+        node: {fileID: 479296081}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!1 &1757685044
 GameObject:
   m_ObjectHideFlags: 0
@@ -2537,6 +2533,83 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1788729169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
+  m_Name: End
+  m_EditorClassIdentifier: 
+  graph: {fileID: 484139692}
+  position: {x: 2232, y: -8}
+  ports:
+    keys:
+    - entry
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1788729169}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 285739805}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+--- !u!114 &1860660782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf23654e7218bce4f8c4f31159792f9a, type: 3}
+  m_Name: Input Action Map
+  m_EditorClassIdentifier: 
+  graph: {fileID: 484139692}
+  position: {x: 440, y: -8}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1860660782}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: stateFalse
+        node: {fileID: 479296081}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 1860660782}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 853101502}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  description: 
+  actionMap: 2
 --- !u!1 &2004799659
 GameObject:
   m_ObjectHideFlags: 0
@@ -2552,9 +2625,9 @@ GameObject:
   - component: {fileID: 2004799662}
   - component: {fileID: 2004799661}
   - component: {fileID: 2004799667}
+  - component: {fileID: 2004799669}
   - component: {fileID: 2004799668}
   - component: {fileID: 2004799660}
-  - component: {fileID: 2004799669}
   m_Layer: 6
   m_Name: ShopKeeper
   m_TagString: NPC
@@ -2571,11 +2644,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2004799659}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21be7e16120a09a489f1365a41adc6e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 162dc4053bae6394a882919c954d97be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graph: {fileID: 277533849}
-  description: Default, walking around
+  graph: {fileID: 1285439127}
+  description: Dialog
 --- !u!54 &2004799661
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2639,7 +2712,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -2648,7 +2720,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b36910e2841b2834e82c3d92ec995317, type: 2}
+  - {fileID: 2100000, guid: 7191b0ec9e3478e42b9c330d178a184b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2702,10 +2774,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2004799659}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97bd714e7ee54c208b24f085c3c05b69, type: 3}
+  m_Script: {fileID: 11500000, guid: 16c26fb07b3776947abb435a09e85ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultEventSequence: {fileID: 2004799660}
+  defaultEventSequence: {fileID: 2004799669}
   focusOnTrigger: 1
   focusRotationSpeed: 8
 --- !u!114 &2004799668
@@ -2717,10 +2789,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2004799659}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a47acf4875fb45b4d99fcd9f1209f71e, type: 3}
+  m_Script: {fileID: 11500000, guid: 403ed9ff66ff80e4bb9c6d95ad60e8a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerEventSequence: {fileID: 2004799669}
+  triggerEventSequence: {fileID: 2004799660}
   resetTriggerSequence: 1
 --- !u!114 &2004799669
 MonoBehaviour:
@@ -2731,12 +2803,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2004799659}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21be7e16120a09a489f1365a41adc6e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 162dc4053bae6394a882919c954d97be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graph: {fileID: 1428709658}
-  description: Dialog
---- !u!114 &2077825942
+  graph: {fileID: 2044343377}
+  description: Default, walking around
+--- !u!114 &2044343377
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2745,51 +2817,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5bfd9a309b84cb6aa3420110704f0e7, type: 3}
-  m_Name: Character Movement
+  m_Script: {fileID: 11500000, guid: bc499b44cc8e2c949b9d32e6c8f83954, type: 3}
+  m_Name: ShopKeeper-graph
   m_EditorClassIdentifier: 
-  graph: {fileID: 277533849}
-  position: {x: 136, y: -408}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 2077825942}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 1142948442}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 2077825942}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 1142948442}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  skip: 0
-  description: 
-  shortName: shopKeeper
-  target: {fileID: 2004799659}
-  targetPosition: {fileID: 1497684354}
-  startingPosition: {fileID: 0}
-  distanceThreshold: 1
-  speed: 3.5
-  disableRotation: 0
-  navMeshRadius: 0.5
+  nodes:
+  - {fileID: 235624898}
+  - {fileID: 214456749}
+  - {fileID: 1265261965}
 --- !u!1 &2082943465
 GameObject:
   m_ObjectHideFlags: 0
@@ -2832,10 +2866,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2082943465}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21be7e16120a09a489f1365a41adc6e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 162dc4053bae6394a882919c954d97be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graph: {fileID: 1015002982}
+  graph: {fileID: 484139692}
   description: 
 --- !u!114 &2082943468
 MonoBehaviour:
@@ -2846,10 +2880,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2082943465}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6f8c6311b2b17f48bf86156dbdeebc5, type: 3}
+  m_Script: {fileID: 11500000, guid: c5d901646fab3b84ea78908bd55966a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerEventSequence: {fileID: 2082943467}
+  triggerEventSequence: {fileID: 0}
   resetTriggerSequence: 0
 --- !u!65 &2082943469
 BoxCollider:
@@ -2864,49 +2898,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 10, z: 50}
   m_Center: {x: 0, y: 4.8569355, z: 13.612789}
---- !u!114 &2111584108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d54ba3ea81a24bf086e27e422a05b42b, type: 3}
-  m_Name: Input Action Map
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1015002982}
-  position: {x: 1784, y: -8}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 2111584108}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 192423043}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 2111584108}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 187000161}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  description: 
-  actionMap: 0

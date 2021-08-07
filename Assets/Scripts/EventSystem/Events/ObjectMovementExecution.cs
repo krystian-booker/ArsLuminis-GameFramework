@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using EditorTools;
 using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Actions;
@@ -70,6 +69,11 @@ namespace EventSystem.Events
         {
             _targetNavMeshAgent.isStopped = false;
             _targetNavMeshAgent.SetDestination(_objectMovementNode.targetPosition.transform.position);
+        }
+        
+        //Unused
+        public void OnDropObjects(UnityEngine.Object[] objects)
+        {
         }
     }
 }

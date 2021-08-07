@@ -1,13 +1,14 @@
 # JRPG-System
-A Unity base project with all the neccesary systems and tools to create an old school JRPG. 
+A Unity base project with all the necessary systems and tools to create an old school J-RPG. 
 Features are based around PS1 era Final Fantasy games.
 
-### Asset Requirements
-- Odin - Inspector and Serializer : (In the process of removing this as a requirement)
+### Requirements
+- Unity 2020.3.15
+- Odin - Inspector and Serializer (In the process of removing this as a requirement)
 
 ## Features
-- Node based state machine & event sequencer
-- Dialog System
+- Extendable node based state machine & event sequencer
+- Customizable Dialog System
 - Localization support
 - Save manager 
 
@@ -17,5 +18,4 @@ Features are based around PS1 era Final Fantasy games.
 - Party manager
 - Battle system
 - Inventory system
-- Customizable dialog
 

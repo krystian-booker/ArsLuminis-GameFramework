@@ -9,5 +9,9 @@ namespace EventSystem.VisualEditor.Graphs
     [CreateAssetMenu(menuName = "CheddyShakes/EventSequence", order = 0)]
     public class EventSequenceGraph : NodeGraph
     {
+        public void OnDropObjects(UnityEngine.Object[] objects)
+        {
+            
+        }
     }
 }

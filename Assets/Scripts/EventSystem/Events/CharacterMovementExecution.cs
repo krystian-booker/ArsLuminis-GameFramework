@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Actions;
 using UnityEngine;
 using UnityEngine.AI;
 using XNode;
-
 namespace EventSystem.Events
 {
     public class CharacterMovementExecution : IPauseEventExecution
@@ -50,7 +48,7 @@ namespace EventSystem.Events
             return _targetNavMeshAgent != null && _targetNavMeshAgent.hasPath && _targetNavMeshAgent.remainingDistance <=
                 _targetNavMeshAgent.stoppingDistance + _characterMovementNode.distanceThreshold;
         }
-        
+
         public void PauseExecution()
         {
             _targetNavMeshAgent.isStopped = true;
@@ -59,6 +57,11 @@ namespace EventSystem.Events
         public void ResumeExecution()
         {
             _targetNavMeshAgent.isStopped = false;
+        }
+        
+        //Unused
+        public void OnDropObjects(UnityEngine.Object[] objects)
+        {
         }
     }
 }

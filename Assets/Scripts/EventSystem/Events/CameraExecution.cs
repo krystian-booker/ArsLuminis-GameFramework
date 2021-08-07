@@ -73,5 +73,10 @@ namespace EventSystem.Events
                 }
             }
         }
+        
+        //Unused
+        public void OnDropObjects(UnityEngine.Object[] objects)
+        {
+        }
     }
 }

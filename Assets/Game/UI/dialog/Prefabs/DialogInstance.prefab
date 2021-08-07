@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8df70542d1dc5f540bed6ad1e1a40cd1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e228e39fe501bb940b67bed159f1c12d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -313,9 +313,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: DIALOG_TEXT
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e7ed7ee9c2a3b674cb01d878f40a8218, type: 2}
-  m_sharedMaterial: {fileID: 8904967422336204943, guid: e7ed7ee9c2a3b674cb01d878f40a8218,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -525,9 +524,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: CHARACTER_NAME
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 23f09c2283f56724f8ab15ebfc392e13, type: 2}
-  m_sharedMaterial: {fileID: 8833652960311138518, guid: 23f09c2283f56724f8ab15ebfc392e13,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -658,7 +656,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ef404c3d0e2904147acab42fb59c7e3b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4ca0891b6525c704d811d5f463773ace, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -940,7 +938,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8946716563194125977}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d4aad92ab3bdaf4b863d96899bf1fee, type: 3}
+  m_Script: {fileID: 11500000, guid: e155251cb9cbe65478dac4580bf6f407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5681920654965904828
@@ -952,7 +950,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8946716563194125977}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc7c404181a34687bcaa1416e7027a44, type: 3}
+  m_Script: {fileID: 11500000, guid: 1afb217f7aed9fe4e9b749b2c7f3a619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dialogGameObject: {fileID: 8946716563194125977}
