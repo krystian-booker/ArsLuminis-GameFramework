@@ -5,6 +5,7 @@ using EventSystem.Models;
 using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Actions;
 using UnityEngine;
+using UnityEngine.Assertions;
 using XNode;
 
 namespace EventSystem.Events
@@ -16,45 +17,35 @@ namespace EventSystem.Events
 
         public CameraExecution(Camera primaryCamera)
         {
-            if (primaryCamera == null)
-            {
-                Debug.LogError($"{nameof(CameraExecution)}: Primary camera is required for all camera events.");
-            }
+            Assert.IsNotNull(primaryCamera,
+                $"{nameof(CameraExecution)}: Primary camera is required for all camera events.");
 
             _cinemachineBrain = primaryCamera.GetComponent<CinemachineBrain>();
-            if (_cinemachineBrain == null)
-            {
-                Debug.LogError($"{nameof(CameraExecution)}: CinemachineBrain required on primary camera.");
-            }
+            Assert.IsNotNull(_cinemachineBrain,
+                $"{nameof(CameraExecution)}: CinemachineBrain required on primary camera.");
         }
 
         public void Execute(Node node)
         {
             //Cast
             var cameraNode = node as CameraNode;
-            if (cameraNode != null && cameraNode.virtualCamera != null)
-            {
-                //Update priorities
-                DisableVirtualCameras();
-                
-                //Set blend states
-                _cinemachineBrain.m_DefaultBlend.m_Style = cameraNode.blend;
-                _cinemachineBrain.m_DefaultBlend.m_Time = cameraNode.blendTime;
+            Assert.IsNotNull(cameraNode, $"{nameof(CameraExecution)}: Invalid setup on CameraNode.");
+            Assert.IsNotNull(cameraNode.virtualCamera, $"{nameof(CameraExecution)}: Invalid setup on CameraNode.");
 
-                //Set active camera state
-                _timeStarted = Time.time;
-                cameraNode.virtualCamera.Priority = (int) CameraPriorityState.Active;
-            }
-            else
-            {
-                Debug.LogException(new Exception($"{nameof(CameraExecution)}: Invalid setup on CameraNode."));
-            }
+            //Update priorities
+            DisableVirtualCameras();
+
+            //Set blend states
+            _cinemachineBrain.m_DefaultBlend.m_Style = cameraNode.blend;
+            _cinemachineBrain.m_DefaultBlend.m_Time = cameraNode.blendTime;
+
+            //Set active camera state
+            _timeStarted = Time.time;
+            cameraNode.virtualCamera.Priority = (int)CameraPriorityState.Active;
         }
 
         public bool IsFinished()
         {
-            //TODO: Add an override time or event for more control
-            //Once the blend is finished, event is finished
             return (Time.time - _timeStarted >= _cinemachineBrain.m_DefaultBlend.m_Time);
         }
 
@@ -63,20 +54,15 @@ namespace EventSystem.Events
             for (var i = 0; i < CinemachineCore.Instance.VirtualCameraCount; i++)
             {
                 var vcam = CinemachineCore.Instance.GetVirtualCamera(i);
-                if (vcam.Priority == (int) CameraPriorityState.Active)
+                if (vcam.Priority == (int)CameraPriorityState.Active)
                 {
-                    vcam.Priority = (int) CameraPriorityState.Secondary;
+                    vcam.Priority = (int)CameraPriorityState.Secondary;
                 }
                 else
                 {
-                    vcam.Priority = (int) CameraPriorityState.Disabled;
+                    vcam.Priority = (int)CameraPriorityState.Disabled;
                 }
             }
-        }
-        
-        //Unused
-        public void OnDropObjects(UnityEngine.Object[] objects)
-        {
         }
     }
 }

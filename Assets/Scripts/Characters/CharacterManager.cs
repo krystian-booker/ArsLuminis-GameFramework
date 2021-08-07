@@ -1,9 +1,7 @@
-﻿using System;
-using EventSystem;
+﻿using EventSystem;
 using EventSystem.Triggers;
 using EventSystem.VisualEditor.Graphs;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Characters
 {

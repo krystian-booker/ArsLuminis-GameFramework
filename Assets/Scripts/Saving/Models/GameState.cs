@@ -12,7 +12,5 @@ namespace Saving.Models
         public int sceneId;
         
         public List<EventStateValue> states;
-        
-        //TODO: Extend, player stats
     }
 }

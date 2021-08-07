@@ -23,9 +23,9 @@ namespace EventSystem
         //TODO: Finish this functionality. Replace with in game UI
         public bool debugger;
         [HideInInspector] public bool step;
-        
+
         private List<IPauseEventExecution> _pauseEventExecutions = new List<IPauseEventExecution>();
-        
+
         /// <summary>
         /// Start parsing the xNode timeLine.
         /// Currently this is called from Start() will be moved over to events 
@@ -34,19 +34,9 @@ namespace EventSystem
         {
             _eventSequenceSceneGraph = eventSequenceSceneGraph;
             var startNode = _eventSequenceSceneGraph.graph.nodes.Where(x => x.GetType() == typeof(StartNode)).ToList();
-            if (!startNode.Any())
-            {
-                Debug.LogError($"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
-                yield return null;
-            }
-
-            if (startNode.Count > 1)
-            {
-                Debug.LogError(
-                    $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
-                yield return null;
-            }
-
+            Assert.IsTrue(startNode.Any(), $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
+            Assert.IsTrue(startNode.Count > 1,
+                $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
             eventSequenceState = EventSequenceState.Started;
             yield return ParseNode(startNode.FirstOrDefault());
         }
@@ -64,7 +54,7 @@ namespace EventSystem
 
             //perform action for node type
             var currentNodeType = node.GetType();
-            if (currentNodeType == typeof(StartNode) || node is BaseNodeExtended {skip: true})
+            if (currentNodeType == typeof(StartNode) || node is BaseNodeExtended { skip: true })
             {
                 yield return NextNode(node);
             }
@@ -137,7 +127,7 @@ namespace EventSystem
                 pauseExecution.PauseExecution();
             }
         }
-        
+
         /// <summary>
         /// Resume all paused IPauseEventExecution
         /// </summary>
@@ -171,11 +161,11 @@ namespace EventSystem
         {
             var objectMovementExecution = new ObjectMovementExecution();
             objectMovementExecution.Execute(node);
-            
+
             _pauseEventExecutions.Add(objectMovementExecution);
             yield return new WaitUntil(objectMovementExecution.IsFinished);
             _pauseEventExecutions.Remove(objectMovementExecution);
-            
+
             yield return NextNode(node);
         }
 
@@ -188,11 +178,11 @@ namespace EventSystem
         {
             var characterMovementExecution = new CharacterMovementExecution();
             characterMovementExecution.Execute(node);
-            
+
             _pauseEventExecutions.Add(characterMovementExecution);
             yield return new WaitUntil(characterMovementExecution.IsFinished);
             _pauseEventExecutions.Remove(characterMovementExecution);
-            
+
             yield return NextNode(node);
         }
 
@@ -231,10 +221,10 @@ namespace EventSystem
         {
             var dialogNode = node as DialogNode;
             Assert.IsNotNull(dialogNode);
-            
+
             var dialogWriter = GameManager.Instance.dialogManager.NewDialog(dialogNode);
             yield return new WaitUntil(dialogWriter.IsNodeFinished);
-            
+
             if (dialogNode.options.Count > 0)
             {
                 var selectedOptionIndex = dialogWriter.GetSelectedOption();
@@ -282,23 +272,15 @@ namespace EventSystem
             var eventState =
                 GameManager.Instance.gameState.states.FirstOrDefault(eventStateValue =>
                     eventStateValue.name == stateNode.eventState);
-            if (eventState == null)
-            {
-                Debug.LogError(
-                    $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.eventState}' in gameManager states");
-                return;
-            }
+            Assert.IsNotNull(eventState,
+                $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.eventState}' in gameManager states");
 
             //Port selection
             var portName = eventState.complete ? "stateTrue" : "stateFalse";
 
             //Execute port based on state
             var nodePort = node.Ports.FirstOrDefault(portNode => portNode.fieldName == portName);
-            if (nodePort == null)
-            {
-                Debug.LogError($"{nameof(EventTimelineParser)}: Unable to find node port for {portName}");
-                return;
-            }
+            Assert.IsNotNull(nodePort, $"{nameof(EventTimelineParser)}: Unable to find node port for {portName}");
 
             var nodePorts = nodePort.GetConnections();
             ExecuteNodePorts(nodePorts);
@@ -323,6 +305,8 @@ namespace EventSystem
         private IEnumerator InputActionMapNode(Node node)
         {
             var inputActionMapNode = node as InputActionMapNode;
+            Assert.IsNotNull(inputActionMapNode);
+            
             GameManager.Instance.inputManager.ChangeActionMap(inputActionMapNode.actionMap);
             yield return NextNode(node);
         }

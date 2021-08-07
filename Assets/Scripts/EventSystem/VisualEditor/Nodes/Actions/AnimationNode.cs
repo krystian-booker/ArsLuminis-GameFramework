@@ -3,6 +3,7 @@ using EditorTools;
 using EventSystem.Models;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace EventSystem.VisualEditor.Nodes.Actions
 {
@@ -49,26 +50,17 @@ namespace EventSystem.VisualEditor.Nodes.Actions
             {
                 if (animationTarget == null) return;
                 var animator = animationTarget.GetComponent<Animator>();
-                if (animator == null)
-                {
-                    Debug.LogError(
-                        $"{nameof(AnimationNode)}: Missing component ${nameof(Animator)} on {animationTarget.name}");
-                }
+                Assert.IsNotNull(animator,
+                    $"{nameof(AnimationNode)}: Missing component ${nameof(Animator)} on {animationTarget.name}");
 
                 var runtimeAnimatorController = animator.runtimeAnimatorController;
-                if (runtimeAnimatorController == null)
-                {
-                    Debug.LogError(
-                        $"{nameof(AnimationNode)}: Missing ${nameof(RuntimeAnimatorController)} on {animationTarget.name}");
-                }
+                Assert.IsNotNull(runtimeAnimatorController,
+                    $"{nameof(AnimationNode)}: Missing ${nameof(RuntimeAnimatorController)} on {animationTarget.name}");
 
                 var animatorType = Tools.GetEnumType($"Models.Animations.{runtimeAnimatorController.name}");
-                if (animatorType == null)
-                {
-                    Debug.LogError($"{nameof(AnimationNode)}: Unable to find matching enum of " +
-                                   $"type {runtimeAnimatorController.name}. \n Did you forget to create the enum in " +
-                                   $"'Scripts/Animations' with a matching name and properties to the animator controller ");
-                }
+                Assert.IsNotNull(animatorType, $"{nameof(AnimationNode)}: Unable to find matching enum of " +
+                                               $"type {runtimeAnimatorController.name}. \n Did you forget to create the enum in " +
+                                               $"'Scripts/Animations' with a matching name and properties to the animator controller ");
 
                 var enumValues = animatorType?.GetEnumNames();
                 _animationTriggers = enumValues;

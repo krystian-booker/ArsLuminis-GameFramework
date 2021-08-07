@@ -17,7 +17,5 @@ namespace EventSystem.Models.interfaces
         /// For example CharacterMovement, reaching the set destination would be finished.
         /// </summary>
         public bool IsFinished();
-
-        public void OnDropObjects(UnityEngine.Object[] objects);
     }
 }

@@ -36,8 +36,8 @@ public class GameManager : MonoBehaviour
 
     #region MoveToParty/CharacterManager
 
-    public GameObject ActiveCharacter { get; private set; }
-    public NavMeshAgent ActiveCharacterNavMeshAgent { get; private set; }
+    public GameObject ActiveCharacter { get; set; }
+    public NavMeshAgent ActiveCharacterNavMeshAgent { get; set; }
 
     #endregion
 

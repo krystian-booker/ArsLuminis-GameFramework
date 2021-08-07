@@ -30,7 +30,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [Tooltip("Position gameobject will be moved to")]
         public GameObject targetPosition;
 
-        [Tooltip("Override the gameobjects current position")]
+        [Tooltip("Override the game objects current position")]
         public GameObject startingPosition;
 
         [Tooltip(
@@ -52,7 +52,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [Button("Create Target Position")]
         private void GenerateTargetPosition()
         {
-            var positionTargetGameObject = UnityEngine.Resources.Load<GameObject>("Prefabs/editorTools/YellowTarget");
+            var positionTargetGameObject = Resources.Load<GameObject>("Prefabs/editorTools/YellowTarget");
             if (positionTargetGameObject == null) return;
 
             //Assign object back to self
@@ -66,7 +66,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [Button("Create Starting Position")]
         private void GenerateStartingPosition()
         {
-            var positionTargetGameObject = UnityEngine.Resources.Load<GameObject>("Prefabs/editorTools/GreenTarget");
+            var positionTargetGameObject = Resources.Load<GameObject>("Prefabs/editorTools/GreenTarget");
             if (positionTargetGameObject == null) return;
 
             //Assign object back to self

@@ -54,7 +54,6 @@ namespace EventSystem.Triggers
             //Start trigger event sequence
             StartCoroutine(_triggerEventTimelineParser.StartEventSequence(triggerEventSequence));
             
-            //TODO: thought: Should these focus events be a setting on the eventSequence?
             _characterManager.SetFocus(triggerObject);
             triggerCharacterManager.SetFocus(this.gameObject);
             
