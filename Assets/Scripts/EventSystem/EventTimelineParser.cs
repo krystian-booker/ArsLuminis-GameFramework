@@ -20,14 +20,11 @@ namespace EventSystem
         public EventSequenceState eventSequenceState = EventSequenceState.Awaiting;
         private EventSequenceSceneGraph _eventSequenceSceneGraph;
 
-        //WIP
+        //TODO: Finish this functionality. Replace with in game UI
         public bool debugger;
-
-        //TODO: Replace with in game UI
         [HideInInspector] public bool step;
-
-        //HMM
-        private List<IPauseEventExecution> _PauseEventExecutions = new List<IPauseEventExecution>();
+        
+        private List<IPauseEventExecution> _pauseEventExecutions = new List<IPauseEventExecution>();
         
         /// <summary>
         /// Start parsing the xNode timeLine.
@@ -121,22 +118,32 @@ namespace EventSystem
             }
         }
 
+        /// <summary>
+        /// Return when event sequence finished
+        /// </summary>
+        /// <returns></returns>
         public bool IsEventSequenceFinished()
         {
             return eventSequenceState == EventSequenceState.Ended;
         }
 
+        /// <summary>
+        /// Pause all IPauseEventExecution events
+        /// </summary>
         public void PauseEventSequence()
         {
-            foreach (var pauseExecution in _PauseEventExecutions)
+            foreach (var pauseExecution in _pauseEventExecutions)
             {
                 pauseExecution.PauseExecution();
             }
         }
         
+        /// <summary>
+        /// Resume all paused IPauseEventExecution
+        /// </summary>
         public void ResumeEventSequence()
         {
-            foreach (var pauseExecution in _PauseEventExecutions)
+            foreach (var pauseExecution in _pauseEventExecutions)
             {
                 pauseExecution.ResumeExecution();
             }
@@ -165,9 +172,9 @@ namespace EventSystem
             var objectMovementExecution = new ObjectMovementExecution();
             objectMovementExecution.Execute(node);
             
-            _PauseEventExecutions.Add(objectMovementExecution);
+            _pauseEventExecutions.Add(objectMovementExecution);
             yield return new WaitUntil(objectMovementExecution.IsFinished);
-            _PauseEventExecutions.Remove(objectMovementExecution);
+            _pauseEventExecutions.Remove(objectMovementExecution);
             
             yield return NextNode(node);
         }
@@ -182,9 +189,9 @@ namespace EventSystem
             var characterMovementExecution = new CharacterMovementExecution();
             characterMovementExecution.Execute(node);
             
-            _PauseEventExecutions.Add(characterMovementExecution);
+            _pauseEventExecutions.Add(characterMovementExecution);
             yield return new WaitUntil(characterMovementExecution.IsFinished);
-            _PauseEventExecutions.Remove(characterMovementExecution);
+            _pauseEventExecutions.Remove(characterMovementExecution);
             
             yield return NextNode(node);
         }
@@ -223,26 +230,27 @@ namespace EventSystem
         private IEnumerator DialogNodeExecution(Node node)
         {
             var dialogNode = node as DialogNode;
+            Assert.IsNotNull(dialogNode);
+            
             var dialogWriter = GameManager.Instance.dialogManager.NewDialog(dialogNode);
             yield return new WaitUntil(dialogWriter.IsNodeFinished);
             
-            //TODO: Implement dialog options
-            // if (dialogNode.options.Count > 0)
-            // {
-                // var selectedOptionIndex = GameManager.Instance.dialogManager.GetSelectedOption();
-                // var dynamicPorts = dialogNode.DynamicPorts.ToList();
-                // var optionNode = dynamicPorts[selectedOptionIndex];
-                // var selectedNodes = optionNode.GetConnections();
-                // ExecuteNodePorts(selectedNodes);
-            // }
-            // else
-            // {
+            if (dialogNode.options.Count > 0)
+            {
+                var selectedOptionIndex = dialogWriter.GetSelectedOption();
+                var dynamicPorts = dialogNode.DynamicPorts.ToList();
+                var optionNode = dynamicPorts[selectedOptionIndex];
+                var selectedNodes = optionNode.GetConnections();
+                ExecuteNodePorts(selectedNodes);
+            }
+            else
+            {
                 yield return NextNode(node);
-            // }
+            }
         }
 
         /// <summary>
-        /// 
+        /// Updates the selected state system
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
@@ -297,7 +305,7 @@ namespace EventSystem
         }
 
         /// <summary>
-        /// 
+        /// Updates the auto save file with the active state system
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
@@ -308,7 +316,7 @@ namespace EventSystem
         }
 
         /// <summary>
-        /// 
+        /// Updates the active input action map
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>

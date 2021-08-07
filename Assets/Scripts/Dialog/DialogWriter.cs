@@ -1,6 +1,8 @@
 ﻿using Dialog.Models;
 using EventSystem.VisualEditor.Nodes.Actions;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Dialog
 {
@@ -9,7 +11,8 @@ namespace Dialog
         private float _typingAnimationTimer;
         private int _characterIndex;
         private bool _continueClicked;
-
+        private int _selectedOptionIndex = -1;
+        
         private readonly DialogNode _dialogNode;
         private readonly DialogComponents _dialogComponents;
         private readonly float _timePerCharacter;
@@ -17,6 +20,8 @@ namespace Dialog
         private Vector3 _followPlayerOffset;
         private float _displayTimer;
 
+        //TODO: Dialog writer is currently using the text passed in directly from the node, which is system default
+        //This needs to be the localized text instead.
         public DialogWriter(DialogNode dialogNode, DialogComponents dialogComponents)
         {
             _dialogNode = dialogNode;
@@ -35,7 +40,8 @@ namespace Dialog
         /// </summary>
         public void Initialize()
         {
-            _dialogComponents.dialogGameObject.SetActive(true);
+            //Enable game object
+            _dialogComponents.gameObject.SetActive(true);
 
             //Set text
             _dialogComponents.characterNameTMPText.text = _dialogNode.characterName;
@@ -50,6 +56,26 @@ namespace Dialog
                 : GameManager.Instance.dialogManager.defaultHeight;
             _dialogComponents.rectTransform.sizeDelta = new Vector2(width, height);
 
+            //Add options
+            if (_dialogNode.options.Count > 0)
+            {
+                _selectedOptionIndex = -1;
+                for (var i = 0; i < _dialogNode.options.Count; i++)
+                {
+                    var optionIndex = i;
+                    var optionInstance = _dialogComponents.optionInstances[optionIndex];
+                    optionInstance.gameObject.SetActive(true);
+                    optionInstance.optionTMPText.text = _dialogNode.options[optionIndex].text;
+                    optionInstance.button.onClick.AddListener(delegate{OptionSelected(optionIndex);});
+                    
+                    if (optionIndex == 0)
+                    {
+                        optionInstance.button.Select();
+                        optionInstance.button.OnSelect(null);
+                    }
+                }
+            }
+            
             //Move dialog to position
             var positionX = _dialogNode.customDialogPosition
                 ? _dialogNode.dialogPositionX
@@ -68,8 +94,9 @@ namespace Dialog
                 _followPlayerOffset = canvasPosition - characterOriginalPosition;
             }
         }
-
+        
         /// <summary>
+        /// Unity update
         /// </summary>
         /// <returns>True on complete</returns>
         public void Update()
@@ -80,13 +107,13 @@ namespace Dialog
 
         /// <summary>
         /// When the text is fully displayed and the user has clicked continue
-        /// or if the dialog has displayed for the required amount of time
+        /// If the dialog has displayed for the required amount of time
         /// then IsNodeFinished will return true
         /// </summary>
         /// <returns>bool</returns>
         public bool IsNodeFinished()
         {
-            return (_continueClicked && IsTextFinished()) || (IsTimedDialog() && HasDisplayedForRequiredTime());
+            return (_continueClicked && IsTextFinished()) || (IsTimedDialog() && HasDisplayedForRequiredTime() || (IsOptionDialog() && IsOptionSelected()));
         }
 
         /// <summary>
@@ -132,6 +159,15 @@ namespace Dialog
         }
 
         /// <summary>
+        /// Returns if the dialog is an options dialog
+        /// </summary>
+        /// <returns></returns>
+        public bool IsOptionDialog()
+        {
+            return _dialogNode.options.Count > 0;
+        }
+        
+        /// <summary>
         /// Returns if the dialog is a timed dialog or a user input dialog
         /// </summary>
         /// <returns></returns>
@@ -150,6 +186,15 @@ namespace Dialog
         }
 
         /// <summary>
+        /// Returns the selected index
+        /// </summary>
+        /// <returns>int</returns>
+        public int GetSelectedOption()
+        {
+            return _selectedOptionIndex;
+        }
+        
+        /// <summary>
         /// Allows the dialog box to follow the player around during movement
         /// Offset calculated from initial offset before following player
         /// </summary>
@@ -163,6 +208,24 @@ namespace Dialog
                 _dialogComponents.rectTransform.position = characterPosition;
             }
         }
+        
+        /// <summary>
+        /// onClick event for option, saves selected index
+        /// </summary>
+        /// <param name="selectedIndex"></param>
+        private void OptionSelected(int selectedIndex)
+        {
+            _selectedOptionIndex = selectedIndex;
+        }
+
+        /// <summary>
+        /// if option is selected
+        /// </summary>
+        /// <returns></returns>
+        public bool IsOptionSelected()
+        {
+            return _selectedOptionIndex >= 0;
+        }
 
         /// <summary>
         /// Updates the text on the UI with a typing animation
@@ -174,6 +237,13 @@ namespace Dialog
 
             if (_characterIndex >= _dialogNode.text.Length) //Finished typing
             {
+                //Display options after text is displayed
+                if (_dialogNode.options.Count > 0)
+                {
+                    _dialogComponents.optionsPanel.SetActive(true);
+                }
+                
+                //Update timers
                 if (_dialogNode.displayForNTime)
                 {
                     _displayTimer += Time.deltaTime;

@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Dialog.Models;
 using EventSystem.VisualEditor.Nodes.Actions;
+using Sirenix.Utilities;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -43,6 +46,10 @@ namespace Dialog
         [SerializeField, Tooltip("Dialog instances are pooled, 'n' amount of instances will be created on start")]
         private int maximumNumberOfDialogs = 6;
 
+        [SerializeField, Tooltip("Maximum number of dialog options in the game.")]
+        //This is required as dialog 'option' game objects are instantiated with the dialog pool.
+        private int maximumNumberOfDialogOptions = 4;
+
         private List<DialogComponents> _dialogInstancePool;
         private const int PoolPositionX = -1500;
         private const int PoolPositionY = 1500;
@@ -83,7 +90,14 @@ namespace Dialog
             for (var i = _activeDialogWriters.Count - 1; i >= 0; i--)
             {
                 _activeDialogWriters[i].Update();
-                if (_activeDialogWriters[i].IsTimedDialog() && _activeDialogWriters[i].HasDisplayedForRequiredTime())
+
+
+                if ( //Timed dialog
+                    (_activeDialogWriters[i].IsTimedDialog() &&
+                     _activeDialogWriters[i].HasDisplayedForRequiredTime()) ||
+                    //Option dialog
+                    (_activeDialogWriters[i].IsOptionDialog() &&
+                     _activeDialogWriters[i].IsOptionSelected()))
                 {
                     ReturnDialogToPool(_activeDialogWriters[i].GetDialogComponent());
                     _activeDialogWriters.RemoveAt(i);
@@ -113,13 +127,16 @@ namespace Dialog
         public void ContinueClicked()
         {
             //Iterate over list in reverse to allow us to remove elements without breaking indices 
-            for (var i = _activeDialogWriters.Count - 1; i >= 0; i--) 
+            for (var i = _activeDialogWriters.Count - 1; i >= 0; i--)
             {
                 if (_activeDialogWriters[i].IsTimedDialog())
                     return;
 
                 if (_activeDialogWriters[i].IsTextFinished())
                 {
+                    if (_activeDialogWriters[i].IsOptionDialog())
+                        return;
+
                     _activeDialogWriters[i].MarkAsFinished();
                     ReturnDialogToPool(_activeDialogWriters[i].GetDialogComponent());
                     _activeDialogWriters.RemoveAt(i);
@@ -157,6 +174,10 @@ namespace Dialog
             var dialogGameObject = Instantiate(dialogPrefab, _dialogPanel.transform);
             var dialogComponents = dialogGameObject.GetComponent<DialogComponents>();
 
+            //Add dialog options
+            dialogComponents.optionInstances = new List<OptionComponents>();
+            CreateDialogOptions(dialogComponents);
+
             //Move dialog off screen and disable it
             dialogComponents.rectTransform.anchoredPosition = new Vector2(PoolPositionX, PoolPositionY);
             dialogGameObject.SetActive(false);
@@ -166,15 +187,48 @@ namespace Dialog
         }
 
         /// <summary>
+        /// Creates 'n' amount of options on dialog instances
+        /// </summary>
+        /// <param name="dialogComponents"></param>
+        private void CreateDialogOptions(DialogComponents dialogComponents)
+        {
+            for (var i = 0; i < maximumNumberOfDialogOptions; i++)
+            {
+                //Create
+                var dialogOptionGO = Instantiate(dialogOptionPrefab, dialogComponents.optionsPanel.transform);
+                var optionComponents = dialogOptionGO.GetComponent<OptionComponents>();
+
+                //Ref
+                dialogOptionGO.SetActive(false);
+                dialogComponents.optionInstances.Add(optionComponents);
+            }
+        }
+
+        /// <summary>
         /// Clears dialogComponents sizing and position, returns object to the pool
         /// Disables the object
         /// </summary>
         /// <param name="dialogComponents"></param>
         private void ReturnDialogToPool(DialogComponents dialogComponents)
         {
+            //Pool position
             dialogComponents.rectTransform.sizeDelta = new Vector2(defaultWidth, defaultHeight);
             dialogComponents.rectTransform.anchoredPosition = new Vector2(PoolPositionX, PoolPositionY);
-            dialogComponents.dialogGameObject.SetActive(false);
+
+            //Clear text
+            dialogComponents.dialogTMPText.text = string.Empty;
+            dialogComponents.characterNameTMPText.text = string.Empty;
+
+            //Clear options
+            foreach (var option in dialogComponents.optionInstances)
+            {
+                option.optionTMPText.text = string.Empty;
+                option.gameObject.SetActive(false);
+            }
+
+            //Disable
+            dialogComponents.optionsPanel.SetActive(false);
+            dialogComponents.gameObject.SetActive(false);
             dialogComponents.IsEnabled = false;
         }
     }

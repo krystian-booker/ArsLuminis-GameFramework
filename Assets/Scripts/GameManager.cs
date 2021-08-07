@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
 
-[RequireComponent(typeof(InputManager),typeof(DialogManager), typeof(EventSystemManager))]
+[RequireComponent(typeof(InputManager), typeof(DialogManager), typeof(EventSystemManager))]
 [RequireComponent(typeof(SceneControlManager))]
 public class GameManager : MonoBehaviour
 {
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
 
     [Tooltip("If enabled all text will be localized")]
     public bool enableLocalization = true;
-    
+
     [SerializeField] public GameState gameState;
 
     [HideInInspector] public InputManager inputManager;
@@ -56,6 +56,21 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public CinemachineBrain cinemachineBrain;
     [HideInInspector] public EventSystemManager eventSystemManager;
     [HideInInspector] public SceneControlManager sceneControlManager;
+
+
+    private UnityEngine.EventSystems.EventSystem _eventSystem;
+    public UnityEngine.EventSystems.EventSystem EventSystem
+    {
+        get
+        {
+            if (_eventSystem == null)
+            {
+                _eventSystem = UnityEngine.EventSystems.EventSystem.current;
+            }
+
+            return _eventSystem;
+        }
+    }
 
     private void Initialize() //Awake
     {
@@ -68,14 +83,14 @@ public class GameManager : MonoBehaviour
         eventSystemManager = GetComponent<EventSystemManager>();
         cinemachineBrain = mainCamera.GetComponent<CinemachineBrain>();
         sceneControlManager = GetComponent<SceneControlManager>();
-        
+
         //Validate components
         Assert.IsNotNull(inputManager);
         Assert.IsNotNull(dialogManager);
         Assert.IsNotNull(eventSystemManager);
         Assert.IsNotNull(cinemachineBrain);
         Assert.IsNotNull(sceneControlManager);
-        
+
         //TODO: Remove. Loading the auto save file is just for testing
         var files = SaveManager.GetSaveFilesDetails();
         var autoFile = files.FirstOrDefault(x => x.fileName == "auto.el");

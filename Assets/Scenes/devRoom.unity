@@ -876,9 +876,6 @@ MonoBehaviour:
       - fieldName: exit
         node: {fileID: 1465208039}
         reroutePoints: []
-      - fieldName: exit
-        node: {fileID: 1172451213}
-        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -1373,8 +1370,9 @@ MonoBehaviour:
   defaultPositionY: -330
   defaultWidth: 1000
   defaultHeight: 300
-  defaultTimePerCharacter: 0.05
+  defaultTimePerCharacter: 0.03
   maximumNumberOfDialogs: 6
+  maximumNumberOfDialogOptions: 4
 --- !u!114 &1141624370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1600,79 +1598,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1172451213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c043dfe5f61a3ef47a5fb4837fa5d5b3, type: 3}
-  m_Name: Dialog
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1285439127}
-  position: {x: 2616, y: -760}
-  ports:
-    keys:
-    - entry
-    - exit
-    - options
-    values:
-    - _fieldName: entry
-      _node: {fileID: 1172451213}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 1229608135}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 1172451213}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 673458285}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: options
-      _node: {fileID: 1172451213}
-      _typeQualifiedName: System.Collections.Generic.List`1[[EventSystem.Models.DialogOption,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  character: {fileID: 477216147}
-  characterName: Player
-  followCharacter: 0
-  displayForNTime: 0
-  displayTime: 0
-  customTimePerCharacter: 0
-  timePerCharacter: 0
-  customDialogPosition: 0
-  dialogPositionX: -1
-  dialogPositionY: -1
-  dialogWidth: 0
-  dialogHeight: 0
-  key: Dialog_Cloud
-  text: I've... been thinking, too... about the universe... people... the planet...
-    How wide and big... No matter where I go and what I do, it won't change a thing
-  options: []
-  nCount: 0
-  optionsKeyTracker: []
 --- !u!1 &1201522737
 GameObject:
   m_ObjectHideFlags: 0
@@ -1743,9 +1668,6 @@ MonoBehaviour:
       connections:
       - fieldName: entry
         node: {fileID: 1271913734}
-        reroutePoints: []
-      - fieldName: entry
-        node: {fileID: 1172451213}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -1827,6 +1749,8 @@ MonoBehaviour:
     - entry
     - exit
     - options
+    - options 0
+    - options 1
     values:
     - _fieldName: entry
       _node: {fileID: 1271913734}
@@ -1862,6 +1786,30 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: options 0
+      _node: {fileID: 1271913734}
+      _typeQualifiedName: EventSystem.Models.DialogOption, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1465208039}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: options 1
+      _node: {fileID: 1271913734}
+      _typeQualifiedName: EventSystem.Models.DialogOption, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1724487887}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
   started: 0
   character: {fileID: 2004799659}
   characterName: ShopKeeper
@@ -1873,14 +1821,20 @@ MonoBehaviour:
   customDialogPosition: 1
   dialogPositionX: -50
   dialogPositionY: -100
-  dialogWidth: 421
-  dialogHeight: 222
+  dialogWidth: 800
+  dialogHeight: 250
   key: DEMO_Shop
   text: Hello, welcome to my store, what would you like to buy? I've got lots of
     goodies!
-  options: []
-  nCount: 0
-  optionsKeyTracker: []
+  options:
+  - key: Dialog_Yes
+    text: Yes
+  - key: Dialog_No
+    text: No
+  nCount: 2
+  optionsKeyTracker:
+  - Dialog_Yes
+  - Dialog_No
 --- !u!114 &1285439127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1899,7 +1853,7 @@ MonoBehaviour:
   - {fileID: 1271913734}
   - {fileID: 1465208039}
   - {fileID: 673458285}
-  - {fileID: 1172451213}
+  - {fileID: 1724487887}
 --- !u!1 &1303509004
 GameObject:
   m_ObjectHideFlags: 0
@@ -2217,6 +2171,9 @@ MonoBehaviour:
       - fieldName: exit
         node: {fileID: 1271913734}
         reroutePoints: []
+      - fieldName: options 0
+        node: {fileID: 1271913734}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -2469,6 +2426,37 @@ Transform:
   m_Father: {fileID: 1757685045}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1724487887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
+  m_Name: End
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1285439127}
+  position: {x: 3192, y: 376}
+  ports:
+    keys:
+    - entry
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1724487887}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: options 1
+        node: {fileID: 1271913734}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!114 &1748119133
 MonoBehaviour:
   m_ObjectHideFlags: 0

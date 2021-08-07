@@ -1,5 +1,7 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Dialog.Models
 {
@@ -10,11 +12,11 @@ namespace Dialog.Models
     /// </summary>
     public class DialogComponents : MonoBehaviour
     {
-        public GameObject dialogGameObject;
         public RectTransform rectTransform;
         public TMP_Text characterNameTMPText;
         public TMP_Text dialogTMPText;
         public GameObject optionsPanel;
+        public List<OptionComponents> optionInstances;
         public GameObject footer;
 
         public bool IsEnabled { get; set; }
