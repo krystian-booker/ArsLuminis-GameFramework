@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
-using EditorTools;
+﻿using System.Linq;
 using EventSystem.Models;
 using EventSystem.VisualEditor.Nodes.Actions;
+using Tools;
 using XNode;
 using XNodeEditor;
 
@@ -55,7 +54,7 @@ namespace EventSystem.VisualEditor.Editor
             }
             
             //Update localization and get messages for keys
-            Tools.BulkOptionUpdateMessages(dialogNode.options);
+            Utilities.BulkOptionUpdateMessages(dialogNode.options);
         }
 
         public override int GetWidth()

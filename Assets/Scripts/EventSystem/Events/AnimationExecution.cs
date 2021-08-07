@@ -42,10 +42,5 @@ namespace EventSystem.Events
         {
             return !_animationNode.continueOnAnimationEvent || _animatorLink.IsAnimationComplete();
         }
-
-        //Unused
-        public void OnDropObjects(UnityEngine.Object[] objects)
-        {
-        }
     }
 }

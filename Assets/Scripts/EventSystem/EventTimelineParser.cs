@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,12 +33,22 @@ namespace EventSystem
         /// </summary>
         public IEnumerator StartEventSequence(EventSequenceSceneGraph eventSequenceSceneGraph)
         {
-            _eventSequenceSceneGraph = eventSequenceSceneGraph;
-            var startNode = _eventSequenceSceneGraph.graph.nodes.Where(x => x.GetType() == typeof(StartNode)).ToList();
-            Assert.IsTrue(startNode.Any(), $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
-            Assert.IsTrue(startNode.Count > 1,
-                $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
-            eventSequenceState = EventSequenceState.Started;
+            var startNode = new List<Node>();
+            try
+            {
+                _eventSequenceSceneGraph = eventSequenceSceneGraph;
+                startNode = _eventSequenceSceneGraph.graph.nodes.Where(x => x.GetType() == typeof(StartNode)).ToList();
+                Assert.IsTrue(startNode.Any(),
+                    $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
+                Assert.IsFalse(startNode.Count > 1,
+                    $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
+                eventSequenceState = EventSequenceState.Started;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+
             yield return ParseNode(startNode.FirstOrDefault());
         }
 
@@ -97,6 +108,10 @@ namespace EventSystem
             else if (currentNodeType == typeof(InputActionMapNode))
             {
                 yield return InputActionMapNode(node);
+            }
+            else if (currentNodeType == typeof(AudioNode))
+            {
+                yield return AudioNode(node);
             }
             else if (currentNodeType == typeof(EndNode))
             {
@@ -306,8 +321,21 @@ namespace EventSystem
         {
             var inputActionMapNode = node as InputActionMapNode;
             Assert.IsNotNull(inputActionMapNode);
-            
+
             GameManager.Instance.inputManager.ChangeActionMap(inputActionMapNode.actionMap);
+            yield return NextNode(node);
+        }
+        
+        /// <summary>
+        /// Plays the set audio on the node
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator AudioNode(Node node)
+        {
+            var audioExecution = new AudioExecution();
+            audioExecution.Execute(node);
+            yield return new WaitUntil(audioExecution.IsFinished);
             yield return NextNode(node);
         }
 

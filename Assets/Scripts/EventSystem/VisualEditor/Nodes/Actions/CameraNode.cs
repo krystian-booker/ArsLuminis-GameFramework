@@ -1,8 +1,8 @@
 using Cinemachine;
-using EditorTools;
 using EventSystem.Models;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using Tools;
 using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.Actions
@@ -38,7 +38,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
             if (vcamGameObject == null) return;
 
             //Assign object back to self
-            var instantiatedVcam = Tools.InstantiateObject(vcamGameObject);
+            var instantiatedVcam = Utilities.InstantiateObject(vcamGameObject);
             virtualCamera = instantiatedVcam.GetComponent<CinemachineVirtualCamera>();
         }
 #endif

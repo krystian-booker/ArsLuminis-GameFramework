@@ -1,6 +1,6 @@
-using EditorTools;
 using EventSystem.Models;
 using Sirenix.OdinInspector;
+using Tools;
 using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.Actions
@@ -50,11 +50,11 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [Button("Create Target Position")]
         private void GenerateTargetPosition()
         {
-            var positionTargetGameObject = UnityEngine.Resources.Load<GameObject>("Prefabs/editorTools/YellowTarget");
+            var positionTargetGameObject = Resources.Load<GameObject>("Prefabs/editorTools/YellowTarget");
             if (positionTargetGameObject == null) return;
 
             //Assign object back to self
-            var instantiatedTarget = Tools.InstantiateObject(positionTargetGameObject);
+            var instantiatedTarget = Utilities.InstantiateObject(positionTargetGameObject);
             instantiatedTarget.name =
                 string.IsNullOrEmpty(shortName) ? "TargetPosition" : $"{shortName}TargetPosition";
             targetPosition = instantiatedTarget;
@@ -63,11 +63,11 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [Button("Create Starting Position")]
         private void GenerateStartingPosition()
         {
-            var positionTargetGameObject = UnityEngine.Resources.Load<GameObject>("Prefabs/editorTools/GreenTarget");
+            var positionTargetGameObject = Resources.Load<GameObject>("Prefabs/editorTools/GreenTarget");
             if (positionTargetGameObject == null) return;
 
             //Assign object back to self
-            var instantiatedTarget = Tools.InstantiateObject(positionTargetGameObject);
+            var instantiatedTarget = Utilities.InstantiateObject(positionTargetGameObject);
             instantiatedTarget.name =
                 string.IsNullOrEmpty(shortName) ? "StartingPosition" : $"{shortName}StartingPosition";
             startingPosition = instantiatedTarget;

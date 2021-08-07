@@ -1,7 +1,7 @@
 ﻿using System;
-using EditorTools;
 using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Actions;
+using Tools;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
@@ -53,7 +53,7 @@ namespace EventSystem.Events
                   _objectMovementNode.distanceThreshold)) return false;
 
             //Remove Navmesh
-            Tools.DestroyComponent(_targetNavMeshAgent);
+            Utilities.DestroyComponent(_targetNavMeshAgent);
             return true;
         }
 

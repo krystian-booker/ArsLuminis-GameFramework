@@ -282,6 +282,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &173892529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eac49a3e47e4d6ba1eac365839ce812, type: 3}
+  m_Name: Audio
+  m_EditorClassIdentifier: 
+  graph: {fileID: 2044343377}
+  position: {x: 2104, y: 376}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 173892529}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 235624898}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 173892529}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1251669160}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  skip: 0
+  description: 
+  audioSourceLocation: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: f6cf8c6a0a7817749bc01b90f6b2535c, type: 3}
+  mute: 0
+  bypassEffects: 0
+  bypassListenerEffects: 0
+  bypassReverbZones: 0
+  loop: 1
+  priority: 128
+  volume: 1
+  pitch: 1
+  stereoPan: 0
+  spatialBlend: 0
+  reverbZoneMix: 0
 --- !u!114 &214456749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,6 +423,9 @@ MonoBehaviour:
       connections:
       - fieldName: entry
         node: {fileID: 214456749}
+        reroutePoints: []
+      - fieldName: entry
+        node: {fileID: 173892529}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -593,6 +655,7 @@ GameObject:
   - component: {fileID: 477216148}
   - component: {fileID: 477216153}
   - component: {fileID: 477216154}
+  - component: {fileID: 477216155}
   m_Layer: 6
   m_Name: Player
   m_TagString: PC
@@ -731,6 +794,14 @@ MonoBehaviour:
   defaultEventSequence: {fileID: 0}
   focusOnTrigger: 1
   focusRotationSpeed: 8
+--- !u!81 &477216155
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477216147}
+  m_Enabled: 1
 --- !u!114 &479296081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -811,6 +882,38 @@ MonoBehaviour:
   - {fileID: 607552141}
   - {fileID: 285739805}
   - {fileID: 1788729169}
+  - {fileID: 819225451}
+  - {fileID: 1973216920}
+--- !u!1 &484198853
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 484198854}
+  m_Layer: 0
+  m_Name: '[AudioSources]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &484198854
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484198853}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1141624368}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &607552141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -972,7 +1075,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1141624368}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &755336515
 MonoBehaviour:
@@ -1021,6 +1124,65 @@ MonoBehaviour:
   skip: 0
   eventState: 0
   stateComplete: 1
+--- !u!114 &819225451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eac49a3e47e4d6ba1eac365839ce812, type: 3}
+  m_Name: Audio
+  m_EditorClassIdentifier: 
+  graph: {fileID: 484139692}
+  position: {x: 824, y: 232}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 819225451}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 1860660782}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 819225451}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1973216920}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  skip: 0
+  description: 
+  audioSourceLocation: {fileID: 1303509004}
+  audioClip: {fileID: 8300000, guid: 4c1ff4adff8c6dc4b98b1f2f0fe8aa06, type: 3}
+  mute: 0
+  bypassEffects: 0
+  bypassListenerEffects: 0
+  bypassReverbZones: 0
+  loop: 0
+  priority: 128
+  volume: 0.85
+  pitch: 1
+  stereoPan: 0
+  spatialBlend: 0.25
+  reverbZoneMix: 1
 --- !u!114 &833040358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1154,7 +1316,6 @@ GameObject:
   m_Component:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
-  - component: {fileID: 963194226}
   - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
@@ -1163,14 +1324,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &963194226
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
 --- !u!20 &963194227
 Camera:
   m_ObjectHideFlags: 0
@@ -1226,7 +1379,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1141624368}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 15.139, y: 0, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
@@ -1327,6 +1480,7 @@ GameObject:
   - component: {fileID: 1141624371}
   - component: {fileID: 1141624373}
   - component: {fileID: 1141624374}
+  - component: {fileID: 1141624375}
   m_Layer: 0
   m_Name: '[GameManager]'
   m_TagString: Untagged
@@ -1345,6 +1499,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 484198854}
   - {fileID: 963194228}
   - {fileID: 705507995}
   m_Father: {fileID: 0}
@@ -1399,6 +1554,7 @@ MonoBehaviour:
   cinemachineBrain: {fileID: 0}
   eventSystemManager: {fileID: 0}
   sceneControlManager: {fileID: 0}
+  audioManager: {fileID: 0}
 --- !u!114 &1141624371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1567,6 +1723,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c05720d13d4da940b36f2200556d372, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1141624375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141624367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17ceffd7c76e4ac5b8ecc47dda6d3a53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultAudioSourceLocation: {fileID: 484198853}
 --- !u!1 &1146394472
 GameObject:
   m_ObjectHideFlags: 0
@@ -1676,6 +1845,37 @@ MonoBehaviour:
   started: 0
   description: 
   actionMap: 1
+--- !u!114 &1251669160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
+  m_Name: End
+  m_EditorClassIdentifier: 
+  graph: {fileID: 2044343377}
+  position: {x: 2488, y: 376}
+  ports:
+    keys:
+    - entry
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1251669160}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 173892529}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!114 &1265261965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2591,6 +2791,9 @@ MonoBehaviour:
       - fieldName: entry
         node: {fileID: 853101502}
         reroutePoints: []
+      - fieldName: entry
+        node: {fileID: 819225451}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -2598,6 +2801,37 @@ MonoBehaviour:
   started: 0
   description: 
   actionMap: 2
+--- !u!114 &1973216920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
+  m_Name: End
+  m_EditorClassIdentifier: 
+  graph: {fileID: 484139692}
+  position: {x: 1208, y: 248}
+  ports:
+    keys:
+    - entry
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1973216920}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 819225451}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!1 &2004799659
 GameObject:
   m_ObjectHideFlags: 0
@@ -2812,6 +3046,8 @@ MonoBehaviour:
   - {fileID: 235624898}
   - {fileID: 214456749}
   - {fileID: 1265261965}
+  - {fileID: 173892529}
+  - {fileID: 1251669160}
 --- !u!1 &2082943465
 GameObject:
   m_ObjectHideFlags: 0
@@ -2871,7 +3107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d901646fab3b84ea78908bd55966a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerEventSequence: {fileID: 0}
+  triggerEventSequence: {fileID: 2082943467}
   resetTriggerSequence: 0
 --- !u!65 &2082943469
 BoxCollider:

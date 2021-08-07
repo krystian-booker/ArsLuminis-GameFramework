@@ -1,7 +1,7 @@
 using System;
-using EditorTools;
 using EventSystem.Models;
 using Sirenix.OdinInspector;
+using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -57,7 +57,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
                 Assert.IsNotNull(runtimeAnimatorController,
                     $"{nameof(AnimationNode)}: Missing ${nameof(RuntimeAnimatorController)} on {animationTarget.name}");
 
-                var animatorType = Tools.GetEnumType($"Models.Animations.{runtimeAnimatorController.name}");
+                var animatorType = Utilities.GetEnumType($"Models.Animations.{runtimeAnimatorController.name}");
                 Assert.IsNotNull(animatorType, $"{nameof(AnimationNode)}: Unable to find matching enum of " +
                                                $"type {runtimeAnimatorController.name}. \n Did you forget to create the enum in " +
                                                $"'Scripts/Animations' with a matching name and properties to the animator controller ");

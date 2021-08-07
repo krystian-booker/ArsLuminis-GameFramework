@@ -1,6 +1,6 @@
-using EditorTools;
 using EventSystem.Models;
 using Sirenix.OdinInspector;
+using Tools;
 using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.Actions
@@ -56,7 +56,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
             if (positionTargetGameObject == null) return;
 
             //Assign object back to self
-            var instantiatedTarget = Tools.InstantiateObject(positionTargetGameObject);
+            var instantiatedTarget = Utilities.InstantiateObject(positionTargetGameObject);
             instantiatedTarget.name =
                 string.IsNullOrEmpty(shortName) ? "TargetPosition" : $"{shortName}TargetPosition";
             targetPosition = instantiatedTarget;
@@ -70,7 +70,7 @@ namespace EventSystem.VisualEditor.Nodes.Actions
             if (positionTargetGameObject == null) return;
 
             //Assign object back to self
-            var instantiatedTarget = Tools.InstantiateObject(positionTargetGameObject);
+            var instantiatedTarget = Utilities.InstantiateObject(positionTargetGameObject);
             instantiatedTarget.name =
                 string.IsNullOrEmpty(shortName) ? "StartingPosition" : $"{shortName}StartingPosition";
             startingPosition = instantiatedTarget;

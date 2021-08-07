@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Localization.Models;
+using Tools;
 using UnityEditor;
 using UnityEngine;
-using Tools = EditorTools.Tools;
 
 namespace Localization.Editor
 {
@@ -91,7 +91,7 @@ namespace Localization.Editor
                             "Ok",
                             "Cancel"))
                         {
-                            Tools.DeleteMessage(element.key);
+                            Utilities.DeleteMessage(element.key);
                             _localizedTexts = LocalizationManager.LoadLocalizedDictionary();
                         }
                     }

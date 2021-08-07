@@ -21,11 +21,11 @@ namespace Characters
         {
             //Everything that moves needs a character manager, NPCs and Playable characters,
             //Not everything will need to always have a sequence attached
-            if (defaultEventSequence != null)
-            {
-                _defaultEventTimelineParser = gameObject.AddComponent<EventTimelineParser>();
-                StartCoroutine(_defaultEventTimelineParser.StartEventSequence(defaultEventSequence));
-            }
+            if (defaultEventSequence == null)
+                return;
+            
+            _defaultEventTimelineParser = gameObject.AddComponent<EventTimelineParser>();
+            StartCoroutine(_defaultEventTimelineParser.StartEventSequence(defaultEventSequence));
         }
 
         private void Update()
@@ -74,7 +74,7 @@ namespace Characters
             //TODO: Remove both nameToLayer and CompareTag, replace of enum for both
             if (other.gameObject.layer != LayerMask.NameToLayer("Character") ||
                 !other.gameObject.CompareTag("NPC")) return;
-            
+
             //InputManager wait for a confirm
             if (!GameManager.Instance.inputManager.onConfirmValue.started) return;
 

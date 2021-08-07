@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Audio;
 using Cinemachine;
 using Dialog;
 using EventSystem;
@@ -11,7 +12,7 @@ using UnityEngine.AI;
 using UnityEngine.Assertions;
 
 [RequireComponent(typeof(InputManager), typeof(DialogManager), typeof(EventSystemManager))]
-[RequireComponent(typeof(SceneControlManager))]
+[RequireComponent(typeof(SceneControlManager), typeof(AudioManager))]
 public class GameManager : MonoBehaviour
 {
     #region Singleton
@@ -56,9 +57,10 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public CinemachineBrain cinemachineBrain;
     [HideInInspector] public EventSystemManager eventSystemManager;
     [HideInInspector] public SceneControlManager sceneControlManager;
-
+    [HideInInspector] public AudioManager audioManager;
 
     private UnityEngine.EventSystems.EventSystem _eventSystem;
+
     public UnityEngine.EventSystems.EventSystem EventSystem
     {
         get
@@ -83,6 +85,7 @@ public class GameManager : MonoBehaviour
         eventSystemManager = GetComponent<EventSystemManager>();
         cinemachineBrain = mainCamera.GetComponent<CinemachineBrain>();
         sceneControlManager = GetComponent<SceneControlManager>();
+        audioManager = GetComponent<AudioManager>();
 
         //Validate components
         Assert.IsNotNull(inputManager);
@@ -90,6 +93,7 @@ public class GameManager : MonoBehaviour
         Assert.IsNotNull(eventSystemManager);
         Assert.IsNotNull(cinemachineBrain);
         Assert.IsNotNull(sceneControlManager);
+        Assert.IsNotNull(audioManager);
 
         //TODO: Remove. Loading the auto save file is just for testing
         var files = SaveManager.GetSaveFilesDetails();

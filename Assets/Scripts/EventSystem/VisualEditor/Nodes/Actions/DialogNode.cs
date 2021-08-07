@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using EditorTools;
 using EventSystem.Models;
 using Sirenix.OdinInspector;
+using Tools;
 using UnityEngine;
 using XNode;
 
@@ -121,19 +121,19 @@ namespace EventSystem.VisualEditor.Nodes.Actions
 
             if (!string.IsNullOrEmpty(key))
             {
-                var message = Tools.GetMessage(key);
+                var message = Utilities.GetMessage(key);
                 if (string.IsNullOrEmpty(message))
                 {
                     if (!string.IsNullOrEmpty(text))
                     {
-                        Tools.UpdateMessage(key, text);
+                        Utilities.UpdateMessage(key, text);
                     }
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(text) && !text.Equals(message))
                     {
-                        Tools.UpdateMessage(key, text);
+                        Utilities.UpdateMessage(key, text);
                     }
                     else
                     {
