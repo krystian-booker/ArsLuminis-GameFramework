@@ -3,17 +3,16 @@ using Sirenix.OdinInspector;
 using Tools;
 using UnityEngine;
 
-namespace EventSystem.VisualEditor.Nodes.Actions
+namespace EventSystem.VisualEditor.Nodes.Locomotion
 {
     /// <summary>
-    /// Expects a navmesh agent has already been configured for our object.
+    /// Able to be used for any object
     /// If you want a more detailed movement control over an object I'd recommend
     /// using CharacterMovement over ObjectMovement
     ///
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    [NodeTint("#4D908E")]
-    public class CharacterMovementNode : BaseNodeExtended
+    public class ObjectMovementNode : BaseNodeExtended
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
@@ -23,11 +22,11 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         
         [Tooltip("Not required, will be prefixed to generated targets names")]
         public string shortName;
-
+        
         [Tooltip("Gameobject that will be moved")]
         public GameObject target;
 
-        [Tooltip("Position gameobject will be moved to")]
+        [Tooltip("Position gameobject will be moved to")] 
         public GameObject targetPosition;
 
         [Tooltip("Override the game objects current position")]
@@ -48,7 +47,6 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         public float navMeshRadius = 0.5f;
 
 #if UNITY_EDITOR
-        //TODO: Remove 'Button', create custom UI 
         [Button("Create Target Position")]
         private void GenerateTargetPosition()
         {
@@ -62,7 +60,6 @@ namespace EventSystem.VisualEditor.Nodes.Actions
             targetPosition = instantiatedTarget;
         }
 
-        //TODO: Remove 'Button', create custom UI 
         [Button("Create Starting Position")]
         private void GenerateStartingPosition()
         {

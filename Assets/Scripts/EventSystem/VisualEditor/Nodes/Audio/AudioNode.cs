@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace EventSystem.VisualEditor.Nodes.Actions
+namespace EventSystem.VisualEditor.Nodes.Audio
 {
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
@@ -59,6 +59,13 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [Range(0, 1.1f), LabelWidth(100), Tooltip("The amount by which the signal from the AudioSource will be mixed into the global reverb associated with the Reverb Zones.")]
         public float reverbZoneMix = 1;
 
+        [Tooltip("By making the Audio 'public' this will allow other audio nodes to access this audio source")]
+        public bool isPublic;
+
+        //TODO: Hide if isPublic is not enabled
+        [Tooltip("Id that will be used to reference from other nodes")]
+        public string publicId;
+        
         [Tooltip("Fades the audio source in/out over the specified properties")]
         public bool audioFade;
         

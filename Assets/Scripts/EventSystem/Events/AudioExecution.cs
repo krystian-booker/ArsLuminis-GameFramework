@@ -1,9 +1,11 @@
 ﻿using Audio;
 using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Actions;
+using EventSystem.VisualEditor.Nodes.Audio;
 using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Audio;
 using XNode;
 
 namespace EventSystem.Events
@@ -47,6 +49,11 @@ namespace EventSystem.Events
             if (_audioNode.audioFade)
             {
                 GameManager.Instance.audioManager.StartAudioCoroutine(FadeAudioSource.StartFade(_audioSource, _audioNode.initialFadeDelay, _audioNode.fadeDuration, _audioNode.targetVolume));
+            }
+
+            if (_audioNode.isPublic)
+            {
+                GameManager.Instance.audioManager.AddActiveAudioSource(_audioNode.publicId, _audioSource);
             }
         }
 

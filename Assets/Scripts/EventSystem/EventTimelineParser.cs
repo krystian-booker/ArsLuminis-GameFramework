@@ -7,7 +7,9 @@ using EventSystem.Models;
 using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Graphs;
 using EventSystem.VisualEditor.Nodes.Actions;
+using EventSystem.VisualEditor.Nodes.Audio;
 using EventSystem.VisualEditor.Nodes.Flow;
+using EventSystem.VisualEditor.Nodes.Locomotion;
 using EventSystem.VisualEditor.Nodes.State;
 using Saving;
 using UnityEngine;
@@ -112,6 +114,10 @@ namespace EventSystem
             else if (currentNodeType == typeof(AudioNode))
             {
                 yield return AudioNode(node);
+            }
+            else if (currentNodeType == typeof(StopAudioById))
+            {
+                yield return StopAudioById(node);
             }
             else if (currentNodeType == typeof(EndNode))
             {
@@ -336,6 +342,20 @@ namespace EventSystem
             var audioExecution = new AudioExecution();
             audioExecution.Execute(node);
             yield return new WaitUntil(audioExecution.IsFinished);
+            yield return NextNode(node);
+        }
+        
+        /// <summary>
+        /// Plays the set audio on the node
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IEnumerator StopAudioById(Node node)
+        {
+            var stopAudioById = node as StopAudioById;
+            Assert.IsNotNull(stopAudioById);
+            
+            GameManager.Instance.audioManager.StopActiveAudioSource(stopAudioById.audioNodeId);
             yield return NextNode(node);
         }
 

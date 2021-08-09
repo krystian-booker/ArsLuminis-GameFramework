@@ -21,7 +21,6 @@ namespace Audio
             {
                 fadeTime += Time.deltaTime;
                 audioSource.volume = Mathf.Lerp(initialVolume, targetVolume, fadeTime / duration);
-                Debug.Log(audioSource.volume);
                 yield return null;
             }
         }
