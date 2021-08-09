@@ -1,4 +1,5 @@
-﻿using EventSystem.Models.interfaces;
+﻿using Audio;
+using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Actions;
 using Tools;
 using UnityEngine;
@@ -40,7 +41,13 @@ namespace EventSystem.Events
             _audioSource.panStereo = _audioNode.stereoPan;
             _audioSource.spatialBlend = _audioNode.spatialBlend;
             _audioSource.reverbZoneMix = _audioNode.reverbZoneMix;
+            _audioSource.outputAudioMixerGroup = _audioNode.audioMixer;
             _audioSource.Play();
+
+            if (_audioNode.audioFade)
+            {
+                GameManager.Instance.audioManager.StartAudioCoroutine(FadeAudioSource.StartFade(_audioSource, _audioNode.initialFadeDelay, _audioNode.fadeDuration, _audioNode.targetVolume));
+            }
         }
 
         public bool IsFinished()

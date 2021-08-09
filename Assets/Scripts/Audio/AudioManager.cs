@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Audio
 {
@@ -9,6 +11,11 @@ namespace Audio
         public void ReturnToPool(AudioSource audioSource)
         {
             Destroy(audioSource);            
+        }
+
+        public void StartAudioCoroutine(IEnumerator coroutine)
+        {
+            StartCoroutine(coroutine);
         }
     }
 }

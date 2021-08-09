@@ -1,6 +1,7 @@
 ﻿using EventSystem.Models;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace EventSystem.VisualEditor.Nodes.Actions
 {
@@ -16,11 +17,15 @@ namespace EventSystem.VisualEditor.Nodes.Actions
         [Tooltip("Documentation purposes only"), TextArea]
         public string description;
 
-        [Tooltip("Source of audio, not required, mostly used for sound effects")]
+        [LabelWidth(130), Tooltip("Source of audio, not required")]
         public GameObject audioSourceLocation; 
         
+        [LabelWidth(130)]
         public AudioClip audioClip;
 
+        [LabelWidth(130), Tooltip("The target group to which the AudioSource should route its signal.")]
+        public AudioMixerGroup audioMixer;
+        
         [LabelWidth(250), Tooltip("Un- / Mutes the AudioSource. Mute sets the volume=0, Un-Mute restore the original volume.")]
         public bool mute;
         
@@ -53,5 +58,18 @@ namespace EventSystem.VisualEditor.Nodes.Actions
 
         [Range(0, 1.1f), LabelWidth(100), Tooltip("The amount by which the signal from the AudioSource will be mixed into the global reverb associated with the Reverb Zones.")]
         public float reverbZoneMix = 1;
+
+        [Tooltip("Fades the audio source in/out over the specified properties")]
+        public bool audioFade;
+        
+        //TODO: Hide if audioFade is not enabled
+        [Tooltip("Audio level that the volume will end at when fade has completed")]
+        public float targetVolume;
+        
+        [Tooltip("Length of time that the fade is occuring for")]
+        public float fadeDuration;
+        
+        [Tooltip("Length of time before the fade begins on the audio source")]
+        public float initialFadeDelay;
     }
 }
