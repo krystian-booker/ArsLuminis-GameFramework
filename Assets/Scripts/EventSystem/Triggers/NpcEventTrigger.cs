@@ -37,11 +37,11 @@ namespace EventSystem.Triggers
         public IEnumerator BeginTriggerEvent(GameObject triggerObject, CharacterManager triggerCharacterManager)
         {
             if (triggerEventSequence == null)
-                yield break;
+                yield return null;
             
             //Pause events of main sequence
             _characterManager.PauseEventSequence();
-
+            
             //Add trigger event timeline parser
             if (_triggerEventTimelineParser == null)
             {

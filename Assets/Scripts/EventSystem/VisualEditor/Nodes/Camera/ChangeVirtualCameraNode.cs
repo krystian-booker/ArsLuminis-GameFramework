@@ -8,8 +8,6 @@ using UnityEngine;
 namespace EventSystem.VisualEditor.Nodes.Camera
 {
     /// <summary>
-    /// I'm not a cinemachine expert, I expect this class will need to be modified heavily
-    ///
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
     [NodeTint("#43AA8B")]

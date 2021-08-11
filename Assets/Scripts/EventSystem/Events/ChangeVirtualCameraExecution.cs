@@ -8,27 +8,27 @@ using XNode;
 
 namespace EventSystem.Events
 {
-    public class CameraExecution : IEventExecution
+    public class ChangeVirtualCameraExecution : IEventExecution
     {
         private readonly CinemachineBrain _cinemachineBrain;
         private float _timeStarted;
 
-        public CameraExecution(Camera primaryCamera)
+        public ChangeVirtualCameraExecution(Camera primaryCamera)
         {
             Assert.IsNotNull(primaryCamera,
-                $"{nameof(CameraExecution)}: Primary camera is required for all camera events.");
+                $"{nameof(ChangeVirtualCameraExecution)}: Primary camera is required for all camera events.");
 
             _cinemachineBrain = primaryCamera.GetComponent<CinemachineBrain>();
             Assert.IsNotNull(_cinemachineBrain,
-                $"{nameof(CameraExecution)}: CinemachineBrain required on primary camera.");
+                $"{nameof(ChangeVirtualCameraExecution)}: CinemachineBrain required on primary camera.");
         }
 
         public void Execute(Node node)
         {
             //Cast
             var cameraNode = node as ChangeVirtualCameraNode;
-            Assert.IsNotNull(cameraNode, $"{nameof(CameraExecution)}: Invalid setup on CameraNode.");
-            Assert.IsNotNull(cameraNode.virtualCamera, $"{nameof(CameraExecution)}: Invalid setup on CameraNode.");
+            Assert.IsNotNull(cameraNode, $"{nameof(ChangeVirtualCameraExecution)}: Invalid setup on CameraNode.");
+            Assert.IsNotNull(cameraNode.virtualCamera, $"{nameof(ChangeVirtualCameraExecution)}: Invalid setup on CameraNode.");
 
             //Update priorities
             DisableVirtualCameras();

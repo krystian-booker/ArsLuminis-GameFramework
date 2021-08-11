@@ -44,7 +44,7 @@ namespace Dialog
             _dialogComponents.gameObject.SetActive(true);
 
             //Set text
-            _dialogComponents.characterNameTMPText.text = _dialogNode.characterName;
+            _dialogComponents.characterNameTMPText.text = _dialogNode.character.name; //TODO: This needs to be localized
             _dialogComponents.dialogTMPText.text = string.Empty;
 
             //Set size of dialog window

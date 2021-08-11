@@ -39,7 +39,10 @@ namespace Characters
         /// </summary>
         public void PauseEventSequence()
         {
-            _defaultEventTimelineParser.PauseEventSequence();
+            if (_defaultEventTimelineParser != null)
+            {            
+                _defaultEventTimelineParser.PauseEventSequence();
+            }
         }
 
         /// <summary>

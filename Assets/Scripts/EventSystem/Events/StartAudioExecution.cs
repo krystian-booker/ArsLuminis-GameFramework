@@ -7,11 +7,11 @@ using XNode;
 
 namespace EventSystem.Events
 {
-    public class AudioExecution : IEventExecution
+    public class StartAudioExecution : IEventExecution
     {
         private GameObject _audioSourceLocation;
         private AudioSource _audioSource;
-        private AudioNode _audioNode;
+        private StartAudioNode _audioNode;
 
         /// <summary>
         /// TODO: We need to create a prefab gameobject that has an audioSource on it. Create a pool of that object
@@ -20,8 +20,8 @@ namespace EventSystem.Events
         /// <param name="node"></param>
         public void Execute(Node node)
         {
-            _audioNode = node as AudioNode;
-            Assert.IsNotNull(_audioNode, $"{nameof(AudioExecution)}: Invalid setup on {nameof(AudioExecution)}");
+            _audioNode = node as StartAudioNode;
+            Assert.IsNotNull(_audioNode, $"{nameof(StartAudioExecution)}: Invalid setup on {nameof(StartAudioExecution)}");
 
             _audioSourceLocation = _audioNode.audioSourceLocation != null
                 ? _audioNode.audioSourceLocation
