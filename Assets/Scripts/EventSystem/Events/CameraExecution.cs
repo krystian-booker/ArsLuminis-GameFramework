@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using Cinemachine;
+﻿using Cinemachine;
 using EventSystem.Models;
 using EventSystem.Models.interfaces;
-using EventSystem.VisualEditor.Nodes.Actions;
+using EventSystem.VisualEditor.Nodes.Camera;
 using UnityEngine;
 using UnityEngine.Assertions;
 using XNode;
@@ -28,7 +26,7 @@ namespace EventSystem.Events
         public void Execute(Node node)
         {
             //Cast
-            var cameraNode = node as CameraNode;
+            var cameraNode = node as ChangeVirtualCameraNode;
             Assert.IsNotNull(cameraNode, $"{nameof(CameraExecution)}: Invalid setup on CameraNode.");
             Assert.IsNotNull(cameraNode.virtualCamera, $"{nameof(CameraExecution)}: Invalid setup on CameraNode.");
 

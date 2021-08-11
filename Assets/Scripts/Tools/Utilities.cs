@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using EventSystem.Models;
+using EventSystem.VisualEditor.Nodes.Dialog.Models;
 using UnityEngine;
 
 namespace Tools
@@ -10,7 +11,7 @@ namespace Tools
     public class Utilities : MonoBehaviour
     {
         /// <summary>
-        /// Used to instantiate gameobjects from in editor.
+        /// Used to instantiate game objects from in editor.
         /// Example: used to create Targets from prefabs
         /// </summary>
         /// <param name="gameObject">Object to be instantiated</param>
@@ -21,6 +22,10 @@ namespace Tools
             return Instantiate(gameObject, Vector3.zero, Quaternion.identity);
         }
 
+        /// <summary>
+        /// Used from the removal of game objects from none MonoBehaviour classes
+        /// </summary>
+        /// <param name="component"></param>
         public static void DestroyComponent(Component component)
         {
             Destroy(component);

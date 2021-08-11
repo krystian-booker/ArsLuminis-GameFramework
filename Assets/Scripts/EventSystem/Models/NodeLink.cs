@@ -1,5 +1,4 @@
 ﻿using System;
-using XNode;
 
 namespace EventSystem.Models
 {

@@ -1,11 +1,8 @@
 ﻿using Audio;
 using EventSystem.Models.interfaces;
-using EventSystem.VisualEditor.Nodes.Actions;
 using EventSystem.VisualEditor.Nodes.Audio;
-using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Audio;
 using XNode;
 
 namespace EventSystem.Events

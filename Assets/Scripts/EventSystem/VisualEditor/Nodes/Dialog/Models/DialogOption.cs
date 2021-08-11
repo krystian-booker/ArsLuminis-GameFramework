@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace EventSystem.Models
+namespace EventSystem.VisualEditor.Nodes.Dialog.Models
 {
     [Serializable]
     public class DialogOption

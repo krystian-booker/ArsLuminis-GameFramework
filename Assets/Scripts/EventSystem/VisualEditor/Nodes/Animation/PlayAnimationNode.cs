@@ -5,13 +5,13 @@ using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace EventSystem.VisualEditor.Nodes.Actions
+namespace EventSystem.VisualEditor.Nodes.Animation
 {
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
     [NodeTint("#577590")]
-    public class AnimationNode : BaseNodeExtended
+    public class PlayAnimationNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
@@ -51,14 +51,14 @@ namespace EventSystem.VisualEditor.Nodes.Actions
                 if (animationTarget == null) return;
                 var animator = animationTarget.GetComponent<Animator>();
                 Assert.IsNotNull(animator,
-                    $"{nameof(AnimationNode)}: Missing component ${nameof(Animator)} on {animationTarget.name}");
+                    $"{nameof(PlayAnimationNode)}: Missing component ${nameof(Animator)} on {animationTarget.name}");
 
                 var runtimeAnimatorController = animator.runtimeAnimatorController;
                 Assert.IsNotNull(runtimeAnimatorController,
-                    $"{nameof(AnimationNode)}: Missing ${nameof(RuntimeAnimatorController)} on {animationTarget.name}");
+                    $"{nameof(PlayAnimationNode)}: Missing ${nameof(RuntimeAnimatorController)} on {animationTarget.name}");
 
                 var animatorType = Utilities.GetEnumType($"Models.Animations.{runtimeAnimatorController.name}");
-                Assert.IsNotNull(animatorType, $"{nameof(AnimationNode)}: Unable to find matching enum of " +
+                Assert.IsNotNull(animatorType, $"{nameof(PlayAnimationNode)}: Unable to find matching enum of " +
                                                $"type {runtimeAnimatorController.name}. \n Did you forget to create the enum in " +
                                                $"'Scripts/Animations' with a matching name and properties to the animator controller ");
 

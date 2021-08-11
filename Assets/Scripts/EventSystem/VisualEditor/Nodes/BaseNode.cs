@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using XNode;
 
-namespace EventSystem.Models
+namespace EventSystem.VisualEditor.Nodes
 {
     public abstract class BaseNode : Node
     {
-        [HideInInspector] public bool started;
-        
         /// <summary>
         /// Required by xNode
         /// </summary>

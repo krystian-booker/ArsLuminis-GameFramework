@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using EventSystem.Models;
+using EventSystem.VisualEditor.Nodes.Dialog.Models;
 using Sirenix.OdinInspector;
 using Tools;
 using UnityEngine;
 using XNode;
 
-namespace EventSystem.VisualEditor.Nodes.Actions
+namespace EventSystem.VisualEditor.Nodes.Dialog
 {
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE

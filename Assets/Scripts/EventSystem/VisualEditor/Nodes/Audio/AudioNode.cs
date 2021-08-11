@@ -9,7 +9,7 @@ namespace EventSystem.VisualEditor.Nodes.Audio
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
     [NodeTint("#577590")]
-    public class AudioNode : BaseNodeExtended
+    public class AudioNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;

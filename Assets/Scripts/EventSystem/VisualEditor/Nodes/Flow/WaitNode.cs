@@ -5,7 +5,7 @@ namespace EventSystem.VisualEditor.Nodes.Flow
 {
 
     [NodeTint("#AD39B8")]
-    public class WaitNode : BaseNodeExtended
+    public class WaitNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;

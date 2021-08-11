@@ -19,9 +19,6 @@ namespace EventSystem.Triggers
         public EventSequenceSceneGraph triggerEventSequence;
         private EventTimelineParser _triggerEventTimelineParser;
         
-        [Tooltip("Should the trigger event sequence be replayable? If unchecked event sequence can only run once.")]
-        public bool resetTriggerSequence = true;
-
         private void Start()
         {
             _characterManager = GetComponent<CharacterManager>();
@@ -40,7 +37,7 @@ namespace EventSystem.Triggers
         public IEnumerator BeginTriggerEvent(GameObject triggerObject, CharacterManager triggerCharacterManager)
         {
             if (triggerEventSequence == null)
-                yield return null;
+                yield break;
             
             //Pause events of main sequence
             _characterManager.PauseEventSequence();
@@ -62,12 +59,6 @@ namespace EventSystem.Triggers
             //Remove focus Events
             triggerCharacterManager.LoseFocus();
             _characterManager.LoseFocus();
-            
-            //Reset trigger event sequence 
-            if (resetTriggerSequence)
-            {
-                GameManager.Instance.eventSystemManager.ResetEventSequenceSceneGraph(triggerEventSequence);
-            }
             
             //Resume events
             _characterManager.ResumeEventSequence();

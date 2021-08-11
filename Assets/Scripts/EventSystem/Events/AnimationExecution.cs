@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using Animations;
+﻿using Animations;
 using EventSystem.Models.interfaces;
-using EventSystem.VisualEditor.Nodes.Actions;
+using EventSystem.VisualEditor.Nodes.Animation;
 using UnityEngine;
 using UnityEngine.Assertions;
 using XNode;
@@ -11,15 +9,15 @@ namespace EventSystem.Events
 {
     public class AnimationExecution : IEventExecution
     {
-        private AnimationNode _animationNode;
+        private PlayAnimationNode _animationNode;
         private Animator _animator;
         private AnimatorLink _animatorLink;
 
         public void Execute(Node node)
         {
-            _animationNode = node as AnimationNode;
+            _animationNode = node as PlayAnimationNode;
             Assert.IsNotNull(_animationNode,
-                $"{nameof(AnimationExecution)}: Invalid setup on {nameof(AnimationNode)}.");
+                $"{nameof(AnimationExecution)}: Invalid setup on {nameof(PlayAnimationNode)}.");
 
             //Get animator
             _animator = _animationNode.animationTarget.GetComponent<Animator>();

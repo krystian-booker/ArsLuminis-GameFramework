@@ -1,8 +1,6 @@
-﻿using EventSystem.VisualEditor.Nodes.Actions;
-using EventSystem.VisualEditor.Nodes.State;
-using XNodeEditor;
+﻿using XNodeEditor;
 
-namespace EventSystem.VisualEditor.Editor
+namespace EventSystem.VisualEditor.Nodes.State.Editor
 {
     [CustomNodeEditor(typeof(StateNode))]
     public class StateNodeEditor : NodeEditor

@@ -12,7 +12,7 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion
     ///
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    public class ObjectMovementNode : BaseNodeExtended
+    public class ObjectMovementNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;

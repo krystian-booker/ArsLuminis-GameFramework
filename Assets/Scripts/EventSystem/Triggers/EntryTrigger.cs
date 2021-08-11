@@ -11,19 +11,12 @@ namespace EventSystem.Triggers
     {
         public EventSequenceSceneGraph triggerEventSequence;
         private EventTimelineParser _triggerEventTimelineParser;
-
-        [Tooltip("Should the trigger event sequence be replayable? If unchecked event sequence can only run once.")]
-        public bool resetTriggerSequence;
-
         private bool _hasTriggered;
 
         public IEnumerator BeginTriggerEvent()
         {
-            if (triggerEventSequence == null)
-                yield return null;
-
-            if (resetTriggerSequence && _hasTriggered)
-                yield return null;
+            if (triggerEventSequence == null || _hasTriggered)
+                yield break;
 
             _hasTriggered = true;
 
@@ -36,12 +29,6 @@ namespace EventSystem.Triggers
             //Start trigger event sequence
             StartCoroutine(_triggerEventTimelineParser.StartEventSequence(triggerEventSequence));
             yield return new WaitUntil(_triggerEventTimelineParser.IsEventSequenceFinished);
-
-            //Reset trigger event sequence 
-            if (resetTriggerSequence)
-            {
-                GameManager.Instance.eventSystemManager.ResetEventSequenceSceneGraph(triggerEventSequence);
-            }
         }
     }
 }

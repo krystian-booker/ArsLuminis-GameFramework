@@ -1,7 +1,6 @@
-﻿using EventSystem.VisualEditor.Graphs;
-using XNodeEditor;
+﻿using XNodeEditor;
 
-namespace EventSystem.VisualEditor.Editor
+namespace EventSystem.VisualEditor.Graphs.Editor
 {
     [CustomNodeGraphEditor(typeof(EventSequenceGraph))]
     public class EventSequenceGraphEditor : NodeGraphEditor 

@@ -6,8 +6,11 @@ using EventSystem.Events;
 using EventSystem.Models;
 using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Graphs;
-using EventSystem.VisualEditor.Nodes.Actions;
+using EventSystem.VisualEditor.Nodes;
+using EventSystem.VisualEditor.Nodes.Animation;
 using EventSystem.VisualEditor.Nodes.Audio;
+using EventSystem.VisualEditor.Nodes.Camera;
+using EventSystem.VisualEditor.Nodes.Dialog;
 using EventSystem.VisualEditor.Nodes.Flow;
 using EventSystem.VisualEditor.Nodes.Locomotion;
 using EventSystem.VisualEditor.Nodes.State;
@@ -63,15 +66,15 @@ namespace EventSystem
         private IEnumerator ParseNode(Node node)
         {
             if (node == null)
-                yield return null;
+                yield break;
 
             //perform action for node type
             var currentNodeType = node.GetType();
-            if (currentNodeType == typeof(StartNode) || node is BaseNodeExtended { skip: true })
+            if (currentNodeType == typeof(StartNode) || node is SkippableBaseNode { skip: true })
             {
                 yield return NextNode(node);
             }
-            else if (currentNodeType == typeof(CameraNode))
+            else if (currentNodeType == typeof(ChangeVirtualCameraNode))
             {
                 yield return CameraNodeExecution(node);
             }
@@ -83,7 +86,7 @@ namespace EventSystem
             {
                 yield return CharacterMovementNodeExecution(node);
             }
-            else if (currentNodeType == typeof(AnimationNode))
+            else if (currentNodeType == typeof(PlayAnimationNode))
             {
                 yield return AnimationNodeExecution(node);
             }

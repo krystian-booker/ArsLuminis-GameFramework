@@ -1,11 +1,10 @@
 ﻿using System.Linq;
-using EventSystem.Models;
-using EventSystem.VisualEditor.Nodes.Actions;
+using EventSystem.VisualEditor.Nodes.Dialog.Models;
 using Tools;
 using XNode;
 using XNodeEditor;
 
-namespace EventSystem.VisualEditor.Editor
+namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
 {
     [CustomNodeEditor(typeof(DialogNode))]
     public class DialogNodeEditor : NodeEditor

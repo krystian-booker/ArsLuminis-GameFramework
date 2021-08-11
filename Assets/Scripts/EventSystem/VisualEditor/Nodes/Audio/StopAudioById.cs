@@ -4,7 +4,7 @@ using UnityEngine;
 namespace EventSystem.VisualEditor.Nodes.Audio
 {
     [NodeTint("#577590")]
-    public class StopAudioById : BaseNodeExtended
+    public class StopAudioById : SkippableBaseNode
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
