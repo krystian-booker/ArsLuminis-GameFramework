@@ -951,6 +951,49 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   started: 0
+--- !u!114 &928719238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d6e540c11e0d954497fcdf2788fcf9a, type: 3}
+  m_Name: Change Virtual Camera
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1445202324}
+  position: {x: -504, y: 248}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 928719238}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 928719238}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  skip: 0
+  description: 
+  virtualCamera: {fileID: 0}
+  blend: 2
+  blendTime: 2
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1907,6 +1950,9 @@ MonoBehaviour:
   - {fileID: 1447912931}
   - {fileID: 1188197012}
   - {fileID: 782394629}
+  - {fileID: 2026618322}
+  - {fileID: 928719238}
+  - {fileID: 1747801181}
 --- !u!114 &1447912931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2258,6 +2304,54 @@ Transform:
   m_Father: {fileID: 1757685045}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1747801181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 950f6c5528e1fcf4c8c974428820fece, type: 3}
+  m_Name: Character Movement
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1445202324}
+  position: {x: -936, y: 280}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1747801181}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 1747801181}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  skip: 0
+  description: 
+  shortName: 
+  target: {fileID: 0}
+  targetPosition: {fileID: 0}
+  startingPosition: {fileID: 0}
+  distanceThreshold: 1
+  speed: 3.5
+  disableRotation: 0
+  navMeshRadius: 0.5
 --- !u!1 &1757685044
 GameObject:
   m_ObjectHideFlags: 0
@@ -2510,6 +2604,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graph: {fileID: 97847979}
   description: Default, walking around
+--- !u!114 &2026618322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eac49a3e47e4d6ba1eac365839ce812, type: 3}
+  m_Name: Start Audio
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1445202324}
+  position: {x: -72, y: 232}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 2026618322}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 2026618322}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  skip: 0
+  description: 
+  audioSourceLocation: {fileID: 0}
+  audioClip: {fileID: 0}
+  audioMixer: {fileID: 0}
+  mute: 0
+  isPublic: 1
+  publicId: 
+  bypassEffects: 0
+  bypassListenerEffects: 0
+  bypassReverbZones: 0
+  loop: 0
+  priority: 128
+  volume: 1
+  pitch: 1
+  stereoPan: 0
+  spatialBlend: 0
+  reverbZoneMix: 1
+  audioFade: 0
+  targetVolume: 0
+  fadeDuration: 0
+  initialFadeDelay: 0
 --- !u!114 &2047924743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2568,6 +2722,7 @@ GameObject:
   - component: {fileID: 2082943469}
   - component: {fileID: 2082943468}
   - component: {fileID: 2082943467}
+  - component: {fileID: 2082943470}
   m_Layer: 0
   m_Name: TrainTrigger
   m_TagString: Trigger
@@ -2629,3 +2784,99 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 10, z: 50}
   m_Center: {x: 0, y: 4.8569355, z: 13.612789}
+--- !u!82 &2082943470
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082943465}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
