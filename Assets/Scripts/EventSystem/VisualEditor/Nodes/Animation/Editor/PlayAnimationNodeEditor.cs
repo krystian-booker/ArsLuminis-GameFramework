@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Tools;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -20,10 +19,7 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
             onUpdateNode += UpdateSelectedAnimationTrigger;
         }
 
-        /// <summary>
         /// Node Width
-        /// </summary>
-        /// <returns></returns>
         public override int GetWidth()
         {
             return 350;
