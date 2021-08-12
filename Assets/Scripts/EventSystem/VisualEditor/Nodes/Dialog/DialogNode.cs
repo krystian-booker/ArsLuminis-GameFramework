@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using EventSystem.Models;
 using EventSystem.VisualEditor.Nodes.Dialog.Models;
-// using Sirenix.OdinInspector;
 using Tools;
 using UnityEngine;
-using UnityEngine.Serialization;
-using XNode;
 
 namespace EventSystem.VisualEditor.Nodes.Dialog
 {

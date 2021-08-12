@@ -5,7 +5,7 @@ using UnityEngine;
 namespace EventSystem.VisualEditor.Nodes.State
 {
     [NodeTint("#F9844A")]
-    public class InputActionMapNode : BaseNode
+    public class ChangeInputActionMapNode : BaseNode
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;

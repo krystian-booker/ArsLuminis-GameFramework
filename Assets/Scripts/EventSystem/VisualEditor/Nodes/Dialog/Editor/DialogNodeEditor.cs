@@ -38,7 +38,6 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
             while (iterator.NextVisible(enterChildren)) {
                 enterChildren = false;
                 if (excludes.Contains(iterator.name)) continue;
-
                 switch (iterator.name)
                 {
                     case "exit":

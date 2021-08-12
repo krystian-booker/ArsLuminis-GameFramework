@@ -29,6 +29,7 @@ namespace EventSystem.Triggers
             //Start trigger event sequence
             StartCoroutine(_triggerEventTimelineParser.StartEventSequence(triggerEventSequence));
             yield return new WaitUntil(_triggerEventTimelineParser.IsEventSequenceFinished);
+            _hasTriggered = false; 
         }
     }
 }

@@ -18,6 +18,7 @@ namespace EventSystem.Triggers
         [Tooltip("Event Sequence to be triggered")]
         public EventSequenceSceneGraph triggerEventSequence;
         private EventTimelineParser _triggerEventTimelineParser;
+        private bool _eventRunning;
         
         private void Start()
         {
@@ -36,8 +37,10 @@ namespace EventSystem.Triggers
          */
         public IEnumerator BeginTriggerEvent(GameObject triggerObject, CharacterManager triggerCharacterManager)
         {
-            if (triggerEventSequence == null)
-                yield return null;
+            if (triggerEventSequence == null || _eventRunning)
+                yield break;
+
+            _eventRunning = true;
             
             //Pause events of main sequence
             _characterManager.PauseEventSequence();
@@ -62,6 +65,7 @@ namespace EventSystem.Triggers
             
             //Resume events
             _characterManager.ResumeEventSequence();
+            _eventRunning = false;
         }
     }
 }

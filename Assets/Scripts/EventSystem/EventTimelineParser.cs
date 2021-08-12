@@ -104,9 +104,9 @@ namespace EventSystem
             {
                 yield return AutoSaveNodeExecution(node);
             }
-            else if (currentNodeType == typeof(InputActionMapNode))
+            else if (currentNodeType == typeof(ChangeInputActionMapNode))
             {
-                yield return InputActionMapNode(node);
+                yield return ChangeInputActionMapNode(node);
             }
             else if (currentNodeType == typeof(StartAudioNode))
             {
@@ -320,9 +320,9 @@ namespace EventSystem
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private IEnumerator InputActionMapNode(Node node)
+        private IEnumerator ChangeInputActionMapNode(Node node)
         {
-            var inputActionMapNode = node as InputActionMapNode;
+            var inputActionMapNode = node as ChangeInputActionMapNode;
             Assert.IsNotNull(inputActionMapNode);
 
             GameManager.Instance.inputManager.ChangeActionMap(inputActionMapNode.actionMap);
