@@ -3,7 +3,7 @@ A Unity base project with all the necessary systems and tools to create an old s
 Features are based around PS1 era Final Fantasy games.
 
 ### Requirements
-- Unity 2020.3.15
+- Unity 2020.3.16
 - Odin - Inspector and Serializer (In the process of removing this as a requirement)
 
 ## Features
