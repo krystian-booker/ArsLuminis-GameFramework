@@ -1,9 +1,5 @@
-using System;
 using EventSystem.Models;
-// using Sirenix.OdinInspector;
-using Tools;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace EventSystem.VisualEditor.Nodes.Animation
 {
