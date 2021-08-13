@@ -54,10 +54,10 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public InputManager inputManager;
     [HideInInspector] public DialogManager dialogManager;
-    [HideInInspector] public CinemachineBrain cinemachineBrain;
     [HideInInspector] public EventSystemManager eventSystemManager;
     [HideInInspector] public SceneControlManager sceneControlManager;
     [HideInInspector] public AudioManager audioManager;
+    [HideInInspector] public CinemachineBrain cinemachineBrain;
 
     private UnityEngine.EventSystems.EventSystem _eventSystem;
 

@@ -1,8 +1,4 @@
-﻿using System.Linq;
-using EventSystem.Models;
-using EventSystem.VisualEditor.Graphs;
-using EventSystem.VisualEditor.Nodes;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace EventSystem
 {

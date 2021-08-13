@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.State
 {
-    [NodeTint("#2C3A47")]
+    [NodeTint("#3d5163")]
     public class AutoSaveNode : BaseNode
     {
         [Input] public NodeLink entry;

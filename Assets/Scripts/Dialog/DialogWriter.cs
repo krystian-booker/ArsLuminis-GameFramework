@@ -1,8 +1,6 @@
 ﻿using Dialog.Models;
 using EventSystem.VisualEditor.Nodes.Dialog;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace Dialog
 {

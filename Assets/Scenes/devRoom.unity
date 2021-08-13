@@ -768,37 +768,6 @@ Transform:
   m_Father: {fileID: 1141624368}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &782394629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
-  m_Name: End
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1445202324}
-  position: {x: 376, y: -8}
-  ports:
-    keys:
-    - entry
-    values:
-    - _fieldName: entry
-      _node: {fileID: 782394629}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 1188197012}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
 --- !u!114 &806228008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -874,6 +843,19 @@ MonoBehaviour:
   options: []
   nCount: 0
   optionsKeyTracker: []
+--- !u!114 &810152505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc499b44cc8e2c949b9d32e6c8f83954, type: 3}
+  m_Name: TrainTrigger-graph
+  m_EditorClassIdentifier: 
+  nodes: []
 --- !u!1 &840201296
 GameObject:
   m_ObjectHideFlags: 0
@@ -951,49 +933,6 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   started: 0
---- !u!114 &928719238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d6e540c11e0d954497fcdf2788fcf9a, type: 3}
-  m_Name: Change Virtual Camera
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1445202324}
-  position: {x: -504, y: 248}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 928719238}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 928719238}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  skip: 0
-  description: 
-  virtualCamera: {fileID: 0}
-  blend: 2
-  blendTime: 2
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1486,55 +1425,6 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   started: 0
---- !u!114 &1188197012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 339bdc57e5719fb419d7e9fa4d037b2e, type: 3}
-  m_Name: Play Animation
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1445202324}
-  position: {x: -72, y: -8}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 1188197012}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 1447912931}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 1188197012}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 782394629}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  skip: 0
-  description: 
-  continueOnAnimationEvent: 1
-  animationTarget: {fileID: 1303509004}
-  animationTrigger: TrainStart
 --- !u!1 &1201522737
 GameObject:
   m_ObjectHideFlags: 0
@@ -1934,56 +1824,6 @@ MonoBehaviour:
   started: 0
   description: 
   actionMap: 0
---- !u!114 &1445202324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc499b44cc8e2c949b9d32e6c8f83954, type: 3}
-  m_Name: TrainTrigger-graph
-  m_EditorClassIdentifier: 
-  nodes:
-  - {fileID: 1447912931}
-  - {fileID: 1188197012}
-  - {fileID: 782394629}
-  - {fileID: 2026618322}
-  - {fileID: 928719238}
-  - {fileID: 1747801181}
---- !u!114 &1447912931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 039c230e90b393740aeed30101050330, type: 3}
-  m_Name: Start
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1445202324}
-  position: {x: -392, y: -8}
-  ports:
-    keys:
-    - exit
-    values:
-    - _fieldName: exit
-      _node: {fileID: 1447912931}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 1188197012}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
 --- !u!1 &1497684354
 GameObject:
   m_ObjectHideFlags: 0
@@ -2178,36 +2018,6 @@ MonoBehaviour:
   speed: 3.5
   disableRotation: 0
   navMeshRadius: 0.5
---- !u!1 &1688249737
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1688249738}
-  m_Layer: 0
-  m_Name: TargetPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1688249738
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1688249737}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1711201546
 GameObject:
   m_ObjectHideFlags: 0
@@ -2304,54 +2114,6 @@ Transform:
   m_Father: {fileID: 1757685045}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1747801181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 950f6c5528e1fcf4c8c974428820fece, type: 3}
-  m_Name: Character Movement
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1445202324}
-  position: {x: -936, y: 280}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 1747801181}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 1747801181}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  skip: 0
-  description: 
-  shortName: 
-  target: {fileID: 0}
-  targetPosition: {fileID: 0}
-  startingPosition: {fileID: 0}
-  distanceThreshold: 1
-  speed: 3.5
-  disableRotation: 0
-  navMeshRadius: 0.5
 --- !u!1 &1757685044
 GameObject:
   m_ObjectHideFlags: 0
@@ -2604,66 +2366,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graph: {fileID: 97847979}
   description: Default, walking around
---- !u!114 &2026618322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eac49a3e47e4d6ba1eac365839ce812, type: 3}
-  m_Name: Start Audio
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1445202324}
-  position: {x: -72, y: 232}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 2026618322}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 2026618322}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  skip: 0
-  description: 
-  audioSourceLocation: {fileID: 0}
-  audioClip: {fileID: 0}
-  audioMixer: {fileID: 0}
-  mute: 0
-  isPublic: 1
-  publicId: 
-  bypassEffects: 0
-  bypassListenerEffects: 0
-  bypassReverbZones: 0
-  loop: 0
-  priority: 128
-  volume: 1
-  pitch: 1
-  stereoPan: 0
-  spatialBlend: 0
-  reverbZoneMix: 1
-  audioFade: 0
-  targetVolume: 0
-  fadeDuration: 0
-  initialFadeDelay: 0
 --- !u!114 &2047924743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2756,7 +2458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162dc4053bae6394a882919c954d97be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graph: {fileID: 1445202324}
+  graph: {fileID: 810152505}
   description: 
 --- !u!114 &2082943468
 MonoBehaviour:

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Dialog.Models;
 using EventSystem.VisualEditor.Nodes.Dialog;
-using Sirenix.Utilities;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
 

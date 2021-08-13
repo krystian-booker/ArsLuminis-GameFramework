@@ -7,7 +7,7 @@ namespace EventSystem.VisualEditor.Nodes.State
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    [NodeTint("#2C3A47")]
+    [NodeTint("#3d5163")]
     public class UpdateStateNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;
