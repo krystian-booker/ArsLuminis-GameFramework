@@ -154,7 +154,7 @@ Transform:
   m_Children:
   - {fileID: 253059592}
   - {fileID: 1431880050}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1141624368}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &97847979
@@ -882,8 +882,67 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1141624368}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &805132113
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 805132114}
+  - component: {fileID: 805132116}
+  - component: {fileID: 805132115}
+  m_Layer: 0
+  m_Name: '[OnStartTrigger]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &805132114
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805132113}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1757685045}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &805132115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805132113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 162dc4053bae6394a882919c954d97be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1220957000}
+  description: 
+--- !u!114 &805132116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805132113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63af5b31b61477f439de9c45942f0e06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerEventSequence: {fileID: 805132115}
 --- !u!114 &806228008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1056,6 +1115,73 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   started: 0
+--- !u!114 &929147415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eac49a3e47e4d6ba1eac365839ce812, type: 3}
+  m_Name: Start Audio
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1220957000}
+  position: {x: -136, y: -264}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 929147415}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 1724975069}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 929147415}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1656132639}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  skip: 0
+  description: 
+  audioSourceLocation: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: 88196a6acc018254495d4290b485d165, type: 3}
+  audioMixer: {fileID: -4040988078582290730, guid: 5af0ac34c57e904439dedd547a801ed9,
+    type: 2}
+  mute: 0
+  isPublic: 0
+  publicId: 
+  bypassEffects: 0
+  bypassListenerEffects: 0
+  bypassReverbZones: 0
+  loop: 0
+  priority: 128
+  volume: 0.75
+  pitch: 1
+  stereoPan: 0
+  spatialBlend: 0
+  reverbZoneMix: 1
+  audioFade: 0
+  targetVolume: 0
+  fadeDuration: 0
+  initialFadeDelay: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,7 +1255,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1141624368}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 15.139, y: 0, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
@@ -1213,7 +1339,7 @@ Transform:
   - {fileID: 477216152}
   - {fileID: 2004799666}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1141624367
 GameObject:
@@ -1250,6 +1376,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 484198854}
+  - {fileID: 94909185}
   - {fileID: 963194228}
   - {fileID: 705507995}
   m_Father: {fileID: 0}
@@ -1515,7 +1642,7 @@ Transform:
   m_Children:
   - {fileID: 2082943466}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1155955925
 MonoBehaviour:
@@ -1609,8 +1736,25 @@ Transform:
   - {fileID: 840201298}
   - {fileID: 1497684356}
   m_Father: {fileID: 1757685045}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1220957000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc499b44cc8e2c949b9d32e6c8f83954, type: 3}
+  m_Name: '[OnStartTrigger]-graph'
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 1724975069}
+  - {fileID: 929147415}
+  - {fileID: 1656132639}
+  - {fileID: 1421943367}
 --- !u!114 &1252418136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1756,7 +1900,7 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 30}
   m_Children: []
   m_Father: {fileID: 1757685045}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1303509010
 MonoBehaviour:
@@ -1770,6 +1914,73 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b118fd2373b5b854fa2bc8482f3ceaca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1421943367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eac49a3e47e4d6ba1eac365839ce812, type: 3}
+  m_Name: Start Audio
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1220957000}
+  position: {x: -136, y: 280}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1421943367}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 1724975069}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 1421943367}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1656132639}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  skip: 0
+  description: 
+  audioSourceLocation: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: f6cf8c6a0a7817749bc01b90f6b2535c, type: 3}
+  audioMixer: {fileID: -9005110977828886889, guid: 5af0ac34c57e904439dedd547a801ed9,
+    type: 2}
+  mute: 0
+  isPublic: 0
+  publicId: 
+  bypassEffects: 0
+  bypassListenerEffects: 0
+  bypassReverbZones: 0
+  loop: 0
+  priority: 128
+  volume: 1
+  pitch: 1
+  stereoPan: 0
+  spatialBlend: 0
+  reverbZoneMix: 1
+  audioFade: 0
+  targetVolume: 0
+  fadeDuration: 0
+  initialFadeDelay: 0
 --- !u!114 &1422868703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1818,7 +2029,7 @@ MonoBehaviour:
   description: 
   waitForAnimationEvent: 1
   animationTarget: {fileID: 1303509004}
-  animationTrigger: TrainStart
+  animationTrigger: TrainLeaves
 --- !u!1 &1431880049
 GameObject:
   m_ObjectHideFlags: 0
@@ -2267,6 +2478,40 @@ MonoBehaviour:
   speed: 3.5
   disableRotation: 0
   navMeshRadius: 0.5
+--- !u!114 &1656132639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
+  m_Name: End
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1220957000}
+  position: {x: 312, y: 248}
+  ports:
+    keys:
+    - entry
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1656132639}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 929147415}
+        reroutePoints: []
+      - fieldName: exit
+        node: {fileID: 1421943367}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!114 &1672479343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2392,8 +2637,42 @@ Transform:
   m_LocalScale: {x: 10, y: 1, z: 30}
   m_Children: []
   m_Father: {fileID: 1757685045}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1724975069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 039c230e90b393740aeed30101050330, type: 3}
+  m_Name: Start
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1220957000}
+  position: {x: -456, y: 248}
+  ports:
+    keys:
+    - exit
+    values:
+    - _fieldName: exit
+      _node: {fileID: 1724975069}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 929147415}
+        reroutePoints: []
+      - fieldName: entry
+        node: {fileID: 1421943367}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!1 &1757685044
 GameObject:
   m_ObjectHideFlags: 0
@@ -2421,11 +2700,12 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 805132114}
   - {fileID: 1201522738}
   - {fileID: 1711201550}
   - {fileID: 1303509009}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1920068762
 MonoBehaviour:

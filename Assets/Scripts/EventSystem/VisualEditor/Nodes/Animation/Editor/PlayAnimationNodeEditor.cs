@@ -15,7 +15,6 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
         public PlayAnimationNodeEditor()
         {
             //Builtin action on xNode
-            onUpdateNode += GetAnimationTriggers;
             onUpdateNode += UpdateSelectedAnimationTrigger;
         }
 
@@ -27,7 +26,8 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
 
         private int _selectedIndex;
         private string[] _animationTriggers = Array.Empty<string>();
-
+        private GameObject _currentAnimationTarget;
+        
         public override void OnBodyGUI()
         {
             serializedObject.Update();
@@ -36,6 +36,8 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
             // Iterate through serialized properties and draw them like the Inspector (But with ports)
             var iterator = serializedObject.GetIterator();
             var enterChildren = true;
+
+            GetAnimationTriggers();
             while (iterator.NextVisible(enterChildren))
             {
                 enterChildren = false;
@@ -66,12 +68,16 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
             serializedObject.ApplyModifiedProperties();
         }
 
+        /// <summary>
+        /// Select animation trigger automatically
+        /// </summary>
+        /// <param name="node"></param>
         private void UpdateSelectedAnimationTrigger(Node node)
         {
             var playAnimationNode = node as PlayAnimationNode;
             if (playAnimationNode == null || _animationTriggers == null || !_animationTriggers.Any())
                 return;
-            
+
             playAnimationNode.animationTrigger = _animationTriggers[_selectedIndex];
         }
 
@@ -79,24 +85,23 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
         /// This will automatically get the link of animations for the provided gameObject
         /// The animations must first be defined in the Models/Animations folder
         /// </summary>
-        private void GetAnimationTriggers(Node node)
+        private void GetAnimationTriggers()
         {
-            var playAnimationNode = node as PlayAnimationNode;
-            if (playAnimationNode == null || playAnimationNode.animationTarget == null ||
-                _animationTriggers?.Length > 0)
+            var animationTargetProperty = serializedObject.FindProperty("animationTarget");
+            var animationTarget = animationTargetProperty.objectReferenceValue as GameObject;
+            
+            if (animationTarget == null || (_animationTriggers?.Length > 0 && _currentAnimationTarget == animationTarget))
                 return;
 
-            var animator = playAnimationNode.animationTarget.GetComponent<Animator>();
+            _currentAnimationTarget = animationTarget;
+            
+            var animator = animationTarget.GetComponent<Animator>();
             Assert.IsNotNull(animator,
-                $"{nameof(PlayAnimationNode)}: Missing component ${nameof(Animator)} on {playAnimationNode.animationTarget.name}");
+                $"{nameof(PlayAnimationNode)}: Missing component ${nameof(Animator)} on {animationTarget.name}");
 
-            var runtimeAnimatorController = animator.runtimeAnimatorController;
-            Assert.IsNotNull(runtimeAnimatorController,
-                $"{nameof(PlayAnimationNode)}: Missing ${nameof(RuntimeAnimatorController)} on {playAnimationNode.animationTarget.name}");
-
-            var animatorController = runtimeAnimatorController as AnimatorController;
+            var animatorController = animator.runtimeAnimatorController as AnimatorController;
             Assert.IsNotNull(animatorController,
-                $"{nameof(PlayAnimationNode)}: Missing ${nameof(AnimatorController)} on {playAnimationNode.animationTarget.name}");
+                $"{nameof(PlayAnimationNode)}: Missing ${nameof(AnimatorController)} on {animationTarget.name}");
 
             _animationTriggers = animatorController.parameters.Select(x => x.name).ToArray();
         }
