@@ -16,7 +16,7 @@ namespace EventSystem.VisualEditor.Nodes.Animation
         public string description;
 
         [Tooltip("The event sequence will only continue when animation event runs. If disabled, the event sequence will continue instantly.")]
-        public bool continueOnAnimationEvent = true;
+        public bool waitForAnimationEvent = true;
 
         [Tooltip("GameObject you want the animation to run on.")]
         public GameObject animationTarget;

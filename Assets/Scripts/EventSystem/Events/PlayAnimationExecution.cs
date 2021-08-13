@@ -38,7 +38,7 @@ namespace EventSystem.Events
 
         public bool IsFinished()
         {
-            return !_animationNode.continueOnAnimationEvent || _animatorLink.IsAnimationComplete();
+            return !_animationNode.waitForAnimationEvent || _animatorLink.IsAnimationComplete();
         }
     }
 }

@@ -10,6 +10,12 @@ namespace EventSystem.Triggers
     public class EntryTrigger : MonoBehaviour
     {
         public EventSequenceSceneGraph triggerEventSequence;
+
+        [Tooltip("If enabled the event sequence can only be triggered once during this session")]
+        // If the player leaves a scene and re-enters, this will be reset
+        // To save states permanently use state nodes
+        public bool runOnce;
+        
         private EventTimelineParser _triggerEventTimelineParser;
         private bool _hasTriggered;
 
@@ -29,7 +35,9 @@ namespace EventSystem.Triggers
             //Start trigger event sequence
             StartCoroutine(_triggerEventTimelineParser.StartEventSequence(triggerEventSequence));
             yield return new WaitUntil(_triggerEventTimelineParser.IsEventSequenceFinished);
-            _hasTriggered = false; 
+            
+            if(!runOnce)
+                _hasTriggered = false; 
         }
     }
 }
