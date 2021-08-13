@@ -84,7 +84,7 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
                         }
                         break;
                     default:
-                        EditorGUIUtility.labelWidth = 160;
+                        EditorGUIUtility.labelWidth = 165;
                         NodeEditorGUILayout.PropertyField(iterator);
                         break;
                 }

@@ -6,7 +6,7 @@ namespace EventSystem.VisualEditor.Nodes.Animation
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    [NodeTint("#577590")]
+    [NodeTint("#40407a")]
     public class PlayAnimationNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;

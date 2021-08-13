@@ -2,8 +2,8 @@
 
 namespace EventSystem.VisualEditor.Nodes.State.Editor
 {
-    [CustomNodeEditor(typeof(StateNode))]
-    public class StateNodeEditor : NodeEditor
+    [CustomNodeEditor(typeof(StateBranchNode))]
+    public class StateBranchNodeEditor : NodeEditor
     {
         public override int GetWidth() {
             return 300;

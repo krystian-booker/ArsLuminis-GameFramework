@@ -25,8 +25,8 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
             return 350;
         }
 
-        public int selectedIndex;
-        public string[] animationTriggers = Array.Empty<string>();
+        private int _selectedIndex;
+        private string[] _animationTriggers = Array.Empty<string>();
 
         public override void OnBodyGUI()
         {
@@ -47,7 +47,7 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
                         NodeEditorGUILayout.PropertyField(iterator);
                         break;
                     case "animationTrigger":
-                        selectedIndex = EditorGUILayout.Popup("Animation Trigger", selectedIndex, animationTriggers);
+                        _selectedIndex = EditorGUILayout.Popup("Animation Trigger", _selectedIndex, _animationTriggers);
                         break;
                     default:
                         EditorGUIUtility.labelWidth = 110;
@@ -69,10 +69,10 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
         private void UpdateSelectedAnimationTrigger(Node node)
         {
             var playAnimationNode = node as PlayAnimationNode;
-            if (playAnimationNode == null || animationTriggers == null || !animationTriggers.Any())
+            if (playAnimationNode == null || _animationTriggers == null || !_animationTriggers.Any())
                 return;
             
-            playAnimationNode.animationTrigger = animationTriggers[selectedIndex];
+            playAnimationNode.animationTrigger = _animationTriggers[_selectedIndex];
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
         {
             var playAnimationNode = node as PlayAnimationNode;
             if (playAnimationNode == null || playAnimationNode.animationTarget == null ||
-                animationTriggers?.Length > 0)
+                _animationTriggers?.Length > 0)
                 return;
 
             var animator = playAnimationNode.animationTarget.GetComponent<Animator>();
@@ -98,7 +98,7 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
             Assert.IsNotNull(animatorController,
                 $"{nameof(PlayAnimationNode)}: Missing ${nameof(AnimatorController)} on {playAnimationNode.animationTarget.name}");
 
-            animationTriggers = animatorController.parameters.Select(x => x.name).ToArray();
+            _animationTriggers = animatorController.parameters.Select(x => x.name).ToArray();
         }
     }
 }

@@ -96,7 +96,7 @@ namespace EventSystem
             {
                 yield return UpdateStateNodeExecution(node);
             }
-            else if (currentNodeType == typeof(StateNode))
+            else if (currentNodeType == typeof(StateBranchNode))
             {
                 NextStateNodeExecution(node);
             }
@@ -283,7 +283,7 @@ namespace EventSystem
         /// <param name="node"></param>
         private void NextStateNodeExecution(Node node)
         {
-            var stateNode = node as StateNode;
+            var stateNode = node as StateBranchNode;
             if (stateNode == null)
                 return;
 

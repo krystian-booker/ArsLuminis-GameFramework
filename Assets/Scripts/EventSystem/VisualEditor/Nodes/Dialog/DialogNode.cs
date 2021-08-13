@@ -9,7 +9,7 @@ namespace EventSystem.VisualEditor.Nodes.Dialog
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    [NodeTint("#277DA1")]
+    [NodeTint("#227093")]
     public class DialogNode : BaseNode
     {
         #region XNode

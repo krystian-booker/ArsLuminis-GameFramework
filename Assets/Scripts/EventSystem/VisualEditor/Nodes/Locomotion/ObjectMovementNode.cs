@@ -10,13 +10,13 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion
     ///
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    [NodeTint("#4D908E")]
+    [NodeTint("#cd6133")]
     public class ObjectMovementNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
 
-        [Tooltip("Documentation purposes only")] [TextArea]
+        [TextArea, Tooltip("Documentation purposes only")]
         public string description;
         
         [Tooltip("Not required, will be prefixed to generated targets names")]
@@ -31,12 +31,10 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion
         [Tooltip("Override the game objects current position")]
         public GameObject startingPosition;
 
-        [Tooltip(
-            "A buffer zone for how close the target needs to be to the targetPosition before the event is considered 'finished'")]
-        [Range(0.5f, 5)]
+        [Range(0.5f, 5), Tooltip("Radius area to target for movement to be considered finished")]
         public float distanceThreshold = 1f;
 
-        [Tooltip("Speed that the object will move at, set on initialization. Default 3.5f")] [Range(0.1f, 10)]
+        [Range(0.1f, 10), Tooltip("Speed that the object will move at, set on initialization. Default 3.5f")]
         public float speed = 3.5f;
 
         [Tooltip("Objects rotation will not be altered on movement")]

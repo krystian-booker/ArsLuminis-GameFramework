@@ -8,7 +8,7 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion
     /// If you want a more detailed movement control over an object I'd recommend
     /// using CharacterMovement over ObjectMovement
     /// </summary>
-    [NodeTint("#4D908E")]
+    [NodeTint("#cd6133")]
     public class CharacterMovementNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;

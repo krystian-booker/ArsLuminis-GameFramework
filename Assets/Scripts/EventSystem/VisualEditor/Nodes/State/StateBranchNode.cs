@@ -6,8 +6,8 @@ namespace EventSystem.VisualEditor.Nodes.State
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    [NodeTint("#F9844A")]
-    public class StateNode : BaseNode
+    [NodeTint("#2C3A47")]
+    public class StateBranchNode : BaseNode
     {
         [Input] public NodeLink entry;
         public EventStates eventState;

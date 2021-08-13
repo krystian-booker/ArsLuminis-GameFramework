@@ -7,7 +7,7 @@ namespace EventSystem.VisualEditor.Nodes.Camera
     /// <summary>
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    [NodeTint("#577590")]
+    [NodeTint("#218c74")]
     public class ChangeVirtualCameraNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;

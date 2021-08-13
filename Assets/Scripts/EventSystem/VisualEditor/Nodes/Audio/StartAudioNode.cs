@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 
 namespace EventSystem.VisualEditor.Nodes.Audio
 {
-    [NodeTint("#577590")]
+    [NodeTint("#2c2c54")]
     public class StartAudioNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;
