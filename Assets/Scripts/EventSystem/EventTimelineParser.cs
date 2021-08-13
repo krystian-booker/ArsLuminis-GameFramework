@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +5,11 @@ using EventSystem.Events;
 using EventSystem.Models;
 using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Graphs;
-using EventSystem.VisualEditor.Nodes.Actions;
+using EventSystem.VisualEditor.Nodes;
+using EventSystem.VisualEditor.Nodes.Animation;
 using EventSystem.VisualEditor.Nodes.Audio;
+using EventSystem.VisualEditor.Nodes.Camera;
+using EventSystem.VisualEditor.Nodes.Dialog;
 using EventSystem.VisualEditor.Nodes.Flow;
 using EventSystem.VisualEditor.Nodes.Locomotion;
 using EventSystem.VisualEditor.Nodes.State;
@@ -35,22 +37,16 @@ namespace EventSystem
         /// </summary>
         public IEnumerator StartEventSequence(EventSequenceSceneGraph eventSequenceSceneGraph)
         {
-            var startNode = new List<Node>();
-            try
-            {
-                _eventSequenceSceneGraph = eventSequenceSceneGraph;
-                startNode = _eventSequenceSceneGraph.graph.nodes.Where(x => x.GetType() == typeof(StartNode)).ToList();
-                Assert.IsTrue(startNode.Any(),
-                    $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
-                Assert.IsFalse(startNode.Count > 1,
-                    $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
-                eventSequenceState = EventSequenceState.Started;
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e.Message);
-            }
-
+            var startNode = eventSequenceSceneGraph.graph.nodes.OfType<StartNode>().ToList();
+            
+            //ASSERTS
+            Assert.IsTrue(startNode.Any(),
+                $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
+            Assert.IsFalse(startNode.Count > 1,
+                $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
+            
+            //Start Sequence
+            eventSequenceState = EventSequenceState.Started;
             yield return ParseNode(startNode.FirstOrDefault());
         }
 
@@ -63,15 +59,15 @@ namespace EventSystem
         private IEnumerator ParseNode(Node node)
         {
             if (node == null)
-                yield return null;
+                yield break;
 
             //perform action for node type
             var currentNodeType = node.GetType();
-            if (currentNodeType == typeof(StartNode) || node is BaseNodeExtended { skip: true })
+            if (currentNodeType == typeof(StartNode) || node is SkippableBaseNode { skip: true })
             {
                 yield return NextNode(node);
             }
-            else if (currentNodeType == typeof(CameraNode))
+            else if (currentNodeType == typeof(ChangeVirtualCameraNode))
             {
                 yield return CameraNodeExecution(node);
             }
@@ -83,7 +79,7 @@ namespace EventSystem
             {
                 yield return CharacterMovementNodeExecution(node);
             }
-            else if (currentNodeType == typeof(AnimationNode))
+            else if (currentNodeType == typeof(PlayAnimationNode))
             {
                 yield return AnimationNodeExecution(node);
             }
@@ -99,7 +95,7 @@ namespace EventSystem
             {
                 yield return UpdateStateNodeExecution(node);
             }
-            else if (currentNodeType == typeof(StateNode))
+            else if (currentNodeType == typeof(StateBranchNode))
             {
                 NextStateNodeExecution(node);
             }
@@ -107,15 +103,15 @@ namespace EventSystem
             {
                 yield return AutoSaveNodeExecution(node);
             }
-            else if (currentNodeType == typeof(InputActionMapNode))
+            else if (currentNodeType == typeof(ChangeInputActionMapNode))
             {
-                yield return InputActionMapNode(node);
+                yield return ChangeInputActionMapNode(node);
             }
-            else if (currentNodeType == typeof(AudioNode))
+            else if (currentNodeType == typeof(StartAudioNode))
             {
                 yield return AudioNode(node);
             }
-            else if (currentNodeType == typeof(StopAudioById))
+            else if (currentNodeType == typeof(StopAudioByIdNode))
             {
                 yield return StopAudioById(node);
             }
@@ -167,7 +163,7 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator CameraNodeExecution(Node node)
         {
-            var cameraExecution = new CameraExecution(GameManager.Instance.mainCamera);
+            var cameraExecution = new ChangeVirtualCameraExecution(GameManager.Instance.mainCamera);
             cameraExecution.Execute(node);
             yield return new WaitUntil(cameraExecution.IsFinished);
             yield return NextNode(node);
@@ -286,7 +282,7 @@ namespace EventSystem
         /// <param name="node"></param>
         private void NextStateNodeExecution(Node node)
         {
-            var stateNode = node as StateNode;
+            var stateNode = node as StateBranchNode;
             if (stateNode == null)
                 return;
 
@@ -323,15 +319,15 @@ namespace EventSystem
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private IEnumerator InputActionMapNode(Node node)
+        private IEnumerator ChangeInputActionMapNode(Node node)
         {
-            var inputActionMapNode = node as InputActionMapNode;
+            var inputActionMapNode = node as ChangeInputActionMapNode;
             Assert.IsNotNull(inputActionMapNode);
 
             GameManager.Instance.inputManager.ChangeActionMap(inputActionMapNode.actionMap);
             yield return NextNode(node);
         }
-        
+
         /// <summary>
         /// Plays the set audio on the node
         /// </summary>
@@ -339,12 +335,12 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator AudioNode(Node node)
         {
-            var audioExecution = new AudioExecution();
+            var audioExecution = new StartAudioExecution();
             audioExecution.Execute(node);
             yield return new WaitUntil(audioExecution.IsFinished);
             yield return NextNode(node);
         }
-        
+
         /// <summary>
         /// Plays the set audio on the node
         /// </summary>
@@ -352,9 +348,9 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator StopAudioById(Node node)
         {
-            var stopAudioById = node as StopAudioById;
+            var stopAudioById = node as StopAudioByIdNode;
             Assert.IsNotNull(stopAudioById);
-            
+
             GameManager.Instance.audioManager.StopActiveAudioSource(stopAudioById.audioNodeId);
             yield return NextNode(node);
         }

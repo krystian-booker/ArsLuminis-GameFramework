@@ -1,4 +1,4 @@
-﻿using EventSystem.Models;
+﻿using EventSystem.VisualEditor.Nodes;
 using XNodeEditor;
 
 namespace EventSystem.VisualEditor.Editor

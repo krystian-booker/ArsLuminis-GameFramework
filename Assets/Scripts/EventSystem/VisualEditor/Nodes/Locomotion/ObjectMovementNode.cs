@@ -1,6 +1,4 @@
 using EventSystem.Models;
-using Sirenix.OdinInspector;
-using Tools;
 using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.Locomotion
@@ -12,12 +10,13 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion
     ///
     /// DO NOT PUT ANY CODE HERE, WITH THE EXCEPTION OF EDITOR CODE
     /// </summary>
-    public class ObjectMovementNode : BaseNodeExtended
+    [NodeTint("#e55039")]
+    public class ObjectMovementNode : SkippableBaseNode
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
 
-        [Tooltip("Documentation purposes only")] [TextArea]
+        [TextArea, Tooltip("Documentation purposes only")]
         public string description;
         
         [Tooltip("Not required, will be prefixed to generated targets names")]
@@ -32,12 +31,10 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion
         [Tooltip("Override the game objects current position")]
         public GameObject startingPosition;
 
-        [Tooltip(
-            "A buffer zone for how close the target needs to be to the targetPosition before the event is considered 'finished'")]
-        [Range(0.5f, 5)]
+        [Range(0.5f, 5), Tooltip("Radius area to target for movement to be considered finished")]
         public float distanceThreshold = 1f;
 
-        [Tooltip("Speed that the object will move at, set on initialization. Default 3.5f")] [Range(0.1f, 10)]
+        [Range(0.1f, 10), Tooltip("Speed that the object will move at, set on initialization. Default 3.5f")]
         public float speed = 3.5f;
 
         [Tooltip("Objects rotation will not be altered on movement")]
@@ -45,33 +42,5 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion
 
         [Tooltip("Set the size of the navmesh radius")]
         public float navMeshRadius = 0.5f;
-
-#if UNITY_EDITOR
-        [Button("Create Target Position")]
-        private void GenerateTargetPosition()
-        {
-            var positionTargetGameObject = Resources.Load<GameObject>("Prefabs/editorTools/YellowTarget");
-            if (positionTargetGameObject == null) return;
-
-            //Assign object back to self
-            var instantiatedTarget = Utilities.InstantiateObject(positionTargetGameObject);
-            instantiatedTarget.name =
-                string.IsNullOrEmpty(shortName) ? "TargetPosition" : $"{shortName}TargetPosition";
-            targetPosition = instantiatedTarget;
-        }
-
-        [Button("Create Starting Position")]
-        private void GenerateStartingPosition()
-        {
-            var positionTargetGameObject = Resources.Load<GameObject>("Prefabs/editorTools/GreenTarget");
-            if (positionTargetGameObject == null) return;
-
-            //Assign object back to self
-            var instantiatedTarget = Utilities.InstantiateObject(positionTargetGameObject);
-            instantiatedTarget.name =
-                string.IsNullOrEmpty(shortName) ? "StartingPosition" : $"{shortName}StartingPosition";
-            startingPosition = instantiatedTarget;
-        }
-#endif
     }
 }

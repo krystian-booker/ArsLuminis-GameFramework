@@ -27,7 +27,7 @@ namespace EventSystem.Triggers
         private IEnumerator BeginTriggerEvent()
         {
             if (triggerEventSequence == null)
-                yield return null;
+                yield break;
 
             //Add trigger event timeline parser
             if (_triggerEventTimelineParser == null)

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using XNode;
+﻿using XNode;
 
 namespace EventSystem.Models.interfaces
 {

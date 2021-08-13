@@ -1,4 +1,3 @@
-using System;
 using Input.models;
 using UnityEngine;
 using UnityEngine.InputSystem;

@@ -1,9 +1,6 @@
-﻿using System;
-using EventSystem.Models.interfaces;
-using EventSystem.VisualEditor.Nodes.Actions;
+﻿using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Locomotion;
 using Tools;
-using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
 using XNode;
