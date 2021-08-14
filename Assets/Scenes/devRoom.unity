@@ -2029,7 +2029,7 @@ MonoBehaviour:
   description: 
   waitForAnimationEvent: 1
   animationTarget: {fileID: 1303509004}
-  animationTrigger: TrainLeaves
+  animationTrigger: TrainStart
 --- !u!1 &1431880049
 GameObject:
   m_ObjectHideFlags: 0

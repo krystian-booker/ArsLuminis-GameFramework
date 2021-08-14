@@ -3,7 +3,8 @@
     public enum EventSequenceState
     {
         Awaiting,
-        Started,
-        Ended
+        Running,
+        Ended,
+        Paused
     }
 }

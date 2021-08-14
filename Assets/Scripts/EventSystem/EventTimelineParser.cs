@@ -23,13 +23,21 @@ namespace EventSystem
     public class EventTimelineParser : MonoBehaviour
     {
         public EventSequenceState eventSequenceState = EventSequenceState.Awaiting;
-        private EventSequenceSceneGraph _eventSequenceSceneGraph;
 
-        //TODO: Finish this functionality. Replace with in game UI
+        #region Debugger
+
         public bool debugger;
-        [HideInInspector] public bool step;
+        public bool debugStep;
+        public string description;
 
+        #endregion
+
+        #region Sequence
+
+        private EventSequenceSceneGraph _eventSequenceSceneGraph;
         private List<IPauseEventExecution> _pauseEventExecutions = new List<IPauseEventExecution>();
+
+        #endregion
 
         /// <summary>
         /// Start parsing the xNode timeLine.
@@ -38,15 +46,16 @@ namespace EventSystem
         public IEnumerator StartEventSequence(EventSequenceSceneGraph eventSequenceSceneGraph)
         {
             var startNode = eventSequenceSceneGraph.graph.nodes.OfType<StartNode>().ToList();
+            description = eventSequenceSceneGraph.description;
             
             //ASSERTS
             Assert.IsTrue(startNode.Any(),
                 $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
             Assert.IsFalse(startNode.Count > 1,
                 $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
-            
+
             //Start Sequence
-            eventSequenceState = EventSequenceState.Started;
+            eventSequenceState = EventSequenceState.Running;
             yield return ParseNode(startNode.FirstOrDefault());
         }
 
@@ -143,6 +152,7 @@ namespace EventSystem
             {
                 pauseExecution.PauseExecution();
             }
+            eventSequenceState = EventSequenceState.Paused;
         }
 
         /// <summary>
@@ -154,6 +164,7 @@ namespace EventSystem
             {
                 pauseExecution.ResumeExecution();
             }
+            eventSequenceState = EventSequenceState.Running;
         }
 
         /// <summary>
@@ -364,7 +375,7 @@ namespace EventSystem
             if (debugger)
             {
                 yield return new WaitUntil(UserSteppedToNextNode);
-                step = false;
+                debugStep = false;
             }
 
             var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
@@ -386,7 +397,7 @@ namespace EventSystem
 
         private bool UserSteppedToNextNode()
         {
-            return step;
+            return debugStep;
         }
     }
 }
