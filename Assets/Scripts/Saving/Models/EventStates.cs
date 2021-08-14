@@ -1,8 +1,9 @@
-﻿namespace Saving.Models
+namespace Saving.Models
 {
-    //DEMO DATA
     public enum EventStates
     {
-       TrainMoved
+        TrainMoved,
+        //[END]
+        //DO NOT REMOVE THE [END] TAG, ITS USED BY THE SaveWindow.cs 
     }
 }

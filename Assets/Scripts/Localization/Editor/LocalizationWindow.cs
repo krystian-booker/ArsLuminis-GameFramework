@@ -14,7 +14,7 @@ namespace Localization.Editor
         public Vector2 scroll;
 
         [MenuItem("Tools/CheddyShakes/Localization")]
-        static void Init()
+        private static void Init()
         {
             var window = (LocalizationWindow) EditorWindow.GetWindow(typeof(LocalizationWindow));
             window.titleContent = new GUIContent("Localization");
