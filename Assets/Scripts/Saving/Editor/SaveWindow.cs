@@ -41,16 +41,16 @@ namespace Saving.Editor
             EditorGUILayout.BeginVertical();
             scroll = EditorGUILayout.BeginScrollView(scroll);
 
-            var eventStates = Enum.GetNames(typeof(EventStates));
-            if (eventStates.Length > 0)
-            {
-                foreach (var eventState in eventStates)
-                {
-                    EditorGUILayout.BeginHorizontal("box");
-                    EditorGUILayout.LabelField(eventState);
-                    EditorGUILayout.EndHorizontal();
-                }
-            }
+            // var eventStates = Enum.GetNames(typeof(EventStates));
+            // if (eventStates.Length > 0)
+            // {
+            //     foreach (var eventState in eventStates)
+            //     {
+            //         EditorGUILayout.BeginHorizontal("box");
+            //         EditorGUILayout.LabelField(eventState);
+            //         EditorGUILayout.EndHorizontal();
+            //     }
+            // }
 
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();

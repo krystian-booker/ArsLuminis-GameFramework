@@ -13,8 +13,8 @@ namespace EventSystem.VisualEditor.Nodes.State
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
         
-        [Tooltip("Event state to be updated")]
-        public EventStates eventState;
+        // [Tooltip("Event state to be updated")]
+        // public EventStates eventState;
         
         [Tooltip("The eventState will be set to this value")]
         public bool stateComplete = false;

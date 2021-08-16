@@ -10,7 +10,7 @@ namespace EventSystem.VisualEditor.Nodes.State
     public class StateBranchNode : BaseNode
     {
         [Input] public NodeLink entry;
-        public EventStates eventState;
+        // public EventStates eventState;
 
         [Output] public NodeLink stateTrue;
         [Output] public NodeLink stateFalse;

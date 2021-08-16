@@ -11,6 +11,6 @@ namespace Saving.Models
         public string playerName;
         public int sceneId;
         
-        public List<EventStateValue> states;
+        public List<EventState> states;
     }
 }

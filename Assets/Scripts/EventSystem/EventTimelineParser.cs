@@ -47,7 +47,7 @@ namespace EventSystem
         {
             var startNode = eventSequenceSceneGraph.graph.nodes.OfType<StartNode>().ToList();
             description = eventSequenceSceneGraph.description;
-            
+
             //ASSERTS
             Assert.IsTrue(startNode.Any(),
                 $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
@@ -152,6 +152,7 @@ namespace EventSystem
             {
                 pauseExecution.PauseExecution();
             }
+
             eventSequenceState = EventSequenceState.Paused;
         }
 
@@ -164,6 +165,7 @@ namespace EventSystem
             {
                 pauseExecution.ResumeExecution();
             }
+
             eventSequenceState = EventSequenceState.Running;
         }
 
@@ -277,11 +279,11 @@ namespace EventSystem
             var updateStateNode = node as UpdateStateNode;
             Assert.IsNotNull(updateStateNode);
 
-            var eventStateValues =
-                GameManager.Instance.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
-
-            if (eventStateValues != null)
-                eventStateValues.complete = updateStateNode.stateComplete;
+            // var eventStateValues =
+            //     GameManager.Instance.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
+            //
+            // if (eventStateValues != null)
+            //     eventStateValues.complete = updateStateNode.stateComplete;
 
             yield return NextNode(node);
         }
@@ -297,21 +299,21 @@ namespace EventSystem
             if (stateNode == null)
                 return;
 
-            var eventState =
-                GameManager.Instance.gameState.states.FirstOrDefault(eventStateValue =>
-                    eventStateValue.name == stateNode.eventState);
-            Assert.IsNotNull(eventState,
-                $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.eventState}' in gameManager states");
+            // var eventState =
+            //     GameManager.Instance.gameState.states.FirstOrDefault(eventStateValue =>
+            //         eventStateValue.name == stateNode.eventState);
+            // Assert.IsNotNull(eventState,
+            //     $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.eventState}' in gameManager states");
 
             //Port selection
-            var portName = eventState.complete ? "stateTrue" : "stateFalse";
+            // var portName = eventState.complete ? "stateTrue" : "stateFalse";
 
             //Execute port based on state
-            var nodePort = node.Ports.FirstOrDefault(portNode => portNode.fieldName == portName);
-            Assert.IsNotNull(nodePort, $"{nameof(EventTimelineParser)}: Unable to find node port for {portName}");
+            // var nodePort = node.Ports.FirstOrDefault(portNode => portNode.fieldName == portName);
+            // Assert.IsNotNull(nodePort, $"{nameof(EventTimelineParser)}: Unable to find node port for {portName}");
 
-            var nodePorts = nodePort.GetConnections();
-            ExecuteNodePorts(nodePorts);
+            // var nodePorts = nodePort.GetConnections();
+            // ExecuteNodePorts(nodePorts);
         }
 
         /// <summary>
@@ -321,7 +323,7 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator AutoSaveNodeExecution(Node node)
         {
-            SaveManager.SaveGame(GameManager.Instance.gameState, true);
+            // GameManager.Instance.saveManager.SaveGame(GameManager.Instance.gameState, true);
             yield return NextNode(node);
         }
 
