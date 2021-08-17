@@ -14,6 +14,7 @@ using EventSystem.VisualEditor.Nodes.Flow;
 using EventSystem.VisualEditor.Nodes.Locomotion;
 using EventSystem.VisualEditor.Nodes.State;
 using Saving;
+using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
 using XNode;
@@ -176,7 +177,7 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator CameraNodeExecution(Node node)
         {
-            var cameraExecution = new ChangeVirtualCameraExecution(GameManager.Instance.mainCamera);
+            var cameraExecution = new ChangeVirtualCameraExecution(Systems.MainCamera);
             cameraExecution.Execute(node);
             yield return new WaitUntil(cameraExecution.IsFinished);
             yield return NextNode(node);
@@ -252,7 +253,7 @@ namespace EventSystem
             var dialogNode = node as DialogNode;
             Assert.IsNotNull(dialogNode);
 
-            var dialogWriter = GameManager.Instance.dialogManager.NewDialog(dialogNode);
+            var dialogWriter = Systems.DialogManager.NewDialog(dialogNode);
             yield return new WaitUntil(dialogWriter.IsNodeFinished);
 
             if (dialogNode.options.Count > 0)
@@ -280,7 +281,7 @@ namespace EventSystem
             Assert.IsNotNull(updateStateNode);
 
             // var eventStateValues =
-            //     GameManager.Instance.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
+            //     Systems.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
             //
             // if (eventStateValues != null)
             //     eventStateValues.complete = updateStateNode.stateComplete;
@@ -300,7 +301,7 @@ namespace EventSystem
                 return;
 
             // var eventState =
-            //     GameManager.Instance.gameState.states.FirstOrDefault(eventStateValue =>
+            //     Systems.gameState.states.FirstOrDefault(eventStateValue =>
             //         eventStateValue.name == stateNode.eventState);
             // Assert.IsNotNull(eventState,
             //     $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.eventState}' in gameManager states");
@@ -323,7 +324,7 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator AutoSaveNodeExecution(Node node)
         {
-            // GameManager.Instance.saveManager.SaveGame(GameManager.Instance.gameState, true);
+            // Systems.saveManager.SaveGame(Systems.gameState, true);
             yield return NextNode(node);
         }
 
@@ -337,7 +338,7 @@ namespace EventSystem
             var inputActionMapNode = node as ChangeInputActionMapNode;
             Assert.IsNotNull(inputActionMapNode);
 
-            GameManager.Instance.inputManager.ChangeActionMap(inputActionMapNode.actionMap);
+            Systems.InputManager.ChangeActionMap(inputActionMapNode.actionMap);
             yield return NextNode(node);
         }
 
@@ -364,7 +365,7 @@ namespace EventSystem
             var stopAudioById = node as StopAudioByIdNode;
             Assert.IsNotNull(stopAudioById);
 
-            GameManager.Instance.audioManager.StopActiveAudioSource(stopAudioById.audioNodeId);
+            Systems.AudioManager.StopActiveAudioSource(stopAudioById.audioNodeId);
             yield return NextNode(node);
         }
 

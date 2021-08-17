@@ -1,6 +1,7 @@
 ﻿using Audio;
 using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Audio;
+using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
 using XNode;
@@ -21,11 +22,12 @@ namespace EventSystem.Events
         public void Execute(Node node)
         {
             _audioNode = node as StartAudioNode;
-            Assert.IsNotNull(_audioNode, $"{nameof(StartAudioExecution)}: Invalid setup on {nameof(StartAudioExecution)}");
+            Assert.IsNotNull(_audioNode,
+                $"{nameof(StartAudioExecution)}: Invalid setup on {nameof(StartAudioExecution)}");
 
             _audioSourceLocation = _audioNode.audioSourceLocation != null
                 ? _audioNode.audioSourceLocation
-                : GameManager.Instance.audioManager.defaultAudioSourceLocation;
+                : Systems.AudioManager.defaultAudioSourceLocation;
 
             _audioSource = _audioSourceLocation.AddComponent<AudioSource>();
             _audioSource.clip = _audioNode.audioClip;
@@ -45,19 +47,20 @@ namespace EventSystem.Events
 
             if (_audioNode.audioFade)
             {
-                GameManager.Instance.audioManager.StartAudioCoroutine(FadeAudioSource.StartFade(_audioSource, _audioNode.initialFadeDelay, _audioNode.fadeDuration, _audioNode.targetVolume));
+                Systems.AudioManager.StartAudioCoroutine(FadeAudioSource.StartFade(_audioSource,
+                    _audioNode.initialFadeDelay, _audioNode.fadeDuration, _audioNode.targetVolume));
             }
 
             if (_audioNode.isPublic)
             {
-                GameManager.Instance.audioManager.AddActiveAudioSource(_audioNode.publicId, _audioSource);
+                Systems.AudioManager.AddActiveAudioSource(_audioNode.publicId, _audioSource);
             }
         }
 
         public bool IsFinished()
         {
             if (_audioSource.isPlaying) return false;
-            GameManager.Instance.audioManager.ReturnToPool(_audioSource);
+            Systems.AudioManager.ReturnToPool(_audioSource);
             return true;
         }
     }
