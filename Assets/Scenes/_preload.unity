@@ -237,7 +237,20 @@ MonoBehaviour:
   gameState:
     playerName: 
     sceneId: 0
-    states: []
+    states:
+    - id: 
+      description: 
+      dataType: 0
+      defaultStringValue: 
+      stringValue: 
+      defaultIntValue: 0
+      intValue: 0
+      defaultFloatValue: 0
+      floatValue: 0
+      defaultBooleanValue: 0
+      booleanValue: 0
+      defaultVector3Value: {x: 0, y: 0, z: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
 --- !u!114 &37462427
 MonoBehaviour:
   m_ObjectHideFlags: 0

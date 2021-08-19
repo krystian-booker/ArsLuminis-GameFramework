@@ -10,9 +10,7 @@ namespace Saving
 {
     public class SaveManager : MonoBehaviour
     {
-        [SerializeField]
-        private GameState gameState;
-        
+        public GameState gameState;
         private string _savePath;
 
         private void Start()
@@ -43,7 +41,7 @@ namespace Saving
                 {
                     fileName = "auto";
                 }
-                
+
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     //Not throwing an overwrite warning here, needs to be handled frontend

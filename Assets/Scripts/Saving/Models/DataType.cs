@@ -6,7 +6,6 @@
         Integer,
         Float,
         Boolean,
-        Vector2,
         Vector3
     }
 }

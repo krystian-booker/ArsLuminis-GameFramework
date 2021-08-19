@@ -1,105 +1,163 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 using Saving.Models;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Saving.Editor
 {
     public class SaveWindow : EditorWindow
     {
+        private static GameState _gameState;
+        private static SaveWindow _saveWindow;
+        private SerializedObject _serializedObject;
+
         public string newState;
         public Vector2 scroll;
 
         [MenuItem("Tools/CheddyShakes/Save Editor")]
         private static void Init()
         {
-            var window = (SaveWindow)EditorWindow.GetWindow(typeof(SaveWindow));
-            window.titleContent = new GUIContent("Save Editor");
-            window.Show();
+            _saveWindow = (SaveWindow)GetWindow(typeof(SaveWindow));
+            _saveWindow.titleContent = new GUIContent("Save Editor");
+            _saveWindow.Show();
+            LoadAppScene();
         }
 
         public void OnGUI()
         {
-            EditorGUILayout.BeginHorizontal("Box");
-            EditorGUILayout.LabelField("New state: ", EditorStyles.boldLabel);
-            newState = EditorGUILayout.TextField(newState);
-
-            if (GUILayout.Button("Add"))
+            if (_serializedObject == null)
             {
-                CreateNewEventState(newState);
+                LoadAppScene();
+            }
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Load Template"))
+            {
+                LoadSaveTemplate();
+            }
+
+            if (GUILayout.Button("Save Template"))
+            {
+                CreateSaveTemplate();
             }
 
             EditorGUILayout.EndHorizontal();
-            GetEventState();
+            EditorGUILayout.Space();
+            
+            var enterChildren = true;
+            var iterator = _serializedObject.GetIterator();
+            while (iterator.NextVisible(enterChildren))
+            {
+                enterChildren = false;
+                if (iterator.name == "m_Script") continue;
+                switch (iterator.name)
+                {
+                    case "gameState":
+                        if (Event.current.type == EventType.Repaint)
+                        {
+                            if (iterator.serializedObject.targetObject == null)
+                            {
+                                if (GUILayout.Button("Reload scene & Refresh Window"))
+                                {
+                                    LoadAppScene();
+                                }
+
+                                return;
+                            }
+                        }
+
+                        EditorGUILayout.PropertyField(iterator);
+                        break;
+                    default:
+                        EditorGUILayout.PropertyField(iterator);
+                        break;
+                }
+            }
         }
 
-        private void GetEventState()
+        private static void LoadAppScene()
         {
-            EditorGUILayout.BeginVertical();
-            scroll = EditorGUILayout.BeginScrollView(scroll);
+            EditorSceneManager.OpenScene("Assets/Scenes/_preload.unity");
+            var app = GameObject.Find("__app");
+            var saveManager = app.GetComponent<SaveManager>();
 
-            // var eventStates = Enum.GetNames(typeof(EventStates));
-            // if (eventStates.Length > 0)
-            // {
-            //     foreach (var eventState in eventStates)
-            //     {
-            //         EditorGUILayout.BeginHorizontal("box");
-            //         EditorGUILayout.LabelField(eventState);
-            //         EditorGUILayout.EndHorizontal();
-            //     }
-            // }
+            //Will be null after builds
+            if (_saveWindow == null)
+            {
+                _saveWindow = (SaveWindow)GetWindow(typeof(SaveWindow));
+            }
 
-            EditorGUILayout.EndScrollView();
-            EditorGUILayout.EndVertical();
+            _saveWindow._serializedObject = new SerializedObject(saveManager);
         }
 
-        private static void CreateNewEventState(string eventStateName)
+        private static void LoadSaveTemplate()
         {
-            //Validate
-            if (string.IsNullOrEmpty(eventStateName))
-                return;
+            var path = EditorUtility.OpenFilePanel("Open save template", $"{Application.dataPath}/", "template");
+            _gameState = LoadTemplate(path);
+        }
+        
+        private static void CreateSaveTemplate()
+        {
+            var path = EditorUtility.SaveFilePanel("Create template", $"{Application.dataPath}/", "saveFileFormat",
+                "template");
+            _gameState = SanitizeSaveTemplate(_gameState);
+            CreateSaveTemplateFile(_gameState, path);
+        }
+        
+        private static GameState SanitizeSaveTemplate(GameState gameState)
+        {
+            //Sanitize the values as templates should be be storing save data
+            foreach (var state in gameState.states)
+            {
+                state.stringValue = string.Empty;
+                state.intValue = 0;
+                state.floatValue = 0f;
+                state.booleanValue = false;
+                state.vector3Value = Vector3.zero;
+            }
 
-            eventStateName = eventStateName.Trim();
-            if (Regex.IsMatch(eventStateName, "[^a-zA-Z\\d]"))
+            return gameState;
+        }
+
+        private static void CreateSaveTemplateFile(GameState gameState, string fileName)
+        {
+            try
             {
-                Debug.LogError(
-                    $"{nameof(SaveWindow)}: EventState name cannot contain characters. AlphaNumeric only.");
-                return;
+                var serializer = new XmlSerializer(typeof(GameState));
+                var path = $"{Application.persistentDataPath}/saves/{fileName}.el";
+                var streamWriter = new StreamWriter(path);
+                serializer.Serialize(streamWriter, gameState);
+                streamWriter.Close();
             }
-            
-            //Const
-            const string endTag = "//[END]";
-            var fileName = $"{Application.dataPath}\\Scripts\\Saving\\Models\\EventStates.cs";
-            
-            //Parse
-            var eventStateEnumLines = File.ReadAllLines(fileName).ToList();
-            
-            //End tag
-            var endTagIndex = eventStateEnumLines.FindIndex(x => x.Contains(endTag));
-            if (endTagIndex == 0)
+            catch (Exception exception)
             {
-                Debug.LogError($"{nameof(SaveWindow)}: Could not find '//[END]' Please add it back after the last enum value.");
-                return;
+                Debug.LogError($"{nameof(SaveManager)}: Unable save template: '{exception.Message}'");
             }
-            
-            //Existing check
-            var te = eventStateEnumLines.FirstOrDefault(x => x.Contains(eventStateName));
-            if (!string.IsNullOrEmpty(te))
+        }
+        
+        private static GameState LoadTemplate(string path)
+        {
+            if (!File.Exists(path))
             {
-                Debug.LogError($"{nameof(SaveWindow)}: Value already exists, duplicates cannot be created.");
-                return;
+                return null;
             }
-            
-            //Add
-            eventStateEnumLines.Insert(endTagIndex, $"{eventStateName},");
-            File.WriteAllLines(fileName, eventStateEnumLines);
-            
-            //Unity doesn't detect this change unless we leave the window and come back.
-            //Manually trigger build
-            AssetDatabase.Refresh();
+
+            try
+            {
+                var serializer = new XmlSerializer(typeof(GameState));
+                var fileStream = new FileStream(path, FileMode.Open);
+                var gameState = (GameState)serializer.Deserialize(fileStream);
+                fileStream.Close();
+                return gameState;
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError($"{nameof(SaveManager)}: Unable to load template: '{exception.Message}'");
+                return null;
+            }
         }
     }
 }

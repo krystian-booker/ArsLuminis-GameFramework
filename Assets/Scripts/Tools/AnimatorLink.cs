@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Animations
+namespace Tools
 {
     public class AnimatorLink : MonoBehaviour
     {

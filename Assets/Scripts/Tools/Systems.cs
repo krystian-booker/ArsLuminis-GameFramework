@@ -1,8 +1,8 @@
 ﻿using Audio;
 using Cinemachine;
 using Dialog;
-using EventSystem;
 using Input;
+using Saving;
 using Scene;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -16,6 +16,7 @@ namespace Tools
         public static readonly DialogManager DialogManager;
         public static readonly SceneControlManager SceneControlManager;
         public static readonly AudioManager AudioManager;
+        public static readonly SaveManager SaveManager;
         
         public static readonly Camera MainCamera;
         public static readonly CinemachineBrain CinemachineBrain;
@@ -31,6 +32,7 @@ namespace Tools
             DialogManager = app.GetComponent<DialogManager>();
             SceneControlManager = app.GetComponent<SceneControlManager>();
             AudioManager = app.GetComponent<AudioManager>();
+            SaveManager = app.GetComponent<SaveManager>();
             MainCamera = Camera.main;
             EventSystem = UnityEngine.EventSystems.EventSystem.current;
 
@@ -40,6 +42,7 @@ namespace Tools
             Assert.IsNotNull(DialogManager, $"{nameof(Systems)}: DialogManager is missing from _preload");
             Assert.IsNotNull(SceneControlManager, $"{nameof(Systems)}: SceneControlManager is missing from _preload");
             Assert.IsNotNull(AudioManager, $"{nameof(Systems)}: AudioManager is missing from _preload");
+            Assert.IsNotNull(SaveManager, $"{nameof(Systems)}: SaveManager is missing from _preload");
             Assert.IsNotNull(MainCamera, $"{nameof(Systems)}: Camera is missing from _preload");
             Assert.IsNotNull(EventSystem, $"{nameof(Systems)}: EventSystem is missing from _preload");
             

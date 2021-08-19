@@ -1,6 +1,6 @@
-﻿using Animations;
-using EventSystem.Models.interfaces;
+﻿using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Animation;
+using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
 using XNode;
