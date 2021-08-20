@@ -235,17 +235,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameState:
-    playerName: 
-    sceneId: 0
+    playerName: Cloud
+    sceneId: 2
     states:
-    - id: 
-      description: 
-      dataType: 0
+    - id: test
+      description: est
+      dataType: 2
       defaultStringValue: 
       stringValue: 
       defaultIntValue: 0
       intValue: 0
-      defaultFloatValue: 0
+      defaultFloatValue: 3.5
       floatValue: 0
       defaultBooleanValue: 0
       booleanValue: 0

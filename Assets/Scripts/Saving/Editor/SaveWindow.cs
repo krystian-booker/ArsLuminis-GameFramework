@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml.Serialization;
 using Saving.Models;
 using UnityEditor;
+using UnityEditor.Experimental.TerrainAPI;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -10,10 +11,10 @@ namespace Saving.Editor
 {
     public class SaveWindow : EditorWindow
     {
-        private static GameState _gameState;
         private static SaveWindow _saveWindow;
+        private static SaveManager _saveManager;
         private SerializedObject _serializedObject;
-
+        
         public string newState;
         public Vector2 scroll;
 
@@ -28,9 +29,20 @@ namespace Saving.Editor
 
         public void OnGUI()
         {
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(_saveManager);
+                EditorSceneManager.MarkSceneDirty(_saveManager.gameObject.scene);
+                Repaint();
+            }
+            
             if (_serializedObject == null)
             {
-                LoadAppScene();
+                if (GUILayout.Button("Reload scene & Refresh Window"))
+                {
+                    LoadAppScene();
+                }
+                return;
             }
 
             EditorGUILayout.BeginHorizontal();
@@ -60,11 +72,6 @@ namespace Saving.Editor
                         {
                             if (iterator.serializedObject.targetObject == null)
                             {
-                                if (GUILayout.Button("Reload scene & Refresh Window"))
-                                {
-                                    LoadAppScene();
-                                }
-
                                 return;
                             }
                         }
@@ -82,7 +89,7 @@ namespace Saving.Editor
         {
             EditorSceneManager.OpenScene("Assets/Scenes/_preload.unity");
             var app = GameObject.Find("__app");
-            var saveManager = app.GetComponent<SaveManager>();
+            _saveManager = app.GetComponent<SaveManager>();
 
             //Will be null after builds
             if (_saveWindow == null)
@@ -90,21 +97,23 @@ namespace Saving.Editor
                 _saveWindow = (SaveWindow)GetWindow(typeof(SaveWindow));
             }
 
-            _saveWindow._serializedObject = new SerializedObject(saveManager);
+            _saveWindow._serializedObject = new SerializedObject(_saveManager);
         }
 
         private static void LoadSaveTemplate()
         {
             var path = EditorUtility.OpenFilePanel("Open save template", $"{Application.dataPath}/", "template");
-            _gameState = LoadTemplate(path);
+            _saveManager.gameState = LoadTemplate(path);
+            EditorUtility.SetDirty(_saveManager);
+            EditorSceneManager.MarkSceneDirty(_saveManager.gameObject.scene);
         }
         
         private static void CreateSaveTemplate()
         {
             var path = EditorUtility.SaveFilePanel("Create template", $"{Application.dataPath}/", "saveFileFormat",
                 "template");
-            _gameState = SanitizeSaveTemplate(_gameState);
-            CreateSaveTemplateFile(_gameState, path);
+            _saveManager.gameState = SanitizeSaveTemplate(_saveManager.gameState);
+            CreateSaveTemplateFile(_saveManager.gameState, path);
         }
         
         private static GameState SanitizeSaveTemplate(GameState gameState)
@@ -122,12 +131,11 @@ namespace Saving.Editor
             return gameState;
         }
 
-        private static void CreateSaveTemplateFile(GameState gameState, string fileName)
+        private static void CreateSaveTemplateFile(GameState gameState, string path)
         {
             try
             {
                 var serializer = new XmlSerializer(typeof(GameState));
-                var path = $"{Application.persistentDataPath}/saves/{fileName}.el";
                 var streamWriter = new StreamWriter(path);
                 serializer.Serialize(streamWriter, gameState);
                 streamWriter.Close();
