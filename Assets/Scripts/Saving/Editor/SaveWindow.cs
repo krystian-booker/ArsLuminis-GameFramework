@@ -19,7 +19,7 @@ namespace Saving.Editor
         public Vector2 scroll;
 
         [MenuItem("Tools/CheddyShakes/Save Editor")]
-        private static void Init()
+        private void Init()
         {
             _saveWindow = (SaveWindow)GetWindow(typeof(SaveWindow));
             _saveWindow.titleContent = new GUIContent("Save Editor");
@@ -27,6 +27,12 @@ namespace Saving.Editor
             LoadAppScene();
         }
 
+        public void Update()
+        {
+            // This is necessary to make the framerate normal for the editor window.
+            Repaint();
+        }
+        
         public void OnGUI()
         {
             if (GUI.changed)
@@ -67,25 +73,15 @@ namespace Saving.Editor
                 if (iterator.name == "m_Script") continue;
                 switch (iterator.name)
                 {
-                    case "gameState":
-                        if (Event.current.type == EventType.Repaint)
-                        {
-                            if (iterator.serializedObject.targetObject == null)
-                            {
-                                return;
-                            }
-                        }
-
-                        EditorGUILayout.PropertyField(iterator);
-                        break;
                     default:
                         EditorGUILayout.PropertyField(iterator);
                         break;
                 }
             }
+            _serializedObject.ApplyModifiedProperties();
         }
 
-        private static void LoadAppScene()
+        private void LoadAppScene()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/_preload.unity");
             var app = GameObject.Find("__app");
@@ -100,12 +96,29 @@ namespace Saving.Editor
             _saveWindow._serializedObject = new SerializedObject(_saveManager);
         }
 
-        private static void LoadSaveTemplate()
+        private void LoadSaveTemplate()
         {
             var path = EditorUtility.OpenFilePanel("Open save template", $"{Application.dataPath}/", "template");
             _saveManager.gameState = LoadTemplate(path);
+            _serializedObject.ApplyModifiedProperties();
+            
             EditorUtility.SetDirty(_saveManager);
             EditorSceneManager.MarkSceneDirty(_saveManager.gameObject.scene);
+            refresh();
+        }
+        
+        private void refresh()
+        {
+            var app = GameObject.Find("__app");
+            _saveManager = app.GetComponent<SaveManager>();
+
+            //Will be null after builds
+            if (_saveWindow == null)
+            {
+                _saveWindow = (SaveWindow)GetWindow(typeof(SaveWindow));
+            }
+
+            _saveWindow._serializedObject = new SerializedObject(_saveManager);
         }
         
         private static void CreateSaveTemplate()
@@ -118,7 +131,7 @@ namespace Saving.Editor
         
         private static GameState SanitizeSaveTemplate(GameState gameState)
         {
-            //Sanitize the values as templates should be be storing save data
+            //Sanitize the values as templates should not be storing save data
             foreach (var state in gameState.states)
             {
                 state.stringValue = string.Empty;

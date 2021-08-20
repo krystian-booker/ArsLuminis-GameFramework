@@ -78,9 +78,9 @@ namespace Saving
                 serializer.UnknownAttribute += SerializerUnknownAttribute;
 
                 var fileStream = new FileStream(path, FileMode.Open);
-                var gameState = (GameState)serializer.Deserialize(fileStream);
+                var gameStateEl = (GameState)serializer.Deserialize(fileStream);
                 fileStream.Close();
-                return gameState;
+                return gameStateEl;
             }
             catch (Exception exception)
             {
