@@ -34,7 +34,6 @@ namespace Tools
             AudioManager = app.GetComponent<AudioManager>();
             SaveManager = app.GetComponent<SaveManager>();
             MainCamera = Camera.main;
-            EventSystem = UnityEngine.EventSystems.EventSystem.current;
 
             //Validate components
             Assert.IsNotNull(GameManager, $"{nameof(Systems)}: GameManager is missing from _preload");
@@ -45,8 +44,10 @@ namespace Tools
             Assert.IsNotNull(SaveManager, $"{nameof(Systems)}: SaveManager is missing from _preload");
             Assert.IsNotNull(MainCamera, $"{nameof(Systems)}: Camera is missing from _preload");
 
-            if (!Application.isEditor)
+            if (Application.isPlaying)
             {
+                //Systems is used by the Editor, these are only available when the game is running
+                EventSystem = UnityEngine.EventSystems.EventSystem.current;
                 Assert.IsNotNull(EventSystem, $"{nameof(Systems)}: EventSystem is missing from _preload");
                 
                 CinemachineBrain = MainCamera.GetComponent<CinemachineBrain>();
