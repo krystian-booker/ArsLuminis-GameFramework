@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using EventSystem.VisualEditor.Nodes.State;
 using Saving.Models;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Saving
 {
@@ -18,17 +20,43 @@ namespace Saving
             _savePath = $"{Application.persistentDataPath}/saves";
         }
 
+        public void UpdateState(UpdateStateNode updateStateNode)
+        {
+            var eventStateValue = gameState.states.FirstOrDefault(x => x.id == updateStateNode.selectedStateId);
+            Assert.IsNotNull(eventStateValue,$"{nameof(SaveManager)}: Unable to find the state '{updateStateNode.selectedStateId}'");
+            switch (eventStateValue.dataType)
+            {
+                case DataType.String:
+                    eventStateValue.stringValue = updateStateNode.stringValue;
+                    break;
+                case DataType.Integer:
+                    eventStateValue.intValue = updateStateNode.intValue;
+                    break;
+                case DataType.Float:
+                    eventStateValue.floatValue = updateStateNode.floatValue;
+                    break;
+                case DataType.Boolean:
+                    eventStateValue.booleanValue = updateStateNode.booleanValue;
+                    break;
+                case DataType.Vector3:
+                    eventStateValue.vector3Value = updateStateNode.vector3Value;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         /// <summary>
         /// autoSave and fileName are both optional parameters.
         /// autoSave will always overwrite the default save file auto.el
         /// fileName allows the user to overwrite an existing save
         /// If neither parameters are provided a new save file will be created
         /// </summary>
-        /// <param name="gameState"></param>
+        /// <param name="updatedGameState"></param>
         /// <param name="autoSave"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public bool SaveGame(GameState gameState, bool autoSave = false, string fileName = null)
+        public bool SaveGame(bool autoSave = false, string fileName = null)
         {
             try
             {

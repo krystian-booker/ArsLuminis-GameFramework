@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ using EventSystem.VisualEditor.Nodes.Flow;
 using EventSystem.VisualEditor.Nodes.Locomotion;
 using EventSystem.VisualEditor.Nodes.State;
 using Saving;
+using Saving.Models;
 using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -279,13 +281,7 @@ namespace EventSystem
         {
             var updateStateNode = node as UpdateStateNode;
             Assert.IsNotNull(updateStateNode);
-
-            // var eventStateValues =
-            //     Systems.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
-            //
-            // if (eventStateValues != null)
-            //     eventStateValues.complete = updateStateNode.stateComplete;
-
+            Systems.SaveManager.UpdateState(updateStateNode);
             yield return NextNode(node);
         }
 
@@ -324,7 +320,7 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator AutoSaveNodeExecution(Node node)
         {
-            // Systems.saveManager.SaveGame(Systems.gameState, true);
+            Systems.SaveManager.SaveGame(true);
             yield return NextNode(node);
         }
 

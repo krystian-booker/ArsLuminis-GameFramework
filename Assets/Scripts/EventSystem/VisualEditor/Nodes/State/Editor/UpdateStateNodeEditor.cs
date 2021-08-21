@@ -5,7 +5,6 @@ using XNodeEditor;
 using System.Linq;
 using Saving.Models;
 using Tools;
-using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.State.Editor
 {
@@ -14,7 +13,7 @@ namespace EventSystem.VisualEditor.Nodes.State.Editor
     {
         private bool _initialSetup;
         private int _selectedIndex;
-        private List<string> _stateNames = new List<string>();
+        private string _selectedStateId;
 
         private string[] _excludes =
         {
@@ -39,13 +38,15 @@ namespace EventSystem.VisualEditor.Nodes.State.Editor
             serializedObject.Update();
 
             #region Setup
-            
+
+            var stateNames = Systems.SaveManager.gameState.states.Select(x => x.id).ToArray();
             if (!_initialSetup)
             {
-                _selectedIndex = serializedObject.FindProperty("selectedStateIndex").intValue;
                 _initialSetup = true;
+                _selectedStateId = serializedObject.FindProperty("selectedStateId").stringValue;
+                _selectedIndex = Systems.SaveManager.gameState.states.FindIndex(x => x.id == _selectedStateId);
             }
-            
+
             #endregion
 
             #region Default draw
@@ -66,47 +67,45 @@ namespace EventSystem.VisualEditor.Nodes.State.Editor
 
             #region State Popup
 
-            //Potential performance issues
-            _stateNames = new List<string>();
-            var stateNamesProperty = serializedObject.FindProperty("stateNames");
-            for (var i = 0; i < stateNamesProperty.arraySize; i++)
+            _selectedIndex = EditorGUILayout.Popup("State", _selectedIndex, stateNames);
+            if (_selectedIndex >= 0)
             {
-                _stateNames.Add(stateNamesProperty.GetArrayElementAtIndex(i).stringValue);
+                serializedObject.FindProperty("selectedStateId").stringValue = Systems.SaveManager.gameState.states[_selectedIndex].id;
             }
-
-            _selectedIndex = EditorGUILayout.Popup("State", _selectedIndex, _stateNames.ToArray());
-            serializedObject.FindProperty("selectedStateIndex").intValue = _selectedIndex;
 
             #endregion
 
             #region State Variables
 
-            var selectedState = Systems.SaveManager.gameState.states[_selectedIndex];
-            switch (selectedState.dataType)
+            if (_selectedIndex >= 0)
             {
-                case DataType.String:
-                    var stringValue = serializedObject.FindProperty("stringValue");
-                    NodeEditorGUILayout.PropertyField(stringValue);
-                    break;
-                case DataType.Integer:
-                    var intValue = serializedObject.FindProperty("intValue");
-                    NodeEditorGUILayout.PropertyField(intValue);
-                    break;
-                case DataType.Float:
-                    var floatValue = serializedObject.FindProperty("floatValue");
-                    NodeEditorGUILayout.PropertyField(floatValue);
-                    break;
-                case DataType.Boolean:
-                    var booleanValue = serializedObject.FindProperty("booleanValue");
-                    NodeEditorGUILayout.PropertyField(booleanValue);
-                    // NodeEditorGUILayout.PropertyField(booleanValue, new GUIContent("Vector Object"));
-                    break;
-                case DataType.Vector3:
-                    var vector3Value = serializedObject.FindProperty("vector3Value");
-                    NodeEditorGUILayout.PropertyField(vector3Value);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                var selectedState = Systems.SaveManager.gameState.states[_selectedIndex];
+                switch (selectedState.dataType)
+                {
+                    case DataType.String:
+                        var stringValue = serializedObject.FindProperty("stringValue");
+                        NodeEditorGUILayout.PropertyField(stringValue);
+                        break;
+                    case DataType.Integer:
+                        var intValue = serializedObject.FindProperty("intValue");
+                        NodeEditorGUILayout.PropertyField(intValue);
+                        break;
+                    case DataType.Float:
+                        var floatValue = serializedObject.FindProperty("floatValue");
+                        NodeEditorGUILayout.PropertyField(floatValue);
+                        break;
+                    case DataType.Boolean:
+                        var booleanValue = serializedObject.FindProperty("booleanValue");
+                        NodeEditorGUILayout.PropertyField(booleanValue);
+                        // NodeEditorGUILayout.PropertyField(booleanValue, new GUIContent("Vector Object"));
+                        break;
+                    case DataType.Vector3:
+                        var vector3Value = serializedObject.FindProperty("vector3Value");
+                        NodeEditorGUILayout.PropertyField(vector3Value);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
 
             #endregion

@@ -1385,17 +1385,12 @@ MonoBehaviour:
       _dynamic: 0
   started: 0
   skip: 0
-  stateNames:
-  - TrainLeft
-  - IntroFinished
-  - CashAmount
-  - PlayerPosition
-  selectedStateIndex: 3
+  selectedStateId: TrainLeft
   stringValue: 
   intValue: 0
   floatValue: 0
-  booleanValue: 0
-  vector3Value: {x: 5, y: 2, z: 3}
+  booleanValue: 1
+  vector3Value: {x: 0, y: 0, z: 0}
 --- !u!114 &1421943367
 MonoBehaviour:
   m_ObjectHideFlags: 0
