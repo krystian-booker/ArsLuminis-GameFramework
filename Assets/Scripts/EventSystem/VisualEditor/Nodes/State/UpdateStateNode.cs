@@ -1,5 +1,6 @@
-﻿using EventSystem.Models;
-using Saving.Models;
+﻿using System.Linq;
+using EventSystem.Models;
+using Tools;
 using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.State
@@ -12,11 +13,20 @@ namespace EventSystem.VisualEditor.Nodes.State
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
-        
-        // [Tooltip("Event state to be updated")]
-        // public EventStates eventState;
-        
-        [Tooltip("The eventState will be set to this value")]
-        public bool stateComplete = false;
+
+        //Used for the editor
+        [HideInInspector] public string[] stateNames;
+        [HideInInspector] public int selectedStateIndex;
+
+        public string stringValue;
+        public int intValue;
+        public float floatValue;
+        public bool booleanValue;
+        public Vector3 vector3Value;
+
+        private void OnValidate()
+        {
+            stateNames = Systems.SaveManager.gameState.states.Select(x => x.id).ToArray();
+        }
     }
 }

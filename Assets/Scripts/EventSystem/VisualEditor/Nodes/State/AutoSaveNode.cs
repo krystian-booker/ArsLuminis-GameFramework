@@ -1,4 +1,6 @@
+using System.Linq;
 using EventSystem.Models;
+using Tools;
 using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.State
@@ -8,9 +10,8 @@ namespace EventSystem.VisualEditor.Nodes.State
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
-        
-        [Tooltip("Only used for documentation purposes")]
-        [TextArea]
+
+        [Tooltip("Only used for documentation purposes")] [TextArea]
         public string description;
     }
 }

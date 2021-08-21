@@ -44,10 +44,14 @@ namespace Tools
             Assert.IsNotNull(AudioManager, $"{nameof(Systems)}: AudioManager is missing from _preload");
             Assert.IsNotNull(SaveManager, $"{nameof(Systems)}: SaveManager is missing from _preload");
             Assert.IsNotNull(MainCamera, $"{nameof(Systems)}: Camera is missing from _preload");
-            Assert.IsNotNull(EventSystem, $"{nameof(Systems)}: EventSystem is missing from _preload");
-            
-            CinemachineBrain = MainCamera.GetComponent<CinemachineBrain>();
-            Assert.IsNotNull(CinemachineBrain, $"{nameof(Systems)}: CinemachineBrain is missing from _preload camera");
+
+            if (!Application.isEditor)
+            {
+                Assert.IsNotNull(EventSystem, $"{nameof(Systems)}: EventSystem is missing from _preload");
+                
+                CinemachineBrain = MainCamera.GetComponent<CinemachineBrain>();
+                Assert.IsNotNull(CinemachineBrain, $"{nameof(Systems)}: CinemachineBrain is missing from _preload camera");
+            }
         }
     }
 }
