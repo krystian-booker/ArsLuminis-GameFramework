@@ -15,12 +15,15 @@ namespace Saving
 {
     public class SaveManager : MonoBehaviour
     {
-        public GameState gameState;
+        public GameState saveTemplate;
+        [HideInInspector] public GameState gameState;
+
         private string _savePath;
 
         private void Start()
         {
             _savePath = $"{Application.persistentDataPath}/saves";
+            gameState = Instantiate(saveTemplate);
         }
 
         /// <summary>
@@ -64,7 +67,7 @@ namespace Saving
         {
             var stateNode = node as StateBranchNode;
             Assert.IsNotNull(stateNode);
-            
+
             var eventState = Systems.SaveManager.gameState.states.FirstOrDefault(x => x.id == stateNode.selectedStateId);
             Assert.IsNotNull(eventState, $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.selectedStateId}' in gameManager states");
 
@@ -109,7 +112,6 @@ namespace Saving
         /// fileName allows the user to overwrite an existing save
         /// If neither parameters are provided a new save file will be created
         /// </summary>
-        /// <param name="updatedGameState"></param>
         /// <param name="autoSave"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -130,11 +132,11 @@ namespace Saving
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     //Not throwing an overwrite warning here, needs to be handled frontend
-                    return CreateSaveFile(gameState, fileName);
+                    return CreateSaveFile(fileName);
                 }
 
                 var saveCount = Directory.GetFiles(_savePath, "*", SearchOption.TopDirectoryOnly).Length;
-                return CreateSaveFile(gameState, $"sav_{saveCount}");
+                return CreateSaveFile($"sav_{saveCount}");
             }
             catch (Exception exception)
             {
@@ -193,10 +195,9 @@ namespace Saving
         /// Serializes the GameState gameobject and creates a save file based on the provided file name
         /// All files are created in the persistent data path
         /// </summary>
-        /// <param name="gameState">Object to be serialized</param>
         /// <param name="fileName">Name of save</param>
         /// <returns></returns>
-        private bool CreateSaveFile(GameState gameState, string fileName)
+        private bool CreateSaveFile(string fileName)
         {
             try
             {

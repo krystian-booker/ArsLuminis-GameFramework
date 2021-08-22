@@ -934,51 +934,6 @@ Transform:
   m_Father: {fileID: 1201522738}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &871378471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912e405933e71c44594bdf7dd985ff38, type: 3}
-  m_Name: Auto Save
-  m_EditorClassIdentifier: 
-  graph: {fileID: 1220957000}
-  position: {x: -136, y: 840}
-  ports:
-    keys:
-    - entry
-    - exit
-    values:
-    - _fieldName: entry
-      _node: {fileID: 871378471}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: exit
-        node: {fileID: 1724975069}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: exit
-      _node: {fileID: 871378471}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 1656132639}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
-  description: 
 --- !u!114 &898812224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1431,7 +1386,6 @@ MonoBehaviour:
   - {fileID: 929147415}
   - {fileID: 1656132639}
   - {fileID: 1421943367}
-  - {fileID: 871378471}
 --- !u!114 &1252418136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2089,7 +2043,7 @@ MonoBehaviour:
   m_Name: End
   m_EditorClassIdentifier: 
   graph: {fileID: 1220957000}
-  position: {x: 312, y: 248}
+  position: {x: 312, y: 56}
   ports:
     keys:
     - entry
@@ -2104,9 +2058,6 @@ MonoBehaviour:
         reroutePoints: []
       - fieldName: exit
         node: {fileID: 1421943367}
-        reroutePoints: []
-      - fieldName: exit
-        node: {fileID: 871378471}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -2253,7 +2204,7 @@ MonoBehaviour:
   m_Name: Start
   m_EditorClassIdentifier: 
   graph: {fileID: 1220957000}
-  position: {x: -456, y: 248}
+  position: {x: -520, y: 88}
   ports:
     keys:
     - exit
@@ -2268,9 +2219,6 @@ MonoBehaviour:
         reroutePoints: []
       - fieldName: entry
         node: {fileID: 1421943367}
-        reroutePoints: []
-      - fieldName: entry
-        node: {fileID: 871378471}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
