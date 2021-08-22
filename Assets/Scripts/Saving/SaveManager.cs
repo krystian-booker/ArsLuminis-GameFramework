@@ -3,52 +3,140 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using EventSystem;
+using EventSystem.VisualEditor.Nodes.State;
 using Saving.Models;
+using Tools;
 using UnityEngine;
+using UnityEngine.Assertions;
+using XNode;
 
 namespace Saving
 {
-    public static class SaveManager
+    public class SaveManager : MonoBehaviour
     {
-        private static readonly string SavePath;
+        public GameState saveTemplate;
+        [HideInInspector] public GameState gameState;
 
-        static SaveManager()
+        private string _savePath;
+
+        private void Start()
         {
-            SavePath = $"{Application.persistentDataPath}/saves";
+            _savePath = $"{Application.persistentDataPath}/saves";
+            gameState = Instantiate(saveTemplate);
         }
-        
+
+        /// <summary>
+        /// Update the selected state by id to the newly set value
+        /// </summary>
+        /// <param name="updateStateNode"></param>
+        public void UpdateState(UpdateStateNode updateStateNode)
+        {
+            var eventStateValue = gameState.states.FirstOrDefault(x => x.id == updateStateNode.selectedStateId);
+            Assert.IsNotNull(eventStateValue, $"{nameof(SaveManager)}: Unable to find the state '{updateStateNode.selectedStateId}'");
+            switch (eventStateValue.dataType)
+            {
+                case DataType.String:
+                    eventStateValue.stringValue = updateStateNode.stringValue;
+                    break;
+                case DataType.Integer:
+                    eventStateValue.intValue = updateStateNode.intValue;
+                    break;
+                case DataType.Float:
+                    eventStateValue.floatValue = updateStateNode.floatValue;
+                    break;
+                case DataType.Boolean:
+                    eventStateValue.booleanValue = updateStateNode.booleanValue;
+                    break;
+                case DataType.Vector3:
+                    eventStateValue.vector3Value = updateStateNode.vector3Value;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        /// <summary>
+        /// Execution of the state branch node, determines datatype of the selected eventState.
+        /// Finds a matching value from the provided outputs in the state branch node.
+        /// If no matching value is found the default port will be used.
+        /// </summary>
+        /// <param name="node">To be execute</param>
+        /// <returns>List of ports to execute</returns>
+        public static List<NodePort> ExecuteStateBranchNode(Node node)
+        {
+            var stateNode = node as StateBranchNode;
+            Assert.IsNotNull(stateNode);
+
+            var eventState = Systems.SaveManager.gameState.states.FirstOrDefault(x => x.id == stateNode.selectedStateId);
+            Assert.IsNotNull(eventState, $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.selectedStateId}' in gameManager states");
+
+            NodePort nodePort = null;
+            var dynamicOutputs = node.DynamicOutputs;
+            switch (eventState.dataType)
+            {
+                case DataType.String:
+                    var stringStateIndex = stateNode.stringOptions.FindIndex(x => x == eventState.stringValue);
+                    nodePort = dynamicOutputs.FirstOrDefault(x => x.fieldName == $"{nameof(StateBranchNode.stringOptions)} {stringStateIndex}");
+                    break;
+                case DataType.Integer:
+                    var intStateIndex = stateNode.stringOptions.FindIndex(x => x == eventState.stringValue);
+                    nodePort = dynamicOutputs.FirstOrDefault(x => x.fieldName == $"{nameof(StateBranchNode.integerOptions)} {intStateIndex}");
+                    break;
+                case DataType.Float:
+                    var floatStateIndex = stateNode.stringOptions.FindIndex(x => x == eventState.stringValue);
+                    nodePort = dynamicOutputs.FirstOrDefault(x => x.fieldName == $"{nameof(StateBranchNode.floatOptions)} {floatStateIndex}");
+                    break;
+                case DataType.Boolean:
+                    var boolOutput = eventState.booleanValue
+                        ? nameof(StateBranchNode.valueTrue)
+                        : nameof(StateBranchNode.valueFalse);
+                    nodePort = node.Ports.FirstOrDefault(portNode => portNode.fieldName == boolOutput);
+                    break;
+                case DataType.Vector3:
+                    var vecStateIndex = stateNode.stringOptions.FindIndex(x => x == eventState.stringValue);
+                    nodePort = dynamicOutputs.FirstOrDefault(x => x.fieldName == $"{nameof(StateBranchNode.vector3Options)} {vecStateIndex}");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            nodePort ??= node.Ports.FirstOrDefault(x => x.fieldName == nameof(StateBranchNode.defaultOutput));
+            Assert.IsNotNull(nodePort);
+            return nodePort.GetConnections();
+        }
+
         /// <summary>
         /// autoSave and fileName are both optional parameters.
         /// autoSave will always overwrite the default save file auto.el
         /// fileName allows the user to overwrite an existing save
         /// If neither parameters are provided a new save file will be created
         /// </summary>
-        /// <param name="gameState"></param>
         /// <param name="autoSave"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public static bool SaveGame(GameState gameState, bool autoSave = false, string fileName = null)
+        public bool SaveGame(bool autoSave = false, string fileName = null)
         {
             try
             {
-                if (!Directory.Exists(SavePath))
+                if (!Directory.Exists(_savePath))
                 {
-                    Directory.CreateDirectory(SavePath);
+                    Directory.CreateDirectory(_savePath);
                 }
 
                 if (autoSave)
                 {
-                    return CreateSaveFile(gameState, "auto");
+                    fileName = "auto";
                 }
 
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     //Not throwing an overwrite warning here, needs to be handled frontend
-                    return CreateSaveFile(gameState, fileName);
+                    return CreateSaveFile(fileName);
                 }
-                
-                var saveCount = Directory.GetFiles(SavePath, "*", SearchOption.TopDirectoryOnly).Length;
-                return CreateSaveFile(gameState, $"sav_{saveCount}");
+
+                var saveCount = Directory.GetFiles(_savePath, "*", SearchOption.TopDirectoryOnly).Length;
+                return CreateSaveFile($"sav_{saveCount}");
             }
             catch (Exception exception)
             {
@@ -56,14 +144,14 @@ namespace Saving
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Based on the provided file path, loads the save and deserializes into the gameState object
         /// that is returned.
         /// </summary>
         /// <param name="path">File to open</param>
         /// <returns></returns>
-        public static GameState LoadGame(string path)
+        public GameState LoadGame(string path)
         {
             if (!File.Exists(path))
             {
@@ -77,9 +165,9 @@ namespace Saving
                 serializer.UnknownAttribute += SerializerUnknownAttribute;
 
                 var fileStream = new FileStream(path, FileMode.Open);
-                var gameState = (GameState) serializer.Deserialize(fileStream);
+                var gameStateEl = (GameState)serializer.Deserialize(fileStream);
                 fileStream.Close();
-                return gameState;
+                return gameStateEl;
             }
             catch (Exception exception)
             {
@@ -92,24 +180,24 @@ namespace Saving
         /// Gets a list of all the saves and returns the name, path and date of creation
         /// </summary>
         /// <returns></returns>
-        public static List<SaveFile> GetSaveFilesDetails()
+        public List<SaveFile> GetSaveFilesDetails()
         {
             var saveFiles = new List<SaveFile>();
-            if (!Directory.Exists(SavePath)) return saveFiles;
-            var directoryInfo = new DirectoryInfo(SavePath);
+            if (!Directory.Exists(_savePath)) return saveFiles;
+            var directoryInfo = new DirectoryInfo(_savePath);
             var files = directoryInfo.GetFiles().OrderByDescending(p => p.CreationTime).ToList();
-            saveFiles.AddRange(files.Select(file => new SaveFile {fileName = file.Name, filePath = file.FullName, saveDate = file.CreationTime}));
+            saveFiles.AddRange(files.Select(file => new SaveFile
+                { fileName = file.Name, filePath = file.FullName, saveDate = file.CreationTime }));
             return saveFiles;
         }
-        
+
         /// <summary>
         /// Serializes the GameState gameobject and creates a save file based on the provided file name
         /// All files are created in the persistent data path
         /// </summary>
-        /// <param name="gameState">Object to be serialized</param>
         /// <param name="fileName">Name of save</param>
         /// <returns></returns>
-        private static bool CreateSaveFile(GameState gameState, string fileName)
+        private bool CreateSaveFile(string fileName)
         {
             try
             {
@@ -134,7 +222,7 @@ namespace Saving
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private static void SerializerUnknownNode(object sender, XmlNodeEventArgs e)
+        private void SerializerUnknownNode(object sender, XmlNodeEventArgs e)
         {
             Debug.LogError($"{nameof(SaveManager)}: Unknown Node: {e.Name} \t {e.Text}");
         }
@@ -146,7 +234,7 @@ namespace Saving
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private static void SerializerUnknownAttribute(object sender, XmlAttributeEventArgs e)
+        private void SerializerUnknownAttribute(object sender, XmlAttributeEventArgs e)
         {
             Debug.LogError($"{nameof(SaveManager)}: Unknown attribute {e.Attr.Name} ='{e.Attr.Value}'");
         }

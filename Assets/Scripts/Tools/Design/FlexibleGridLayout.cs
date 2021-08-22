@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Tools
+namespace Tools.Design
 {
     public class FlexibleGridLayout : LayoutGroup
     {

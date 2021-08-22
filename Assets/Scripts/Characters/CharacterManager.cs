@@ -1,6 +1,7 @@
 ﻿using EventSystem;
 using EventSystem.Triggers;
 using EventSystem.VisualEditor.Graphs;
+using Tools;
 using UnityEngine;
 
 namespace Characters
@@ -23,7 +24,7 @@ namespace Characters
             //Not everything will need to always have a sequence attached
             if (defaultEventSequence == null)
                 return;
-            
+
             _defaultEventTimelineParser = gameObject.AddComponent<EventTimelineParser>();
             StartCoroutine(_defaultEventTimelineParser.StartEventSequence(defaultEventSequence));
         }
@@ -40,7 +41,7 @@ namespace Characters
         public void PauseEventSequence()
         {
             if (_defaultEventTimelineParser != null)
-            {            
+            {
                 _defaultEventTimelineParser.PauseEventSequence();
             }
         }
@@ -53,10 +54,14 @@ namespace Characters
             _defaultEventTimelineParser.ResumeEventSequence();
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="other"></param>
         private void OnTriggerEnter(Collider other)
         {
             //Only want events triggered on active player
-            if (GameManager.Instance.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
+            if (Systems.GameManager.activePlayer == null ||
+                Systems.GameManager.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
 
             //TODO: Remove both nameToLayer and CompareTag, replace of enum for both
             if (!other.gameObject.CompareTag("Trigger")) return;
@@ -66,20 +71,20 @@ namespace Characters
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="other"></param>
         private void OnTriggerStay(Collider other)
         {
             //Only want events triggered on active player
-            if (GameManager.Instance.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
+            if (Systems.GameManager.activePlayer == null ||
+                Systems.GameManager.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
 
             //TODO: Remove both nameToLayer and CompareTag, replace of enum for both
             if (other.gameObject.layer != LayerMask.NameToLayer("Character") ||
                 !other.gameObject.CompareTag("NPC")) return;
 
             //InputManager wait for a confirm
-            if (!GameManager.Instance.inputManager.onConfirmValue.started) return;
+            if (!Systems.InputManager.onConfirmValue.started) return;
 
             var npcEventTrigger = other.gameObject.GetComponent<NpcEventTrigger>();
             StartCoroutine(npcEventTrigger.BeginTriggerEvent(this.gameObject, this));

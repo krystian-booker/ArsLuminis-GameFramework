@@ -8,9 +8,8 @@ namespace EventSystem.VisualEditor.Nodes.State
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
-        
-        [Tooltip("Only used for documentation purposes")]
-        [TextArea]
+
+        [Tooltip("Only used for documentation purposes")] [TextArea]
         public string description;
     }
 }

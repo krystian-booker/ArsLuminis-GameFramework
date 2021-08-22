@@ -1,5 +1,7 @@
-﻿using Dialog.Models;
+﻿using System;
+using Dialog.Models;
 using EventSystem.VisualEditor.Nodes.Dialog;
+using Tools;
 using UnityEngine;
 
 namespace Dialog
@@ -26,7 +28,7 @@ namespace Dialog
             _dialogComponents = dialogComponents;
             _timePerCharacter = dialogNode.customTimePerCharacter
                 ? dialogNode.timePerCharacter
-                : GameManager.Instance.dialogManager.defaultTimePerCharacter;
+                : Systems.DialogManager.defaultTimePerCharacter;
 
             //Reset from previous runs
             _characterIndex = 0;
@@ -42,16 +44,16 @@ namespace Dialog
             _dialogComponents.gameObject.SetActive(true);
 
             //Set text
-            _dialogComponents.characterNameTMPText.text = _dialogNode.character.name; //TODO: This needs to be localized
+            _dialogComponents.characterNameTMPText.text = _dialogNode.character != null ? _dialogNode.character.name : string.Empty; //TODO: This needs to be localized
             _dialogComponents.dialogTMPText.text = string.Empty;
 
             //Set size of dialog window
             var width = _dialogNode.dialogWidth != 0
                 ? _dialogNode.dialogWidth
-                : GameManager.Instance.dialogManager.defaultWidth;
+                : Systems.DialogManager.defaultWidth;
             var height = _dialogNode.dialogHeight != 0
                 ? _dialogNode.dialogHeight
-                : GameManager.Instance.dialogManager.defaultHeight;
+                : Systems.DialogManager.defaultHeight;
             _dialogComponents.rectTransform.sizeDelta = new Vector2(width, height);
 
             //Add options
@@ -77,17 +79,17 @@ namespace Dialog
             //Move dialog to position
             var positionX = _dialogNode.customDialogPosition
                 ? _dialogNode.dialogPositionX
-                : GameManager.Instance.dialogManager.defaultPositionX;
+                : Systems.DialogManager.defaultPositionX;
             var positionY = _dialogNode.customDialogPosition
                 ? _dialogNode.dialogPositionY
-                : GameManager.Instance.dialogManager.defaultPositionY;
+                : Systems.DialogManager.defaultPositionY;
             _dialogComponents.rectTransform.anchoredPosition = new Vector2(positionX, positionY);
 
             //Initial Offset, used when following a character
             if (_dialogNode.followCharacter)
             {
                 var characterOriginalPosition =
-                    GameManager.Instance.mainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
+                    Systems.MainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
                 var canvasPosition = _dialogComponents.rectTransform.position;
                 _followPlayerOffset = canvasPosition - characterOriginalPosition;
             }
@@ -201,7 +203,7 @@ namespace Dialog
             if (_dialogNode.followCharacter)
             {
                 var characterPosition =
-                    GameManager.Instance.mainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
+                    Systems.MainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
                 characterPosition += _followPlayerOffset;
                 _dialogComponents.rectTransform.position = characterPosition;
             }

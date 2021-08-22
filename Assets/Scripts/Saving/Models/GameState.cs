@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
+using UnityEngine;
 
 namespace Saving.Models
 {
-    [Serializable]
     [XmlRoot("GameState", IsNullable = false)]
-    public class GameState
+    [CreateAssetMenu(fileName = "Data", menuName = "CheddyShakes/ScriptableObjects/GameState template", order = 1)]
+    public class GameState : ScriptableObject
     {
-        public string playerName;
-        public int sceneId;
-        
-        public List<EventStateValue> states;
+        public List<EventState> states;
     }
 }

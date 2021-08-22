@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ using EventSystem.VisualEditor.Nodes.Flow;
 using EventSystem.VisualEditor.Nodes.Locomotion;
 using EventSystem.VisualEditor.Nodes.State;
 using Saving;
+using Saving.Models;
+using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
 using XNode;
@@ -47,17 +50,17 @@ namespace EventSystem
         {
             var startNode = eventSequenceSceneGraph.graph.nodes.OfType<StartNode>().ToList();
             description = eventSequenceSceneGraph.description;
-            
-            //ASSERTS
-            Assert.IsTrue(startNode.Any(),
-                $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
-            Assert.IsFalse(startNode.Count > 1,
-                $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
+
+            //Assert
+            Assert.IsTrue(startNode.Any(), $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
+            Assert.IsFalse(startNode.Count > 1, $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
 
             //Start Sequence
             eventSequenceState = EventSequenceState.Running;
             yield return ParseNode(startNode.FirstOrDefault());
         }
+
+        #region Timeline parser
 
         /// <summary>
         /// All nodes are the type of BaseNode, from there they are extended as needed.
@@ -135,6 +138,44 @@ namespace EventSystem
         }
 
         /// <summary>
+        /// Find a node's exit port based on our constant name "exit" 
+        /// </summary>
+        /// <param name="node">current executing node</param>
+        private IEnumerator NextNode(Node node)
+        {
+            if (debugger)
+            {
+                yield return new WaitUntil(UserSteppedToNextNode);
+                debugStep = false;
+            }
+
+            var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
+            ExecuteNodePorts(nodePorts);
+        }
+
+        /// <summary>
+        /// From a list of nodePorts, execute all the linked nodes simultaneously (not threaded)
+        /// </summary>
+        /// <param name="nodePorts"></param>
+        private void ExecuteNodePorts(List<NodePort> nodePorts)
+        {
+            if (nodePorts == null) return;
+            foreach (var nodePort in nodePorts)
+            {
+                StartCoroutine(ParseNode(nodePort.node));
+            }
+        }
+
+        private bool UserSteppedToNextNode()
+        {
+            return debugStep;
+        }
+
+        #endregion
+
+        #region Node Executions
+
+        /// <summary>
         /// Return when event sequence finished
         /// </summary>
         /// <returns></returns>
@@ -152,6 +193,7 @@ namespace EventSystem
             {
                 pauseExecution.PauseExecution();
             }
+
             eventSequenceState = EventSequenceState.Paused;
         }
 
@@ -164,6 +206,7 @@ namespace EventSystem
             {
                 pauseExecution.ResumeExecution();
             }
+
             eventSequenceState = EventSequenceState.Running;
         }
 
@@ -174,7 +217,7 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator CameraNodeExecution(Node node)
         {
-            var cameraExecution = new ChangeVirtualCameraExecution(GameManager.Instance.mainCamera);
+            var cameraExecution = new ChangeVirtualCameraExecution(Systems.MainCamera);
             cameraExecution.Execute(node);
             yield return new WaitUntil(cameraExecution.IsFinished);
             yield return NextNode(node);
@@ -250,7 +293,7 @@ namespace EventSystem
             var dialogNode = node as DialogNode;
             Assert.IsNotNull(dialogNode);
 
-            var dialogWriter = GameManager.Instance.dialogManager.NewDialog(dialogNode);
+            var dialogWriter = Systems.DialogManager.NewDialog(dialogNode);
             yield return new WaitUntil(dialogWriter.IsNodeFinished);
 
             if (dialogNode.options.Count > 0)
@@ -276,13 +319,7 @@ namespace EventSystem
         {
             var updateStateNode = node as UpdateStateNode;
             Assert.IsNotNull(updateStateNode);
-
-            var eventStateValues =
-                GameManager.Instance.gameState.states.FirstOrDefault(x => x.name == updateStateNode.eventState);
-
-            if (eventStateValues != null)
-                eventStateValues.complete = updateStateNode.stateComplete;
-
+            Systems.SaveManager.UpdateState(updateStateNode);
             yield return NextNode(node);
         }
 
@@ -293,24 +330,7 @@ namespace EventSystem
         /// <param name="node"></param>
         private void NextStateNodeExecution(Node node)
         {
-            var stateNode = node as StateBranchNode;
-            if (stateNode == null)
-                return;
-
-            var eventState =
-                GameManager.Instance.gameState.states.FirstOrDefault(eventStateValue =>
-                    eventStateValue.name == stateNode.eventState);
-            Assert.IsNotNull(eventState,
-                $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.eventState}' in gameManager states");
-
-            //Port selection
-            var portName = eventState.complete ? "stateTrue" : "stateFalse";
-
-            //Execute port based on state
-            var nodePort = node.Ports.FirstOrDefault(portNode => portNode.fieldName == portName);
-            Assert.IsNotNull(nodePort, $"{nameof(EventTimelineParser)}: Unable to find node port for {portName}");
-
-            var nodePorts = nodePort.GetConnections();
+            var nodePorts = SaveManager.ExecuteStateBranchNode(node);
             ExecuteNodePorts(nodePorts);
         }
 
@@ -321,7 +341,7 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator AutoSaveNodeExecution(Node node)
         {
-            SaveManager.SaveGame(GameManager.Instance.gameState, true);
+            Systems.SaveManager.SaveGame(true);
             yield return NextNode(node);
         }
 
@@ -334,8 +354,7 @@ namespace EventSystem
         {
             var inputActionMapNode = node as ChangeInputActionMapNode;
             Assert.IsNotNull(inputActionMapNode);
-
-            GameManager.Instance.inputManager.ChangeActionMap(inputActionMapNode.actionMap);
+            Systems.InputManager.ChangeActionMap(inputActionMapNode.actionMap);
             yield return NextNode(node);
         }
 
@@ -361,43 +380,10 @@ namespace EventSystem
         {
             var stopAudioById = node as StopAudioByIdNode;
             Assert.IsNotNull(stopAudioById);
-
-            GameManager.Instance.audioManager.StopActiveAudioSource(stopAudioById.audioNodeId);
+            Systems.AudioManager.StopActiveAudioSource(stopAudioById.audioNodeId);
             yield return NextNode(node);
         }
 
-        /// <summary>
-        /// Find a node's exit port based on our constant name "exit" 
-        /// </summary>
-        /// <param name="node">current executing node</param>
-        private IEnumerator NextNode(Node node)
-        {
-            if (debugger)
-            {
-                yield return new WaitUntil(UserSteppedToNextNode);
-                debugStep = false;
-            }
-
-            var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
-            ExecuteNodePorts(nodePorts);
-        }
-
-        /// <summary>
-        /// From a list of nodePorts, execute all the linked nodes simultaneously (not threaded)
-        /// </summary>
-        /// <param name="nodePorts"></param>
-        private void ExecuteNodePorts(List<NodePort> nodePorts)
-        {
-            if (nodePorts == null) return;
-            foreach (var nodePort in nodePorts)
-            {
-                StartCoroutine(ParseNode(nodePort.node));
-            }
-        }
-
-        private bool UserSteppedToNextNode()
-        {
-            return debugStep;
-        }
+        #endregion
     }
 }

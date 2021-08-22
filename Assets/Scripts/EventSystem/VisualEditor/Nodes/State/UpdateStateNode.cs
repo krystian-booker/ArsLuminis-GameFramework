@@ -1,5 +1,8 @@
-﻿using EventSystem.Models;
+﻿using System;
+using System.Linq;
+using EventSystem.Models;
 using Saving.Models;
+using Tools;
 using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.State
@@ -12,11 +15,58 @@ namespace EventSystem.VisualEditor.Nodes.State
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
-        
-        [Tooltip("Event state to be updated")]
-        public EventStates eventState;
-        
-        [Tooltip("The eventState will be set to this value")]
-        public bool stateComplete = false;
+
+        [HideInInspector] public string selectedStateId;
+
+        public string stringValue;
+        public int intValue;
+        public float floatValue;
+        public bool booleanValue;
+        public Vector3 vector3Value;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            var selectedState = Systems.SaveManager.saveTemplate.states.FirstOrDefault(x => x.id == selectedStateId);
+            if (selectedState != null)
+            {
+                switch (selectedState.dataType)
+                {
+                    case DataType.String:
+                        intValue = 0;
+                        floatValue = 0;
+                        booleanValue = false;
+                        vector3Value = Vector3.zero;
+                        break;
+                    case DataType.Integer:
+                        stringValue = string.Empty;
+                        floatValue = 0;
+                        booleanValue = false;
+                        vector3Value = Vector3.zero;
+                        break;
+                    case DataType.Float:
+                        stringValue = string.Empty;
+                        intValue = 0;
+                        booleanValue = false;
+                        vector3Value = Vector3.zero;
+                        break;
+                    case DataType.Boolean:
+                        stringValue = string.Empty;
+                        intValue = 0;
+                        floatValue = 0;
+                        vector3Value = Vector3.zero;
+                        break;
+                    case DataType.Vector3:
+                        stringValue = string.Empty;
+                        intValue = 0;
+                        floatValue = 0;
+                        booleanValue = false;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+#endif
     }
 }

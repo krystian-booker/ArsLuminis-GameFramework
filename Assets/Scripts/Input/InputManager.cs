@@ -1,4 +1,5 @@
 using Input.models;
+using Tools;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,8 +16,8 @@ namespace Input
         {
             if (_rawInputMovement != Vector3.zero)
             {
-                GameManager.Instance.ActiveCharacterNavMeshAgent.Move(_rawInputMovement * 0.5f);
-                GameManager.Instance.activePlayer.transform.rotation = Quaternion.LookRotation(_rawInputMovement);
+                Systems.GameManager.activeCharacterNavMeshAgent.Move(_rawInputMovement * 0.5f);
+                Systems.GameManager.activePlayer.transform.rotation = Quaternion.LookRotation(_rawInputMovement);
             }
         }
 
@@ -31,11 +32,11 @@ namespace Input
 
         #region Dialog
 
-        public void dialogOnConfirm(InputAction.CallbackContext value)
+        public void OnDialogConfirm(InputAction.CallbackContext value)
         {
             if (value.started)
             {
-                GameManager.Instance.dialogManager.ContinueClicked();
+                Systems.DialogManager.ContinueClicked();
             }
         }
 
@@ -43,12 +44,17 @@ namespace Input
 
         #region Movement
 
+        public InputAction.CallbackContext onConfirmValue;
+        public InputAction.CallbackContext onCancelValue;
+        public InputAction.CallbackContext onMenuValue;
+        public InputAction.CallbackContext onActionValue;
+        
         public void OnMovement(InputAction.CallbackContext value)
         {
             var inputMovement = value.ReadValue<Vector2>();
 
             //camera forward and right vectors:
-            var cameraTransform = GameManager.Instance.cinemachineBrain.transform;
+            var cameraTransform = Systems.CinemachineBrain.transform;
             var cameraForward = cameraTransform.forward;
             cameraForward.y = 0f;
 
@@ -63,11 +69,25 @@ namespace Input
             _rawInputMovement = cameraForward * inputMovement.y + cameraRight * inputMovement.x;
         }
 
-        public InputAction.CallbackContext onConfirmValue;
 
         public void OnConfirm(InputAction.CallbackContext value)
         {
             onConfirmValue = value;
+        }
+        
+        public void OnAction(InputAction.CallbackContext value)
+        {
+            onActionValue = value;
+        }
+        
+        public void OnCancel(InputAction.CallbackContext value)
+        {
+            onCancelValue = value;
+        }
+
+        public void OnMenu(InputAction.CallbackContext value)
+        {
+            onMenuValue = value;
         }
 
         #endregion Movement

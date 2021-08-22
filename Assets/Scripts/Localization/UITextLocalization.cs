@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using Tools;
 using UnityEngine;
 
 namespace Localization
@@ -7,7 +8,7 @@ namespace Localization
     {
         private void Start()
         {
-            if (GameManager.Instance.enableLocalization)
+            if (Systems.GameManager.enableLocalization)
             {
                 UpdateKeysWithText();
             }
@@ -18,7 +19,7 @@ namespace Localization
         /// </summary>
         public void RefreshText()
         {
-            if (GameManager.Instance.enableLocalization)
+            if (Systems.GameManager.enableLocalization)
             {
                 UpdateKeysWithText();
             }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Tools
+namespace Tools.Design
 {
     public class TargetGizmo : MonoBehaviour
     {
