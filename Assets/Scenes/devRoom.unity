@@ -195,37 +195,6 @@ MonoBehaviour:
   speed: 3.5
   disableRotation: 0
   navMeshRadius: 0.5
---- !u!114 &277171842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
-  m_Name: End
-  m_EditorClassIdentifier: 
-  graph: {fileID: 810152505}
-  position: {x: -776, y: -648}
-  ports:
-    keys:
-    - entry
-    values:
-    - _fieldName: entry
-      _node: {fileID: 277171842}
-      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: valueTrue
-        node: {fileID: 1049686627}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  started: 0
 --- !u!1 &313571867
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,6 +290,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 313571867}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &322735024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c043dfe5f61a3ef47a5fb4837fa5d5b3, type: 3}
+  m_Name: Dialog
+  m_EditorClassIdentifier: 
+  graph: {fileID: 810152505}
+  position: {x: -824, y: -1096}
+  ports:
+    keys:
+    - entry
+    - exit
+    - options
+    values:
+    - _fieldName: entry
+      _node: {fileID: 322735024}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: stringOptions 0
+        node: {fileID: 1049686627}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 322735024}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 1616749422}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: options
+      _node: {fileID: 322735024}
+      _typeQualifiedName: System.Collections.Generic.List`1[[EventSystem.VisualEditor.Nodes.Dialog.Models.DialogOption,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
+  character: {fileID: 0}
+  followCharacter: 0
+  displayForNTime: 0
+  displayTime: 0
+  customTimePerCharacter: 0
+  timePerCharacter: 0
+  customDialogPosition: 0
+  dialogPositionX: -1
+  dialogPositionY: -1
+  dialogWidth: 1000
+  dialogHeight: 300
+  localizationKey: Dialog_Yes
+  text: Yes
+  options: []
+  nCount: 0
+  optionsKeyTracker: []
 --- !u!1 &474477787
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,7 +707,7 @@ MonoBehaviour:
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: valueFalse
+      - fieldName: defaultOutput
         node: {fileID: 1049686627}
         reroutePoints: []
       _direction: 0
@@ -849,7 +889,8 @@ MonoBehaviour:
   - {fileID: 1379665866}
   - {fileID: 1822741240}
   - {fileID: 1049686627}
-  - {fileID: 277171842}
+  - {fileID: 322735024}
+  - {fileID: 1616749422}
 --- !u!1 &840201296
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,7 +1125,7 @@ MonoBehaviour:
   m_Name: State Branch
   m_EditorClassIdentifier: 
   graph: {fileID: 810152505}
-  position: {x: -1192, y: -520}
+  position: {x: -1128, y: -648}
   ports:
     keys:
     - entry
@@ -1098,6 +1139,9 @@ MonoBehaviour:
     - integerOptions 1
     - floatOptions 0
     - floatOptions 1
+    - defaultOutput
+    - vector3Options 0
+    - stringOptions 0
     values:
     - _fieldName: entry
       _node: {fileID: 1049686627}
@@ -1145,10 +1189,7 @@ MonoBehaviour:
       _node: {fileID: 1049686627}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 277171842}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -1167,10 +1208,7 @@ MonoBehaviour:
       _node: {fileID: 1049686627}
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: entry
-        node: {fileID: 565773488}
-        reroutePoints: []
+      connections: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -1211,13 +1249,45 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
+    - _fieldName: defaultOutput
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 565773488}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: vector3Options 0
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: stringOptions 0
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: entry
+        node: {fileID: 322735024}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
   started: 0
-  selectedStateId: TrainLeft
-  stringOptions: []
-  integerOptions: 0500000006000000
-  floatOptions:
-  - 4.2
-  - 99
+  selectedStateId: StringTest
+  stringOptions:
+  - TrainLeft
+  integerOptions: 
+  floatOptions: []
   vector3Options: []
 --- !u!1 &1146394472
 GameObject:
@@ -1566,11 +1636,11 @@ MonoBehaviour:
       _dynamic: 0
   started: 0
   skip: 0
-  selectedStateId: TrainLeft
-  stringValue: 
+  selectedStateId: StringTest
+  stringValue: TrainLeft
   intValue: 0
   floatValue: 0
-  booleanValue: 1
+  booleanValue: 0
   vector3Value: {x: 0, y: 0, z: 0}
 --- !u!114 &1421943367
 MonoBehaviour:
@@ -1975,6 +2045,37 @@ MonoBehaviour:
   speed: 3.5
   disableRotation: 0
   navMeshRadius: 0.5
+--- !u!114 &1616749422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
+  m_Name: End
+  m_EditorClassIdentifier: 
+  graph: {fileID: 810152505}
+  position: {x: -392, y: -1096}
+  ports:
+    keys:
+    - entry
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1616749422}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 322735024}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!114 &1656132639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2025,7 +2126,7 @@ MonoBehaviour:
   m_Name: Start
   m_EditorClassIdentifier: 
   graph: {fileID: 810152505}
-  position: {x: -1480, y: -520}
+  position: {x: -1416, y: -648}
   ports:
     keys:
     - exit

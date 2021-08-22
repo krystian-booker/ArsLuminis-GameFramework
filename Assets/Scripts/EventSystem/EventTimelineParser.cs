@@ -14,6 +14,8 @@ using EventSystem.VisualEditor.Nodes.Dialog;
 using EventSystem.VisualEditor.Nodes.Flow;
 using EventSystem.VisualEditor.Nodes.Locomotion;
 using EventSystem.VisualEditor.Nodes.State;
+using Saving;
+using Saving.Models;
 using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -50,10 +52,8 @@ namespace EventSystem
             description = eventSequenceSceneGraph.description;
 
             //Assert
-            Assert.IsTrue(startNode.Any(),
-                $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
-            Assert.IsFalse(startNode.Count > 1,
-                $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
+            Assert.IsTrue(startNode.Any(), $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
+            Assert.IsFalse(startNode.Count > 1, $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
 
             //Start Sequence
             eventSequenceState = EventSequenceState.Running;
@@ -165,12 +165,12 @@ namespace EventSystem
                 StartCoroutine(ParseNode(nodePort.node));
             }
         }
-        
+
         private bool UserSteppedToNextNode()
         {
             return debugStep;
         }
-        
+
         #endregion
 
         #region Node Executions
@@ -330,25 +330,8 @@ namespace EventSystem
         /// <param name="node"></param>
         private void NextStateNodeExecution(Node node)
         {
-            var stateNode = node as StateBranchNode;
-            if (stateNode == null)
-                return;
-
-            // var eventState =
-            //     Systems.gameState.states.FirstOrDefault(eventStateValue =>
-            //         eventStateValue.name == stateNode.eventState);
-            // Assert.IsNotNull(eventState,
-            //     $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.eventState}' in gameManager states");
-
-            //Port selection
-            // var portName = eventState.complete ? "stateTrue" : "stateFalse";
-
-            //Execute port based on state
-            // var nodePort = node.Ports.FirstOrDefault(portNode => portNode.fieldName == portName);
-            // Assert.IsNotNull(nodePort, $"{nameof(EventTimelineParser)}: Unable to find node port for {portName}");
-
-            // var nodePorts = nodePort.GetConnections();
-            // ExecuteNodePorts(nodePorts);
+            var nodePorts = SaveManager.ExecuteStateBranchNode(node);
+            ExecuteNodePorts(nodePorts);
         }
 
         /// <summary>

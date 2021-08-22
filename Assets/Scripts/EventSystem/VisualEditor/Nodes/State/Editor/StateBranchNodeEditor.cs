@@ -37,18 +37,8 @@ namespace EventSystem.VisualEditor.Nodes.State.Editor
 
             #region Draw Entry
 
-            // Iterate through serialized properties and draw them like the Inspector (But with ports)
-            var iterator = serializedObject.GetIterator();
-            var enterChildren = true;
-            while (iterator.NextVisible(enterChildren))
-            {
-                enterChildren = false;
-                if (iterator.name == "entry")
-                {
-                    EditorGUIUtility.labelWidth = 120;
-                    NodeEditorGUILayout.PropertyField(iterator);
-                }
-            }
+            var entry = serializedObject.FindProperty("entry");
+            NodeEditorGUILayout.PropertyField(entry);
 
             #endregion
 
@@ -97,8 +87,11 @@ namespace EventSystem.VisualEditor.Nodes.State.Editor
                 }
             }
 
+            var defaultOutput = serializedObject.FindProperty("defaultOutput");
+            NodeEditorGUILayout.PropertyField(defaultOutput);
+
             #endregion
-            
+
             serializedObject.ApplyModifiedProperties();
         }
     }

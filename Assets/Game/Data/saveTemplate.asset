@@ -25,38 +25,12 @@ MonoBehaviour:
     defaultFloatValue: 0
     floatValue: 0
     defaultBooleanValue: 0
-    booleanValue: 0
+    booleanValue: 1
     defaultVector3Value: {x: 0, y: 0, z: 0}
     vector3Value: {x: 0, y: 0, z: 0}
-  - id: IntroFinished
-    description: User has completed the intro
-    dataType: 3
-    defaultStringValue: 
-    stringValue: 
-    defaultIntValue: 0
-    intValue: 0
-    defaultFloatValue: 0
-    floatValue: 0
-    defaultBooleanValue: 0
-    booleanValue: 0
-    defaultVector3Value: {x: 0, y: 0, z: 0}
-    vector3Value: {x: 0, y: 0, z: 0}
-  - id: CashAmount
-    description: Player cash amount
-    dataType: 1
-    defaultStringValue: 
-    stringValue: 
-    defaultIntValue: 0
-    intValue: 0
-    defaultFloatValue: 0
-    floatValue: 0
-    defaultBooleanValue: 0
-    booleanValue: 0
-    defaultVector3Value: {x: 0, y: 0, z: 0}
-    vector3Value: {x: 0, y: 0, z: 0}
-  - id: PlayerPosition
-    description: position
-    dataType: 4
+  - id: StringTest
+    description: 
+    dataType: 0
     defaultStringValue: 
     stringValue: 
     defaultIntValue: 0

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using EventSystem;
 using EventSystem.VisualEditor.Nodes.State;
 using Saving.Models;
+using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
+using XNode;
 
 namespace Saving
 {
@@ -20,10 +23,14 @@ namespace Saving
             _savePath = $"{Application.persistentDataPath}/saves";
         }
 
+        /// <summary>
+        /// Update the selected state by id to the newly set value
+        /// </summary>
+        /// <param name="updateStateNode"></param>
         public void UpdateState(UpdateStateNode updateStateNode)
         {
             var eventStateValue = gameState.states.FirstOrDefault(x => x.id == updateStateNode.selectedStateId);
-            Assert.IsNotNull(eventStateValue,$"{nameof(SaveManager)}: Unable to find the state '{updateStateNode.selectedStateId}'");
+            Assert.IsNotNull(eventStateValue, $"{nameof(SaveManager)}: Unable to find the state '{updateStateNode.selectedStateId}'");
             switch (eventStateValue.dataType)
             {
                 case DataType.String:
@@ -44,6 +51,56 @@ namespace Saving
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        /// <summary>
+        /// Execution of the state branch node, determines datatype of the selected eventState.
+        /// Finds a matching value from the provided outputs in the state branch node.
+        /// If no matching value is found the default port will be used.
+        /// </summary>
+        /// <param name="node">To be execute</param>
+        /// <returns>List of ports to execute</returns>
+        public static List<NodePort> ExecuteStateBranchNode(Node node)
+        {
+            var stateNode = node as StateBranchNode;
+            Assert.IsNotNull(stateNode);
+            
+            var eventState = Systems.SaveManager.gameState.states.FirstOrDefault(x => x.id == stateNode.selectedStateId);
+            Assert.IsNotNull(eventState, $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.selectedStateId}' in gameManager states");
+
+            NodePort nodePort = null;
+            var dynamicOutputs = node.DynamicOutputs;
+            switch (eventState.dataType)
+            {
+                case DataType.String:
+                    var stringStateIndex = stateNode.stringOptions.FindIndex(x => x == eventState.stringValue);
+                    nodePort = dynamicOutputs.FirstOrDefault(x => x.fieldName == $"{nameof(StateBranchNode.stringOptions)} {stringStateIndex}");
+                    break;
+                case DataType.Integer:
+                    var intStateIndex = stateNode.stringOptions.FindIndex(x => x == eventState.stringValue);
+                    nodePort = dynamicOutputs.FirstOrDefault(x => x.fieldName == $"{nameof(StateBranchNode.integerOptions)} {intStateIndex}");
+                    break;
+                case DataType.Float:
+                    var floatStateIndex = stateNode.stringOptions.FindIndex(x => x == eventState.stringValue);
+                    nodePort = dynamicOutputs.FirstOrDefault(x => x.fieldName == $"{nameof(StateBranchNode.floatOptions)} {floatStateIndex}");
+                    break;
+                case DataType.Boolean:
+                    var boolOutput = eventState.booleanValue
+                        ? nameof(StateBranchNode.valueTrue)
+                        : nameof(StateBranchNode.valueFalse);
+                    nodePort = node.Ports.FirstOrDefault(portNode => portNode.fieldName == boolOutput);
+                    break;
+                case DataType.Vector3:
+                    var vecStateIndex = stateNode.stringOptions.FindIndex(x => x == eventState.stringValue);
+                    nodePort = dynamicOutputs.FirstOrDefault(x => x.fieldName == $"{nameof(StateBranchNode.vector3Options)} {vecStateIndex}");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            nodePort ??= node.Ports.FirstOrDefault(x => x.fieldName == nameof(StateBranchNode.defaultOutput));
+            Assert.IsNotNull(nodePort);
+            return nodePort.GetConnections();
         }
 
         /// <summary>

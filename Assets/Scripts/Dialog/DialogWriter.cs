@@ -1,4 +1,5 @@
-﻿using Dialog.Models;
+﻿using System;
+using Dialog.Models;
 using EventSystem.VisualEditor.Nodes.Dialog;
 using Tools;
 using UnityEngine;
@@ -43,7 +44,7 @@ namespace Dialog
             _dialogComponents.gameObject.SetActive(true);
 
             //Set text
-            _dialogComponents.characterNameTMPText.text = _dialogNode.character.name; //TODO: This needs to be localized
+            _dialogComponents.characterNameTMPText.text = _dialogNode.character != null ? _dialogNode.character.name : string.Empty; //TODO: This needs to be localized
             _dialogComponents.dialogTMPText.text = string.Empty;
 
             //Set size of dialog window
