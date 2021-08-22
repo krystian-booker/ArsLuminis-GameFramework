@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEditor;
 using XNodeEditor;
 using System.Linq;
@@ -97,7 +96,6 @@ namespace EventSystem.VisualEditor.Nodes.State.Editor
                     case DataType.Boolean:
                         var booleanValue = serializedObject.FindProperty("booleanValue");
                         NodeEditorGUILayout.PropertyField(booleanValue);
-                        // NodeEditorGUILayout.PropertyField(booleanValue, new GUIContent("Vector Object"));
                         break;
                     case DataType.Vector3:
                         var vector3Value = serializedObject.FindProperty("vector3Value");

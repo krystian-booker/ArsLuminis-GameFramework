@@ -195,6 +195,37 @@ MonoBehaviour:
   speed: 3.5
   disableRotation: 0
   navMeshRadius: 0.5
+--- !u!114 &277171842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96271f93d8f3f8a4cbf40172afce31c0, type: 3}
+  m_Name: End
+  m_EditorClassIdentifier: 
+  graph: {fileID: 810152505}
+  position: {x: -776, y: -648}
+  ports:
+    keys:
+    - entry
+    values:
+    - _fieldName: entry
+      _node: {fileID: 277171842}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: valueTrue
+        node: {fileID: 1049686627}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  started: 0
 --- !u!1 &313571867
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,7 +656,7 @@ MonoBehaviour:
   m_Name: Change Input Action Map
   m_EditorClassIdentifier: 
   graph: {fileID: 810152505}
-  position: {x: -744, y: -520}
+  position: {x: -776, y: -520}
   ports:
     keys:
     - entry
@@ -636,8 +667,8 @@ MonoBehaviour:
       _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
       connections:
-      - fieldName: exit
-        node: {fileID: 1672479343}
+      - fieldName: valueFalse
+        node: {fileID: 1049686627}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -817,6 +848,8 @@ MonoBehaviour:
   - {fileID: 1920068762}
   - {fileID: 1379665866}
   - {fileID: 1822741240}
+  - {fileID: 1049686627}
+  - {fileID: 277171842}
 --- !u!1 &840201296
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,6 +1071,154 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1049686627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a897da5a8535ec43947fdde0ce9d326, type: 3}
+  m_Name: State Branch
+  m_EditorClassIdentifier: 
+  graph: {fileID: 810152505}
+  position: {x: -1192, y: -520}
+  ports:
+    keys:
+    - entry
+    - stringOptions
+    - integerOptions
+    - floatOptions
+    - valueTrue
+    - vector3Options
+    - valueFalse
+    - integerOptions 0
+    - integerOptions 1
+    - floatOptions 0
+    - floatOptions 1
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: exit
+        node: {fileID: 1672479343}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: stringOptions
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: System.Collections.Generic.List`1[[System.String, mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: integerOptions
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: System.Collections.Generic.List`1[[System.Int32, mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: floatOptions
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: System.Collections.Generic.List`1[[System.Single, mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib,
+        Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: valueTrue
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 277171842}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: vector3Options
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: System.Collections.Generic.List`1[[UnityEngine.Vector3,
+        UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: valueFalse
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: EventSystem.Models.NodeLink, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 565773488}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: integerOptions 0
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: integerOptions 1
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: floatOptions 0
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: floatOptions 1
+      _node: {fileID: 1049686627}
+      _typeQualifiedName: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  started: 0
+  selectedStateId: TrainLeft
+  stringOptions: []
+  integerOptions: 0500000006000000
+  floatOptions:
+  - 4.2
+  - 99
+  vector3Options: []
 --- !u!1 &1146394472
 GameObject:
   m_ObjectHideFlags: 0
@@ -1844,7 +2025,7 @@ MonoBehaviour:
   m_Name: Start
   m_EditorClassIdentifier: 
   graph: {fileID: 810152505}
-  position: {x: -1032, y: -520}
+  position: {x: -1480, y: -520}
   ports:
     keys:
     - exit
@@ -1855,7 +2036,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: entry
-        node: {fileID: 565773488}
+        node: {fileID: 1049686627}
         reroutePoints: []
       _direction: 1
       _connectionType: 0

@@ -24,6 +24,7 @@ namespace EventSystem.VisualEditor.Nodes.State
         public bool booleanValue;
         public Vector3 vector3Value;
 
+#if UNITY_EDITOR
         private void OnValidate()
         {
             var selectedState = Systems.SaveManager.gameState.states.FirstOrDefault(x => x.id == selectedStateId);
@@ -66,5 +67,6 @@ namespace EventSystem.VisualEditor.Nodes.State
                 }
             }
         }
+#endif
     }
 }

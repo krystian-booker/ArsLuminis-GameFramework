@@ -14,8 +14,6 @@ using EventSystem.VisualEditor.Nodes.Dialog;
 using EventSystem.VisualEditor.Nodes.Flow;
 using EventSystem.VisualEditor.Nodes.Locomotion;
 using EventSystem.VisualEditor.Nodes.State;
-using Saving;
-using Saving.Models;
 using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -51,7 +49,7 @@ namespace EventSystem
             var startNode = eventSequenceSceneGraph.graph.nodes.OfType<StartNode>().ToList();
             description = eventSequenceSceneGraph.description;
 
-            //ASSERTS
+            //Assert
             Assert.IsTrue(startNode.Any(),
                 $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
             Assert.IsFalse(startNode.Count > 1,
@@ -61,6 +59,8 @@ namespace EventSystem
             eventSequenceState = EventSequenceState.Running;
             yield return ParseNode(startNode.FirstOrDefault());
         }
+
+        #region Timeline parser
 
         /// <summary>
         /// All nodes are the type of BaseNode, from there they are extended as needed.
@@ -136,6 +136,44 @@ namespace EventSystem
                 Debug.LogError($"{nameof(EventTimelineParser)}: Unknown node type {currentNodeType}");
             }
         }
+
+        /// <summary>
+        /// Find a node's exit port based on our constant name "exit" 
+        /// </summary>
+        /// <param name="node">current executing node</param>
+        private IEnumerator NextNode(Node node)
+        {
+            if (debugger)
+            {
+                yield return new WaitUntil(UserSteppedToNextNode);
+                debugStep = false;
+            }
+
+            var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
+            ExecuteNodePorts(nodePorts);
+        }
+
+        /// <summary>
+        /// From a list of nodePorts, execute all the linked nodes simultaneously (not threaded)
+        /// </summary>
+        /// <param name="nodePorts"></param>
+        private void ExecuteNodePorts(List<NodePort> nodePorts)
+        {
+            if (nodePorts == null) return;
+            foreach (var nodePort in nodePorts)
+            {
+                StartCoroutine(ParseNode(nodePort.node));
+            }
+        }
+        
+        private bool UserSteppedToNextNode()
+        {
+            return debugStep;
+        }
+        
+        #endregion
+
+        #region Node Executions
 
         /// <summary>
         /// Return when event sequence finished
@@ -333,7 +371,6 @@ namespace EventSystem
         {
             var inputActionMapNode = node as ChangeInputActionMapNode;
             Assert.IsNotNull(inputActionMapNode);
-
             Systems.InputManager.ChangeActionMap(inputActionMapNode.actionMap);
             yield return NextNode(node);
         }
@@ -360,43 +397,10 @@ namespace EventSystem
         {
             var stopAudioById = node as StopAudioByIdNode;
             Assert.IsNotNull(stopAudioById);
-
             Systems.AudioManager.StopActiveAudioSource(stopAudioById.audioNodeId);
             yield return NextNode(node);
         }
 
-        /// <summary>
-        /// Find a node's exit port based on our constant name "exit" 
-        /// </summary>
-        /// <param name="node">current executing node</param>
-        private IEnumerator NextNode(Node node)
-        {
-            if (debugger)
-            {
-                yield return new WaitUntil(UserSteppedToNextNode);
-                debugStep = false;
-            }
-
-            var nodePorts = node.Ports.FirstOrDefault(portNode => portNode.fieldName == "exit")?.GetConnections();
-            ExecuteNodePorts(nodePorts);
-        }
-
-        /// <summary>
-        /// From a list of nodePorts, execute all the linked nodes simultaneously (not threaded)
-        /// </summary>
-        /// <param name="nodePorts"></param>
-        private void ExecuteNodePorts(List<NodePort> nodePorts)
-        {
-            if (nodePorts == null) return;
-            foreach (var nodePort in nodePorts)
-            {
-                StartCoroutine(ParseNode(nodePort.node));
-            }
-        }
-
-        private bool UserSteppedToNextNode()
-        {
-            return debugStep;
-        }
+        #endregion
     }
 }
