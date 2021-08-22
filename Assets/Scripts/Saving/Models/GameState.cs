@@ -8,9 +8,6 @@ namespace Saving.Models
     [CreateAssetMenu(fileName = "Data", menuName = "CheddyShakes/ScriptableObjects/GameState template", order = 1)]
     public class GameState : ScriptableObject
     {
-        public string playerName;
-        public int sceneId;
-        
         public List<EventState> states;
     }
 }

@@ -55,7 +55,7 @@ namespace Saving.Editor
                 EditorGUI.PropertyField(rectDataType, dataType);
                 lines += 0.1f;
 
-                //DefaultValue
+                //Value
                 var rectDefaultValue = new Rect(
                     position.min.x,
                     position.min.y + lines++ * EditorGUIUtility.singleLineHeight,
@@ -63,50 +63,33 @@ namespace Saving.Editor
                     EditorGUIUtility.singleLineHeight
                 );
                 lines += 0.1f;
-                
-                var rectValue = new Rect(
-                    position.min.x,
-                    position.min.y + lines++ * EditorGUIUtility.singleLineHeight,
-                    position.size.x,
-                    EditorGUIUtility.singleLineHeight
-                );
-                
-                var defaultValueLabel = new GUIContent("Default Value");
+
                 var valueLabel = new GUIContent("Value");
                 switch (dataType.enumValueIndex)
                 {
                     case (int)DataType.String:
-                        EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("defaultStringValue"),
-                            defaultValueLabel);
-                        // EditorGUI.PropertyField(rectValue, property.FindPropertyRelative("stringValue"), valueLabel);
-                        ClearValues(property, "defaultStringValue", "stringValue");
+                        EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("stringValue"), valueLabel);
+                        ClearValues(property, "stringValue");
                         break;
                     case (int)DataType.Integer:
-                        EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("defaultIntValue"),
-                            defaultValueLabel);
-                        // EditorGUI.PropertyField(rectValue, property.FindPropertyRelative("intValue"), valueLabel);
-                        ClearValues(property, "defaultIntValue", "intValue");
+                        EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("intValue"), valueLabel);
+                        ClearValues(property, "intValue");
                         break;
                     case (int)DataType.Float:
-                        EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("defaultFloatValue"),
-                            defaultValueLabel);
-                        // EditorGUI.PropertyField(rectValue, property.FindPropertyRelative("floatValue"), valueLabel);
-                        ClearValues(property, "defaultFloatValue", "floatValue");
+                        EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("floatValue"), valueLabel);
+                        ClearValues(property, "floatValue");
                         break;
                     case (int)DataType.Boolean:
-                        EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("defaultBooleanValue"),
-                            defaultValueLabel);
-                        // EditorGUI.PropertyField(rectValue, property.FindPropertyRelative("booleanValue"), valueLabel);
-                        ClearValues(property, "defaultBooleanValue", "booleanValue");
+                        EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("booleanValue"), valueLabel);
+                        ClearValues(property, "booleanValue");
                         break;
                     case (int)DataType.Vector3:
-                        EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("defaultVector3Value"),
-                            defaultValueLabel);
-                        // EditorGUI.PropertyField(rectValue, property.FindPropertyRelative("vector3Value"), valueLabel);
-                        ClearValues(property, "defaultVector3Value", "vector3Value");
+                        EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("vector3Value"), valueLabel);
+                        ClearValues(property, "vector3Value");
                         break;
                 }
             }
+
             EditorGUI.EndProperty();
         }
 
@@ -122,35 +105,30 @@ namespace Saving.Editor
                    EditorGUIUtility.standardVerticalSpacing * (totalLines - 1);
         }
 
-        private void ClearValues(SerializedProperty property, string defaultValue, string value)
+        private static void ClearValues(SerializedProperty property, string value)
         {
-            if (defaultValue != "defaultStringValue" && value != "stringValue")
+            if (value != "stringValue")
             {
-                property.FindPropertyRelative("defaultStringValue").stringValue = string.Empty;
                 property.FindPropertyRelative("stringValue").stringValue = string.Empty;
             }
 
-            if (defaultValue != "defaultIntValue" && value != "intValue")
+            if (value != "intValue")
             {
-                property.FindPropertyRelative("defaultIntValue").intValue = 0;
                 property.FindPropertyRelative("intValue").intValue = 0;
             }
 
-            if (defaultValue != "defaultFloatValue" && value != "floatValue")
+            if (value != "floatValue")
             {
-                property.FindPropertyRelative("defaultFloatValue").floatValue = 0f;
                 property.FindPropertyRelative("floatValue").floatValue = 0f;
             }
-            
-            if (defaultValue != "defaultBooleanValue" && value != "booleanValue")
+
+            if (value != "booleanValue")
             {
-                property.FindPropertyRelative("defaultBooleanValue").boolValue = false;
                 property.FindPropertyRelative("booleanValue").boolValue = false;
             }
-            
-            if (defaultValue != "defaultVector3Value" && value != "vector3Value")
+
+            if (value != "vector3Value")
             {
-                property.FindPropertyRelative("defaultVector3Value").vector3Value = Vector3.zero;
                 property.FindPropertyRelative("vector3Value").vector3Value = Vector3.zero;
             }
         }

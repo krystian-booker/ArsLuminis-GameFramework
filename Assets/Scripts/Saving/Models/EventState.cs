@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace Saving.Models
@@ -16,19 +15,19 @@ namespace Saving.Models
         [Tooltip("The type of data that you want to save")]
         public DataType dataType;
 
-        public string defaultStringValue;
+        [Tooltip("Set a value here to be the default value")]
         public string stringValue;
         
-        public int defaultIntValue;
+        [Tooltip("Set a value here to be the default value")]
         public int intValue;
         
-        public float defaultFloatValue;
+        [Tooltip("Set a value here to be the default value")]
         public float floatValue;
         
-        public bool defaultBooleanValue;
+        [Tooltip("Set a value here to be the default value")]
         public bool booleanValue;
         
-        public Vector3 defaultVector3Value;
+        [Tooltip("Set a value here to be the default value")]
         public Vector3 vector3Value;
     }
 }

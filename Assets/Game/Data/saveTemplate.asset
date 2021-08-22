@@ -12,32 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fdde18918b8b8e4e86285f465b5ae24, type: 3}
   m_Name: saveTemplate
   m_EditorClassIdentifier: 
-  playerName: 
-  sceneId: 0
   states:
   - id: TrainLeft
     description: When the train leaves the station
     dataType: 3
-    defaultStringValue: 
     stringValue: 
-    defaultIntValue: 0
     intValue: 0
-    defaultFloatValue: 0
     floatValue: 0
-    defaultBooleanValue: 0
     booleanValue: 1
-    defaultVector3Value: {x: 0, y: 0, z: 0}
     vector3Value: {x: 0, y: 0, z: 0}
   - id: StringTest
     description: 
     dataType: 0
-    defaultStringValue: 
     stringValue: 
-    defaultIntValue: 0
     intValue: 0
-    defaultFloatValue: 0
     floatValue: 0
-    defaultBooleanValue: 0
     booleanValue: 0
-    defaultVector3Value: {x: 0, y: 0, z: 0}
     vector3Value: {x: 0, y: 0, z: 0}
