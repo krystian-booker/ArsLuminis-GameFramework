@@ -234,8 +234,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e00a8e49b4613a0489111509742bf4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveTemplate: {fileID: 11400000, guid: c552c16e2e053aa40b3cc87d3b7268f8, type: 2}
-  gameState: {fileID: 0}
+  saveTemplate:
+    states:
+    - id: TrainLeft
+      description: 
+      dataType: 3
+      stringValue: 
+      intValue: 0
+      floatValue: 0
+      booleanValue: 0
+      vector3Value: {x: 0, y: 0, z: 0}
 --- !u!114 &37462427
 MonoBehaviour:
   m_ObjectHideFlags: 0

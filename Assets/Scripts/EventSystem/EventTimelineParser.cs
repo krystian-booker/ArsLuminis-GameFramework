@@ -42,6 +42,8 @@ namespace EventSystem
 
         #endregion
 
+        #region Timeline parser
+
         /// <summary>
         /// Start parsing the xNode timeLine.
         /// Currently this is called from Start() will be moved over to events 
@@ -59,9 +61,7 @@ namespace EventSystem
             eventSequenceState = EventSequenceState.Running;
             yield return ParseNode(startNode.FirstOrDefault());
         }
-
-        #region Timeline parser
-
+        
         /// <summary>
         /// All nodes are the type of BaseNode, from there they are extended as needed.
         /// Here the specific type of the node is checked and executed as needed.
@@ -126,6 +126,10 @@ namespace EventSystem
             else if (currentNodeType == typeof(StopAudioByIdNode))
             {
                 yield return StopAudioById(node);
+            }
+            else if (currentNodeType == typeof(LoadSaveNode))
+            {
+                yield return LoadSave(node);
             }
             else if (currentNodeType == typeof(EndNode))
             {
@@ -384,6 +388,14 @@ namespace EventSystem
             yield return NextNode(node);
         }
 
+        private IEnumerator LoadSave(Node node)
+        {
+            var loadSaveNode = node as LoadSaveNode;
+            Assert.IsNotNull(loadSaveNode);
+            Systems.SaveManager.LoadGame(loadSaveNode.saveFileName);
+            yield return NextNode(node);
+        }
+            
         #endregion
     }
 }

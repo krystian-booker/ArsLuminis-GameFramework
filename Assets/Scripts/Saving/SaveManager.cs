@@ -16,14 +16,14 @@ namespace Saving
     public class SaveManager : MonoBehaviour
     {
         public GameState saveTemplate;
-        [HideInInspector] public GameState gameState;
+        private GameState _gameState;
 
         private string _savePath;
 
         private void Start()
         {
             _savePath = $"{Application.persistentDataPath}/saves";
-            gameState = Instantiate(saveTemplate);
+            _gameState = saveTemplate;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Saving
         /// <param name="updateStateNode"></param>
         public void UpdateState(UpdateStateNode updateStateNode)
         {
-            var eventStateValue = gameState.states.FirstOrDefault(x => x.id == updateStateNode.selectedStateId);
+            var eventStateValue = _gameState.states.FirstOrDefault(x => x.id == updateStateNode.selectedStateId);
             Assert.IsNotNull(eventStateValue, $"{nameof(SaveManager)}: Unable to find the state '{updateStateNode.selectedStateId}'");
             switch (eventStateValue.dataType)
             {
@@ -68,7 +68,7 @@ namespace Saving
             var stateNode = node as StateBranchNode;
             Assert.IsNotNull(stateNode);
 
-            var eventState = Systems.SaveManager.gameState.states.FirstOrDefault(x => x.id == stateNode.selectedStateId);
+            var eventState = Systems.SaveManager._gameState.states.FirstOrDefault(x => x.id == stateNode.selectedStateId);
             Assert.IsNotNull(eventState, $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.selectedStateId}' in gameManager states");
 
             NodePort nodePort = null;
@@ -88,9 +88,7 @@ namespace Saving
                     nodePort = dynamicOutputs.FirstOrDefault(x => x.fieldName == $"{nameof(StateBranchNode.floatOptions)} {floatStateIndex}");
                     break;
                 case DataType.Boolean:
-                    var boolOutput = eventState.booleanValue
-                        ? nameof(StateBranchNode.valueTrue)
-                        : nameof(StateBranchNode.valueFalse);
+                    var boolOutput = eventState.booleanValue ? nameof(StateBranchNode.valueTrue) : nameof(StateBranchNode.valueFalse);
                     nodePort = node.Ports.FirstOrDefault(portNode => portNode.fieldName == boolOutput);
                     break;
                 case DataType.Vector3:
@@ -149,14 +147,13 @@ namespace Saving
         /// Based on the provided file path, loads the save and deserializes into the gameState object
         /// that is returned.
         /// </summary>
-        /// <param name="path">File to open</param>
+        /// <param name="fileName">File to open</param>
         /// <returns></returns>
-        public GameState LoadGame(string path)
+        public void LoadGame(string fileName)
         {
-            if (!File.Exists(path))
-            {
-                return null;
-            }
+            var file = $"{_savePath}/{fileName}";
+            if (!File.Exists(file))
+                return;
 
             try
             {
@@ -164,15 +161,14 @@ namespace Saving
                 serializer.UnknownNode += SerializerUnknownNode;
                 serializer.UnknownAttribute += SerializerUnknownAttribute;
 
-                var fileStream = new FileStream(path, FileMode.Open);
-                var gameStateEl = (GameState)serializer.Deserialize(fileStream);
+                var fileStream = new FileStream(file, FileMode.Open);
+                _gameState = serializer.Deserialize(fileStream) as GameState;
+
                 fileStream.Close();
-                return gameStateEl;
             }
             catch (Exception exception)
             {
                 Debug.LogError($"{nameof(SaveManager)}: Unable save game: '{exception.Message}'");
-                return null;
             }
         }
 
@@ -183,11 +179,18 @@ namespace Saving
         public List<SaveFile> GetSaveFilesDetails()
         {
             var saveFiles = new List<SaveFile>();
-            if (!Directory.Exists(_savePath)) return saveFiles;
+            if (!Directory.Exists(_savePath))
+                return saveFiles;
+
             var directoryInfo = new DirectoryInfo(_savePath);
             var files = directoryInfo.GetFiles().OrderByDescending(p => p.CreationTime).ToList();
             saveFiles.AddRange(files.Select(file => new SaveFile
-                { fileName = file.Name, filePath = file.FullName, saveDate = file.CreationTime }));
+            {
+                fileName = file.Name,
+                filePath = file.FullName,
+                saveDate = file.CreationTime
+            }));
+
             return saveFiles;
         }
 
@@ -204,7 +207,7 @@ namespace Saving
                 var serializer = new XmlSerializer(typeof(GameState));
                 var path = $"{Application.persistentDataPath}/saves/{fileName}.el";
                 var streamWriter = new StreamWriter(path);
-                serializer.Serialize(streamWriter, gameState);
+                serializer.Serialize(streamWriter, _gameState);
                 streamWriter.Close();
                 return true;
             }
