@@ -17,6 +17,33 @@ namespace Scene
 
         public void Awake()
         {
+            StartPreloadScene();
+        }
+        
+        public void SwitchScene(string sceneName)
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+
+        public void LoadSceneAdditive(string sceneName)
+        {
+            SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        }
+
+        private void StartPreloadScene()
+        {
+            if (SceneManager.sceneCount == 1)
+            {
+                var openedScene = SceneManager.GetSceneAt(0);
+                if (openedScene.name == "_preload")
+                {
+                    LoadDefaultScenes();
+                }
+            }
+        }
+        
+        private void LoadDefaultScenes()
+        {
             if (overrideScene != null && Application.isEditor)
             {
                 SceneManager.LoadSceneAsync(overrideScene.SceneName, LoadSceneMode.Additive);
@@ -31,16 +58,6 @@ namespace Scene
             {
                 SceneManager.LoadSceneAsync("UI", LoadSceneMode.Additive);
             }
-        }
-
-        public void SwitchScene(string sceneName)
-        {
-            SceneManager.LoadScene(sceneName);
-        }
-
-        public void LoadSceneAdditive(string sceneName)
-        {
-            SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         }
     }
 }
