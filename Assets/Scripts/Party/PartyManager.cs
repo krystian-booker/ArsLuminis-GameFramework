@@ -10,8 +10,8 @@ namespace Party
         [Tooltip("Contains a list of all playable party members.")]
         public List<PartyMember> partyMembers;
 
-        [SerializeField] 
-        [Tooltip("Party member that will be seen on the map")]
-        public Character primaryMember;
+        // [SerializeField] 
+        // [Tooltip("Party member that will be seen on the map")]
+        // public Character primaryMember;
     }
 }

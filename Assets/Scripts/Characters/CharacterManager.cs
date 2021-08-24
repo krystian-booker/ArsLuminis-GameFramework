@@ -8,6 +8,8 @@ namespace Characters
 {
     public class CharacterManager : MonoBehaviour
     {
+        public CharacterStats characterStats;
+        
         [Tooltip("Not required")] public EventSequenceSceneGraph defaultEventSequence;
         private EventTimelineParser _defaultEventTimelineParser;
 
