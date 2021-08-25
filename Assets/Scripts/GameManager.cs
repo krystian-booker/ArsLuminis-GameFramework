@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Characters;
+using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
     public bool enableLocalization = true;
 
     [HideInInspector] public GameObject activePlayer;
+    [HideInInspector] public CharacterManager activePlayerCharacterManager;
     [HideInInspector] public NavMeshAgent activeCharacterNavMeshAgent;
 
     void OnEnable()
@@ -43,5 +45,6 @@ public class GameManager : MonoBehaviour
         activeCharacterNavMeshAgent = activePlayer.GetComponent<NavMeshAgent>();
         activeCharacterNavMeshAgent.updateRotation = true;
         activeCharacterNavMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+        activePlayerCharacterManager = activePlayer.GetComponent<CharacterManager>();
     }
 }

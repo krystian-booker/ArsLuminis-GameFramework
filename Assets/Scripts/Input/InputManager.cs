@@ -16,8 +16,8 @@ namespace Input
         {
             if (_rawInputMovement != Vector3.zero)
             {
-                Systems.GameManager.activeCharacterNavMeshAgent.Move(_rawInputMovement * 0.5f);
-                Systems.GameManager.activePlayer.transform.rotation = Quaternion.LookRotation(_rawInputMovement);
+                Systems.Instance.gameManager.activeCharacterNavMeshAgent.Move(_rawInputMovement * Systems.Instance.gameManager.activePlayerCharacterManager.playerSpeed);
+                Systems.Instance.gameManager.activePlayer.transform.rotation = Quaternion.LookRotation(_rawInputMovement);
             }
         }
 
@@ -36,7 +36,7 @@ namespace Input
         {
             if (value.started)
             {
-                Systems.DialogManager.ContinueClicked();
+                Systems.Instance.dialogManager.ContinueClicked();
             }
         }
 
@@ -54,7 +54,7 @@ namespace Input
             var inputMovement = value.ReadValue<Vector2>();
 
             //camera forward and right vectors:
-            var cameraTransform = Systems.CinemachineBrain.transform;
+            var cameraTransform = Systems.Instance.cinemachineBrain.transform;
             var cameraForward = cameraTransform.forward;
             cameraForward.y = 0f;
 

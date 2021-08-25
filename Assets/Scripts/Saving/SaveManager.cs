@@ -68,7 +68,7 @@ namespace Saving
             var stateNode = node as StateBranchNode;
             Assert.IsNotNull(stateNode);
 
-            var eventState = Systems.SaveManager._gameState.states.FirstOrDefault(x => x.id == stateNode.selectedStateId);
+            var eventState = Systems.Instance.saveManager._gameState.states.FirstOrDefault(x => x.id == stateNode.selectedStateId);
             Assert.IsNotNull(eventState, $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.selectedStateId}' in gameManager states");
 
             NodePort nodePort = null;

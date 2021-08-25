@@ -25,12 +25,12 @@ namespace EventSystem.VisualEditor.Nodes.State.Editor
 
             #region Setup
 
-            var stateNames = Systems.SaveManager.saveTemplate.states.Select(x => x.id).ToArray();
+            var stateNames = Systems.Instance.saveManager.saveTemplate.states.Select(x => x.id).ToArray();
             if (!_initialSetup)
             {
                 _initialSetup = true;
                 _selectedStateId = serializedObject.FindProperty("selectedStateId").stringValue;
-                _selectedIndex = Systems.SaveManager.saveTemplate.states.FindIndex(x => x.id == _selectedStateId);
+                _selectedIndex = Systems.Instance.saveManager.saveTemplate.states.FindIndex(x => x.id == _selectedStateId);
             }
 
             #endregion
@@ -48,7 +48,7 @@ namespace EventSystem.VisualEditor.Nodes.State.Editor
             if (_selectedIndex >= 0)
             {
                 serializedObject.FindProperty("selectedStateId").stringValue =
-                    Systems.SaveManager.saveTemplate.states[_selectedIndex].id;
+                    Systems.Instance.saveManager.saveTemplate.states[_selectedIndex].id;
             }
 
             #endregion
@@ -57,7 +57,7 @@ namespace EventSystem.VisualEditor.Nodes.State.Editor
 
             if (_selectedIndex >= 0)
             {
-                var selectedState = Systems.SaveManager.saveTemplate.states[_selectedIndex];
+                var selectedState = Systems.Instance.saveManager.saveTemplate.states[_selectedIndex];
                 switch (selectedState.dataType)
                 {
                     case DataType.String:

@@ -27,7 +27,7 @@ namespace EventSystem.Events
 
             _audioSourceLocation = _audioNode.audioSourceLocation != null
                 ? _audioNode.audioSourceLocation
-                : Systems.AudioManager.defaultAudioSourceLocation;
+                : Systems.Instance.audioManager.defaultAudioSourceLocation;
 
             _audioSource = _audioSourceLocation.AddComponent<AudioSource>();
             _audioSource.clip = _audioNode.audioClip;
@@ -47,20 +47,20 @@ namespace EventSystem.Events
 
             if (_audioNode.audioFade)
             {
-                Systems.AudioManager.StartAudioCoroutine(FadeAudioSource.StartFade(_audioSource,
+                Systems.Instance.audioManager.StartAudioCoroutine(FadeAudioSource.StartFade(_audioSource,
                     _audioNode.initialFadeDelay, _audioNode.fadeDuration, _audioNode.targetVolume));
             }
 
             if (_audioNode.isPublic)
             {
-                Systems.AudioManager.AddActiveAudioSource(_audioNode.publicId, _audioSource);
+                Systems.Instance.audioManager.AddActiveAudioSource(_audioNode.publicId, _audioSource);
             }
         }
 
         public bool IsFinished()
         {
             if (_audioSource.isPlaying) return false;
-            Systems.AudioManager.ReturnToPool(_audioSource);
+            Systems.Instance.audioManager.ReturnToPool(_audioSource);
             return true;
         }
     }

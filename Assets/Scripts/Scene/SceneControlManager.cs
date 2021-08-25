@@ -1,4 +1,6 @@
-﻿using Tools.Design;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Tools.Design;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
@@ -19,7 +21,7 @@ namespace Scene
         {
             StartPreloadScene();
         }
-        
+
         public void SwitchScene(string sceneName)
         {
             SceneManager.LoadScene(sceneName);
@@ -32,16 +34,26 @@ namespace Scene
 
         private void StartPreloadScene()
         {
-            if (SceneManager.sceneCount == 1)
+            var openScenes = new List<string>();
+            for (var i = 0; i < SceneManager.sceneCount; i++)
             {
-                var openedScene = SceneManager.GetSceneAt(0);
-                if (openedScene.name == "_preload")
+                openScenes.Add(SceneManager.GetSceneAt(i).name);
+            }
+
+            if (openScenes.Contains("_preload") && openScenes.Count == 1)
+            {
+                LoadDefaultScenes();
+            }
+            else if (openScenes.Contains("_preload") && !openScenes.Contains("UI"))
+            {
+                if (loadUI)
                 {
-                    LoadDefaultScenes();
+                    SceneManager.LoadSceneAsync("UI", LoadSceneMode.Additive);
                 }
             }
+
         }
-        
+
         private void LoadDefaultScenes()
         {
             if (overrideScene != null && Application.isEditor)
@@ -53,7 +65,6 @@ namespace Scene
                 SceneManager.LoadSceneAsync(initialScene.SceneName, LoadSceneMode.Additive);
             }
 
-            //UI
             if (loadUI)
             {
                 SceneManager.LoadSceneAsync("UI", LoadSceneMode.Additive);

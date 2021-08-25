@@ -19,6 +19,9 @@ namespace Characters
         [Range(1f, 20f)] public float focusRotationSpeed = 8f;
         private bool _focusActive;
         private GameObject _focusTarget;
+        
+        [Range(0.1f,0.2f)]
+        public float playerSpeed = 0.1f;
 
         private void Start()
         {
@@ -62,8 +65,8 @@ namespace Characters
         private void OnTriggerEnter(Collider other)
         {
             //Only want events triggered on active player
-            if (Systems.GameManager.activePlayer == null ||
-                Systems.GameManager.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
+            if (Systems.Instance.gameManager.activePlayer == null ||
+                Systems.Instance.gameManager.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
 
             //TODO: Remove both nameToLayer and CompareTag, replace of enum for both
             if (!other.gameObject.CompareTag("Trigger")) return;
@@ -78,15 +81,15 @@ namespace Characters
         private void OnTriggerStay(Collider other)
         {
             //Only want events triggered on active player
-            if (Systems.GameManager.activePlayer == null ||
-                Systems.GameManager.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
+            if (Systems.Instance.gameManager.activePlayer == null ||
+                Systems.Instance.gameManager.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
 
             //TODO: Remove both nameToLayer and CompareTag, replace of enum for both
             if (other.gameObject.layer != LayerMask.NameToLayer("Character") ||
                 !other.gameObject.CompareTag("NPC")) return;
 
             //InputManager wait for a confirm
-            if (!Systems.InputManager.onConfirmValue.started) return;
+            if (!Systems.Instance.inputManager.onConfirmValue.started) return;
 
             var npcEventTrigger = other.gameObject.GetComponent<NpcEventTrigger>();
             StartCoroutine(npcEventTrigger.BeginTriggerEvent(this.gameObject, this));

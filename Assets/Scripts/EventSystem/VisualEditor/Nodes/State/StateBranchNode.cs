@@ -47,7 +47,10 @@ namespace EventSystem.VisualEditor.Nodes.State
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            var selectedState = Systems.SaveManager.saveTemplate.states.FirstOrDefault(x => x.id == selectedStateId);
+            if(Systems.Instance == null)
+                return;
+            
+            var selectedState = Systems.Instance.saveManager.saveTemplate.states.FirstOrDefault(x => x.id == selectedStateId);
             if (selectedState != null)
                 
                 //This likely needs to be removed, breaking ui

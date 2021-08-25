@@ -9,50 +9,70 @@ using UnityEngine.Assertions;
 
 namespace Tools
 {
-    public static class Systems
+    public class Systems : MonoBehaviour
     {
-        public static readonly GameManager GameManager;
-        public static readonly InputManager InputManager;
-        public static readonly DialogManager DialogManager;
-        public static readonly SceneControlManager SceneControlManager;
-        public static readonly AudioManager AudioManager;
-        public static readonly SaveManager SaveManager;
-        
-        public static readonly Camera MainCamera;
-        public static readonly CinemachineBrain CinemachineBrain;
-        public static readonly UnityEngine.EventSystems.EventSystem EventSystem;
+        #region Singleton
 
-        static Systems()
+        public static Systems Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+                Initialize();
+            }
+        }
+
+        #endregion
+
+        [HideInInspector] public GameManager gameManager;
+        [HideInInspector] public InputManager inputManager;
+        [HideInInspector] public DialogManager dialogManager;
+        [HideInInspector] public SceneControlManager sceneControlManager;
+        [HideInInspector] public AudioManager audioManager;
+        [HideInInspector] public SaveManager saveManager;
+
+        [HideInInspector] public Camera mainCamera;
+        [HideInInspector] public CinemachineBrain cinemachineBrain;
+        [HideInInspector] public UnityEngine.EventSystems.EventSystem eventSystem;
+
+        private void Initialize()
         {
             var app = GameObject.Find("__app");
 
             //Create references
-            GameManager = app.GetComponent<GameManager>();
-            InputManager = app.GetComponent<InputManager>();
-            DialogManager = app.GetComponent<DialogManager>();
-            SceneControlManager = app.GetComponent<SceneControlManager>();
-            AudioManager = app.GetComponent<AudioManager>();
-            SaveManager = app.GetComponent<SaveManager>();
-            MainCamera = Camera.main;
+            gameManager = app.GetComponent<GameManager>();
+            inputManager = app.GetComponent<InputManager>();
+            dialogManager = app.GetComponent<DialogManager>();
+            sceneControlManager = app.GetComponent<SceneControlManager>();
+            audioManager = app.GetComponent<AudioManager>();
+            saveManager = app.GetComponent<SaveManager>();
+            mainCamera = Camera.main;
 
             //Validate components
-            Assert.IsNotNull(GameManager, $"{nameof(Systems)}: GameManager is missing from _preload");
-            Assert.IsNotNull(InputManager, $"{nameof(Systems)}: InputManager is missing from _preload");
-            Assert.IsNotNull(DialogManager, $"{nameof(Systems)}: DialogManager is missing from _preload");
-            Assert.IsNotNull(SceneControlManager, $"{nameof(Systems)}: SceneControlManager is missing from _preload");
-            Assert.IsNotNull(AudioManager, $"{nameof(Systems)}: AudioManager is missing from _preload");
-            Assert.IsNotNull(SaveManager, $"{nameof(Systems)}: SaveManager is missing from _preload");
-            Assert.IsNotNull(MainCamera, $"{nameof(Systems)}: Camera is missing from _preload");
+            Assert.IsNotNull(gameManager, $"{nameof(Systems)}: GameManager is missing from _preload");
+            Assert.IsNotNull(inputManager, $"{nameof(Systems)}: InputManager is missing from _preload");
+            Assert.IsNotNull(dialogManager, $"{nameof(Systems)}: DialogManager is missing from _preload");
+            Assert.IsNotNull(sceneControlManager, $"{nameof(Systems)}: SceneControlManager is missing from _preload");
+            Assert.IsNotNull(audioManager, $"{nameof(Systems)}: AudioManager is missing from _preload");
+            Assert.IsNotNull(saveManager, $"{nameof(Systems)}: SaveManager is missing from _preload");
+            Assert.IsNotNull(mainCamera, $"{nameof(Systems)}: Camera is missing from _preload");
 
-            if (Application.isPlaying)
-            {
-                //Systems is used by the Editor, these are only available when the game is running
-                EventSystem = UnityEngine.EventSystems.EventSystem.current;
-                Assert.IsNotNull(EventSystem, $"{nameof(Systems)}: EventSystem is missing from _preload");
-                
-                CinemachineBrain = MainCamera.GetComponent<CinemachineBrain>();
-                Assert.IsNotNull(CinemachineBrain, $"{nameof(Systems)}: CinemachineBrain is missing from _preload camera");
-            }
+            // if (Application.isPlaying)
+            // {
+            //Systems is used by the Editor, these are only available when the game is running
+            eventSystem = UnityEngine.EventSystems.EventSystem.current;
+            Assert.IsNotNull(eventSystem, $"{nameof(Systems)}: EventSystem is missing from _preload");
+
+            cinemachineBrain = mainCamera.GetComponent<CinemachineBrain>();
+            Assert.IsNotNull(cinemachineBrain, $"{nameof(Systems)}: CinemachineBrain is missing from _preload camera");
+            // }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Locomotion;
+using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
 using XNode;
@@ -39,9 +40,21 @@ namespace EventSystem.Events
         //Check if objects position is within range of the target position
         public bool IsFinished()
         {
-            return _targetNavMeshAgent != null && _targetNavMeshAgent.hasPath &&
-                   _targetNavMeshAgent.remainingDistance <=
-                   _targetNavMeshAgent.stoppingDistance + _characterMovementNode.distanceThreshold;
+            var characterPosition = _targetNavMeshAgent.transform.position;
+            var targetPosition = _characterMovementNode.targetPosition.transform.position;
+            if (_characterMovementNode.xyThresholdOnly)
+            {
+                characterPosition.y = 0f;
+                targetPosition.y = 0f;
+            }
+            
+            var dist = Vector3.Distance(characterPosition, targetPosition);
+            if (_characterMovementNode.debugDistance)
+            {
+                Debug.Log("Distance to target: " + dist);
+            }
+            
+            return (dist <= _characterMovementNode.distanceThreshold);
         }
 
         public void PauseExecution()

@@ -133,6 +133,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 37462422}
+  - component: {fileID: 37462430}
   - component: {fileID: 37462421}
   - component: {fileID: 37462425}
   - component: {fileID: 37462429}
@@ -221,6 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableLocalization: 0
   activePlayer: {fileID: 0}
+  activePlayerCharacterManager: {fileID: 0}
   activeCharacterNavMeshAgent: {fileID: 0}
 --- !u!114 &37462426
 MonoBehaviour:
@@ -459,6 +461,27 @@ MonoBehaviour:
   m_DefaultActionMap: Movement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 1144214318}
+--- !u!114 &37462430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37462420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e5708110484b2ea933a57062d533f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+  inputManager: {fileID: 0}
+  dialogManager: {fileID: 0}
+  sceneControlManager: {fileID: 0}
+  audioManager: {fileID: 0}
+  saveManager: {fileID: 0}
+  mainCamera: {fileID: 0}
+  cinemachineBrain: {fileID: 0}
+  eventSystem: {fileID: 0}
 --- !u!1 &1080246978
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,8 +687,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144214316}
-  m_LocalRotation: {x: -0.47884876, y: -0.036332697, z: 0.019828644, w: -0.8769212}
-  m_LocalPosition: {x: 18.902592, y: 53.70098, z: -25.631428}
+  m_LocalRotation: {x: -0.16850142, y: 0.23324315, z: -0.0410472, w: -0.9568281}
+  m_LocalPosition: {x: 5.874915, y: 4.7801275, z: -7.282745}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

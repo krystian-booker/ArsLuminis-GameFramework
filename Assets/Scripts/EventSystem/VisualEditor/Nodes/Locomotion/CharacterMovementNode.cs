@@ -29,7 +29,7 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion
         [Tooltip("Override the game objects current position")]
         public GameObject startingPosition;
 
-        [Range(0.5f, 5), Tooltip("Radius area to target for movement to be considered finished")]
+        [Range(0.5f, 5), Tooltip("Radius area to target for movement to be considered finished, recommend 1f")]
         public float distanceThreshold = 1f;
 
         [Range(0.1f, 10), Tooltip("Speed that the object will move at, set on initialization. Default 3.5f")]
@@ -38,7 +38,12 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion
         [Tooltip("Objects rotation will not be altered on movement")]
         public bool disableRotation;
 
-        [Tooltip("Set the size of the navmesh radius")]
-        public float navMeshRadius = 0.5f;
+        [Tooltip("When calculating distance from the target, only the XY values will be used. " +
+                 "This is highly recommended unless you have nav mesh areas stacked on-top of each other. " +
+                 "A well tuned nav-mesh agent is required as well as you're relying on Z values as well.")]
+        public bool xyThresholdOnly = true;
+
+        [Tooltip("Prints out distance from target")]
+        public bool debugDistance;
     }
 }
