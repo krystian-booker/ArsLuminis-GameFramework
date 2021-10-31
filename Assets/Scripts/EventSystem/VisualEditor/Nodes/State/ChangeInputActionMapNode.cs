@@ -1,5 +1,5 @@
 ﻿using EventSystem.Models;
-using Input.models;
+using SystemInput;
 using UnityEngine;
 
 namespace EventSystem.VisualEditor.Nodes.State
