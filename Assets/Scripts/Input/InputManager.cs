@@ -3,7 +3,7 @@ using Tools;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Input
+namespace SystemInput
 {
     [RequireComponent(typeof(PlayerInput))]
     public class InputManager : MonoBehaviour

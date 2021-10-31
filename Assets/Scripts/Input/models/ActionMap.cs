@@ -1,4 +1,4 @@
-﻿namespace Input.models
+﻿namespace SystemInput
 {
     public enum ActionMap
     {

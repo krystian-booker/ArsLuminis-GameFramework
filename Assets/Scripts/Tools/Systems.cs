@@ -1,9 +1,9 @@
 ﻿using Audio;
 using Cinemachine;
 using Dialog;
-using Input;
 using Saving;
 using Scene;
+using SystemInput;
 using UnityEngine;
 using UnityEngine.Assertions;
 
