@@ -221,7 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableLocalization: 0
   activePlayer: {fileID: 0}
-  activeCharacterNavMeshAgent: {fileID: 0}
+  activeCharacterManager: {fileID: 0}
 --- !u!114 &37462426
 MonoBehaviour:
   m_ObjectHideFlags: 0

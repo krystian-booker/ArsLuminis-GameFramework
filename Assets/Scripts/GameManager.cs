@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.AI;
+﻿using Characters;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public bool enableLocalization = true;
 
     [HideInInspector] public GameObject activePlayer;
-    [HideInInspector] public NavMeshAgent activeCharacterNavMeshAgent;
+    [HideInInspector] public CharacterManager activeCharacterManager;
 
     void OnEnable()
     {
@@ -32,16 +32,7 @@ public class GameManager : MonoBehaviour
     
     private void ChangeCharacter(GameObject newCharacter)
     {
-        //Set past character to obstacle avoidance
-        if (activeCharacterNavMeshAgent != null)
-        {
-            activeCharacterNavMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
-        }
-
-        //Update character
         activePlayer = newCharacter;
-        activeCharacterNavMeshAgent = activePlayer.GetComponent<NavMeshAgent>();
-        activeCharacterNavMeshAgent.updateRotation = true;
-        activeCharacterNavMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+        activeCharacterManager = activePlayer.GetComponent<CharacterManager>();
     }
 }

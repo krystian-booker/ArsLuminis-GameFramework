@@ -13,7 +13,7 @@ namespace Localization.Editor
         public string filterValue;
         public Vector2 scroll;
 
-        [MenuItem("Tools/CheddyShakes/Localization")]
+        [MenuItem("Tools/ExAmore/Localization")]
         private static void Init()
         {
             var window = (LocalizationWindow) EditorWindow.GetWindow(typeof(LocalizationWindow));

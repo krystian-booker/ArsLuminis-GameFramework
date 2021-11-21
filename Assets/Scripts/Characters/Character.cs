@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Characters
 {
-    [CreateAssetMenu(fileName = "Data", menuName = "CheddyShakes/ScriptableObjects/Character")]
+    [CreateAssetMenu(fileName = "Data", menuName = "ExAmore/ScriptableObjects/Character")]
     public class Character : ScriptableObject
     {
         private string _id = Guid.NewGuid().ToString();

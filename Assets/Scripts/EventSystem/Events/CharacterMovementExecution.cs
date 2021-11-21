@@ -1,6 +1,6 @@
-﻿using EventSystem.Models.interfaces;
+﻿using Characters;
+using EventSystem.Models.interfaces;
 using EventSystem.VisualEditor.Nodes.Locomotion;
-using UnityEngine.AI;
 using UnityEngine.Assertions;
 using XNode;
 
@@ -9,8 +9,8 @@ namespace EventSystem.Events
     public class CharacterMovementExecution : IPauseEventExecution
     {
         private CharacterMovementNode _characterMovementNode;
-        private NavMeshAgent _targetNavMeshAgent;
-
+        private CharacterManager _targetCharacterManager;
+        
         public void Execute(Node node)
         {
             _characterMovementNode = node as CharacterMovementNode;
@@ -18,40 +18,40 @@ namespace EventSystem.Events
                 $"{nameof(CharacterMovementExecution)}: Invalid setup on {nameof(CharacterMovementNode)}.");
 
             //Get navMeshAgent
-            _targetNavMeshAgent = _characterMovementNode.target.GetComponent<NavMeshAgent>();
-            Assert.IsNotNull(_targetNavMeshAgent,
-                $"{nameof(CharacterMovementExecution)}: Missing component {nameof(NavMeshAgent)}");
+            _targetCharacterManager = _characterMovementNode.target.GetComponent<CharacterManager>();
+            Assert.IsNotNull(_targetCharacterManager,
+                $"{nameof(CharacterMovementExecution)}: Missing component {nameof(CharacterManager)}");
 
-            //Set navmeshagent properties
-            _targetNavMeshAgent.speed = _characterMovementNode.speed;
-            _targetNavMeshAgent.updateRotation = !_characterMovementNode.disableRotation;
+            //Set properties
+            _targetCharacterManager.SetSpeed(_characterMovementNode.speed);
+            _targetCharacterManager.UpdateRotation(!_characterMovementNode.disableRotation);
 
             //Teleport if starting position given
             if (_characterMovementNode.startingPosition != null)
             {
-                _targetNavMeshAgent.Warp(_characterMovementNode.startingPosition.transform.position);
+                _targetCharacterManager.Warp(_characterMovementNode.startingPosition.transform.position);
             }
 
             //Move to position
-            _targetNavMeshAgent.SetDestination(_characterMovementNode.targetPosition.transform.position);
+            _targetCharacterManager.SetDestination(_characterMovementNode.targetPosition.transform.position);
         }
 
         //Check if objects position is within range of the target position
         public bool IsFinished()
         {
-            return _targetNavMeshAgent != null && _targetNavMeshAgent.hasPath &&
-                   _targetNavMeshAgent.remainingDistance <=
-                   _targetNavMeshAgent.stoppingDistance + _characterMovementNode.distanceThreshold;
+            return _targetCharacterManager != null && _targetCharacterManager.HasPath() &&
+                   _targetCharacterManager.GetRemainingDistance() <=
+                   _targetCharacterManager.GetStoppingDistance() + _characterMovementNode.distanceThreshold;
         }
 
         public void PauseExecution()
         {
-            _targetNavMeshAgent.isStopped = true;
+            _targetCharacterManager.IsStopped(true);
         }
 
         public void ResumeExecution()
         {
-            _targetNavMeshAgent.isStopped = false;
+            _targetCharacterManager.IsStopped(false);
         }
     }
 }

@@ -15,8 +15,7 @@ namespace SystemInput
         {
             if (_rawInputMovement != Vector3.zero)
             {
-                Systems.GameManager.activeCharacterNavMeshAgent.Move(_rawInputMovement * 0.5f);
-                Systems.GameManager.activePlayer.transform.rotation = Quaternion.LookRotation(_rawInputMovement);
+                Systems.GameManager.activeCharacterManager.Move(_rawInputMovement);
             }
         }
 
@@ -25,11 +24,11 @@ namespace SystemInput
             playerInput.SwitchCurrentActionMap(actionMap.ToString());
         }
 
-        #region Menu
+        #region Menu Actions
 
         #endregion
 
-        #region Dialog
+        #region Dialog Actions
 
         public void OnDialogConfirm(InputAction.CallbackContext value)
         {
@@ -41,13 +40,13 @@ namespace SystemInput
 
         #endregion
 
-        #region Movement
+        #region Movement Actions
 
         public InputAction.CallbackContext onConfirmValue;
         public InputAction.CallbackContext onCancelValue;
         public InputAction.CallbackContext onMenuValue;
         public InputAction.CallbackContext onActionValue;
-        
+
         public void OnMovement(InputAction.CallbackContext value)
         {
             var inputMovement = value.ReadValue<Vector2>();
@@ -73,12 +72,12 @@ namespace SystemInput
         {
             onConfirmValue = value;
         }
-        
+
         public void OnAction(InputAction.CallbackContext value)
         {
             onActionValue = value;
         }
-        
+
         public void OnCancel(InputAction.CallbackContext value)
         {
             onCancelValue = value;
@@ -91,7 +90,7 @@ namespace SystemInput
 
         #endregion Movement
 
-        #region Global
+        #region Global Actions
 
         public void OnPause(InputAction.CallbackContext value)
         {
