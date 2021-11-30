@@ -12,7 +12,7 @@ namespace Dialog
         private int _characterIndex;
         private bool _continueClicked;
         private int _selectedOptionIndex = -1;
-        
+
         private readonly DialogNode _dialogNode;
         private readonly DialogComponents _dialogComponents;
         private readonly float _timePerCharacter;
@@ -20,15 +20,12 @@ namespace Dialog
         private Vector3 _followPlayerOffset;
         private float _displayTimer;
 
-        //TODO: Dialog writer is currently using the text passed in directly from the node, which is system default
-        //This needs to be the localized text instead.
+        //TODO: Dialog writer is currently using the text passed in directly from the node, which is system default. This needs to be the localized text instead.
         public DialogWriter(DialogNode dialogNode, DialogComponents dialogComponents)
         {
             _dialogNode = dialogNode;
             _dialogComponents = dialogComponents;
-            _timePerCharacter = dialogNode.customTimePerCharacter
-                ? dialogNode.timePerCharacter
-                : Systems.DialogManager.defaultTimePerCharacter;
+            _timePerCharacter = dialogNode.customTimePerCharacter ? dialogNode.timePerCharacter : Systems.DialogManager.defaultTimePerCharacter;
 
             //Reset from previous runs
             _characterIndex = 0;
@@ -43,17 +40,13 @@ namespace Dialog
             //Enable game object
             _dialogComponents.gameObject.SetActive(true);
 
-            //Set text
-            _dialogComponents.characterNameTMPText.text = _dialogNode.character != null ? _dialogNode.character.name : string.Empty; //TODO: This needs to be localized
+            //Set text TODO: This needs to be localized
+            _dialogComponents.characterNameTMPText.text = _dialogNode.character != null ? _dialogNode.character.name : string.Empty;
             _dialogComponents.dialogTMPText.text = string.Empty;
 
             //Set size of dialog window
-            var width = _dialogNode.dialogWidth != 0
-                ? _dialogNode.dialogWidth
-                : Systems.DialogManager.defaultWidth;
-            var height = _dialogNode.dialogHeight != 0
-                ? _dialogNode.dialogHeight
-                : Systems.DialogManager.defaultHeight;
+            var width = _dialogNode.dialogWidth != 0 ? _dialogNode.dialogWidth : Systems.DialogManager.defaultWidth;
+            var height = _dialogNode.dialogHeight != 0 ? _dialogNode.dialogHeight : Systems.DialogManager.defaultHeight;
             _dialogComponents.rectTransform.sizeDelta = new Vector2(width, height);
 
             //Add options
@@ -66,8 +59,8 @@ namespace Dialog
                     var optionInstance = _dialogComponents.optionInstances[optionIndex];
                     optionInstance.gameObject.SetActive(true);
                     optionInstance.optionTMPText.text = _dialogNode.options[optionIndex].text;
-                    optionInstance.button.onClick.AddListener(delegate{OptionSelected(optionIndex);});
-                    
+                    optionInstance.button.onClick.AddListener(delegate { OptionSelected(optionIndex); });
+
                     if (optionIndex == 0)
                     {
                         optionInstance.button.Select();
@@ -75,26 +68,21 @@ namespace Dialog
                     }
                 }
             }
-            
+
             //Move dialog to position
-            var positionX = _dialogNode.customDialogPosition
-                ? _dialogNode.dialogPositionX
-                : Systems.DialogManager.defaultPositionX;
-            var positionY = _dialogNode.customDialogPosition
-                ? _dialogNode.dialogPositionY
-                : Systems.DialogManager.defaultPositionY;
+            var positionX = _dialogNode.customDialogPosition ? _dialogNode.dialogPositionX : Systems.DialogManager.defaultPositionX;
+            var positionY = _dialogNode.customDialogPosition ? _dialogNode.dialogPositionY : Systems.DialogManager.defaultPositionY;
             _dialogComponents.rectTransform.anchoredPosition = new Vector2(positionX, positionY);
 
             //Initial Offset, used when following a character
             if (_dialogNode.followCharacter)
             {
-                var characterOriginalPosition =
-                    Systems.MainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
+                var characterOriginalPosition = Systems.MainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
                 var canvasPosition = _dialogComponents.rectTransform.position;
                 _followPlayerOffset = canvasPosition - characterOriginalPosition;
             }
         }
-        
+
         /// <summary>
         /// Unity update
         /// </summary>
@@ -113,7 +101,7 @@ namespace Dialog
         /// <returns>bool</returns>
         public bool IsNodeFinished()
         {
-            return (_continueClicked && IsTextFinished()) || (IsTimedDialog() && HasDisplayedForRequiredTime() || (IsOptionDialog() && IsOptionSelected()));
+            return _continueClicked && IsTextFinished() || IsTimedDialog() && HasDisplayedForRequiredTime() || IsOptionDialog() && IsOptionSelected();
         }
 
         /// <summary>
@@ -166,7 +154,7 @@ namespace Dialog
         {
             return _dialogNode.options.Count > 0;
         }
-        
+
         /// <summary>
         /// Returns if the dialog is a timed dialog or a user input dialog
         /// </summary>
@@ -193,7 +181,7 @@ namespace Dialog
         {
             return _selectedOptionIndex;
         }
-        
+
         /// <summary>
         /// Allows the dialog box to follow the player around during movement
         /// Offset calculated from initial offset before following player
@@ -202,13 +190,12 @@ namespace Dialog
         {
             if (_dialogNode.followCharacter)
             {
-                var characterPosition =
-                    Systems.MainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
+                var characterPosition = Systems.MainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
                 characterPosition += _followPlayerOffset;
                 _dialogComponents.rectTransform.position = characterPosition;
             }
         }
-        
+
         /// <summary>
         /// onClick event for option, saves selected index
         /// </summary>
@@ -242,7 +229,7 @@ namespace Dialog
                 {
                     _dialogComponents.optionsPanel.SetActive(true);
                 }
-                
+
                 //Update timers
                 if (_dialogNode.displayForNTime)
                 {

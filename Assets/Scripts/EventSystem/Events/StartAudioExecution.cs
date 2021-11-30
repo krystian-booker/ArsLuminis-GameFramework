@@ -22,12 +22,9 @@ namespace EventSystem.Events
         public void Execute(Node node)
         {
             _audioNode = node as StartAudioNode;
-            Assert.IsNotNull(_audioNode,
-                $"{nameof(StartAudioExecution)}: Invalid setup on {nameof(StartAudioExecution)}");
+            Assert.IsNotNull(_audioNode, $"{nameof(StartAudioExecution)}: Invalid setup on {nameof(StartAudioExecution)}");
 
-            _audioSourceLocation = _audioNode.audioSourceLocation != null
-                ? _audioNode.audioSourceLocation
-                : Systems.AudioManager.defaultAudioSourceLocation;
+            _audioSourceLocation = _audioNode.audioSourceLocation != null ? _audioNode.audioSourceLocation : Systems.AudioManager.defaultAudioSourceLocation;
 
             _audioSource = _audioSourceLocation.AddComponent<AudioSource>();
             _audioSource.clip = _audioNode.audioClip;
@@ -47,8 +44,8 @@ namespace EventSystem.Events
 
             if (_audioNode.audioFade)
             {
-                Systems.AudioManager.StartAudioCoroutine(FadeAudioSource.StartFade(_audioSource,
-                    _audioNode.initialFadeDelay, _audioNode.fadeDuration, _audioNode.targetVolume));
+                Systems.AudioManager.StartAudioCoroutine(FadeAudioSource.StartFade(_audioSource, _audioNode.initialFadeDelay, _audioNode.fadeDuration,
+                    _audioNode.targetVolume));
             }
 
             if (_audioNode.isPublic)
@@ -59,7 +56,9 @@ namespace EventSystem.Events
 
         public bool IsFinished()
         {
-            if (_audioSource.isPlaying) return false;
+            if (_audioSource.isPlaying)
+                return false;
+            
             Systems.AudioManager.ReturnToPool(_audioSource);
             return true;
         }

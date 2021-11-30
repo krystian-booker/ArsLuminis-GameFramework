@@ -11,7 +11,7 @@ namespace EventSystem.VisualEditor.Nodes.Audio
 
         [Tooltip("Documentation purposes only"), TextArea]
         public string description;
-        
+
         [Tooltip("Id of the audio node that you want to stop")]
         public string audioNodeId;
     }

@@ -29,13 +29,14 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
         public override void OnBodyGUI()
         {
             serializedObject.Update();
-            
-            string[] excludes = { "m_Script", "graph", "position", "ports" };
+
+            string[] excludes = {"m_Script", "graph", "position", "ports"};
 
             // Iterate through serialized properties and draw them like the Inspector (But with ports)
             var iterator = serializedObject.GetIterator();
             var enterChildren = true;
-            while (iterator.NextVisible(enterChildren)) {
+            while (iterator.NextVisible(enterChildren))
+            {
                 enterChildren = false;
                 if (excludes.Contains(iterator.name)) continue;
                 switch (iterator.name)
@@ -45,10 +46,11 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
                         {
                             NodeEditorGUILayout.PropertyField(iterator);
                         }
+
                         break;
                     case "displayTime":
                         var displayForNTime = serializedObject.FindProperty("displayForNTime");
-                        if (displayForNTime is { boolValue: true })
+                        if (displayForNTime is {boolValue: true})
                         {
                             NodeEditorGUILayout.PropertyField(iterator);
                         }
@@ -57,10 +59,11 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
                             //Clear previous value
                             iterator.intValue = 0;
                         }
+
                         break;
                     case "timePerCharacter":
                         var customTimePerCharacter = serializedObject.FindProperty("customTimePerCharacter");
-                        if (customTimePerCharacter is { boolValue: true })
+                        if (customTimePerCharacter is {boolValue: true})
                         {
                             NodeEditorGUILayout.PropertyField(iterator);
                         }
@@ -69,11 +72,12 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
                             //Clear previous value
                             iterator.intValue = 0;
                         }
+
                         break;
                     case "dialogPositionX":
                     case "dialogPositionY":
                         var customDialogPosition = serializedObject.FindProperty("customDialogPosition");
-                        if (customDialogPosition is { boolValue: true })
+                        if (customDialogPosition is {boolValue: true})
                         {
                             NodeEditorGUILayout.PropertyField(iterator);
                         }
@@ -82,6 +86,7 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
                             //Clear previous value
                             iterator.intValue = -1;
                         }
+
                         break;
                     default:
                         EditorGUIUtility.labelWidth = 165;
@@ -89,13 +94,14 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
                         break;
                 }
             }
-            
+
             // Iterate through dynamic ports and draw them in the order in which they are serialized
-            foreach (var dynamicPort in target.DynamicPorts) {
+            foreach (var dynamicPort in target.DynamicPorts)
+            {
                 if (NodeEditorGUILayout.IsDynamicPortListPort(dynamicPort)) continue;
                 NodeEditorGUILayout.PortField(dynamicPort);
             }
-            
+
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -110,7 +116,7 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
                 output?.ClearConnections();
             }
         }
-        
+
         /// <summary>
         /// Due to a bug in xNode, when adding a new element to our Options list, we need to remove the new element and
         /// add a new value again.
@@ -129,14 +135,15 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
                 dialogNode.options.Remove(dialogNode.options.LastOrDefault());
                 dialogNode.options.Add(new DialogOption());
             }
+
             dialogNode.nCount = dialogNode.options.Count;
 
             //Clear text if key has changed
             foreach (var option in dialogNode.options)
             {
-                if(string.IsNullOrEmpty(option.key))
+                if (string.IsNullOrEmpty(option.key))
                     continue;
-                
+
                 var trackedOption = dialogNode.optionsKeyTracker.FirstOrDefault(x => x.Equals(option.key));
                 if (trackedOption == null || string.IsNullOrEmpty(trackedOption))
                 {
@@ -150,7 +157,7 @@ namespace EventSystem.VisualEditor.Nodes.Dialog.Editor
             {
                 dialogNode.optionsKeyTracker.Add(option.key);
             }
-            
+
             //Update localization and get messages for keys
             Utilities.BulkOptionUpdateMessages(dialogNode.options);
         }

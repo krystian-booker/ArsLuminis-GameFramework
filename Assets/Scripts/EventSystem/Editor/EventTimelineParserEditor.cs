@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EventSystem.Editor
 {
-    [CustomEditor(typeof(EventTimelineParser))]
+    [CustomEditor(typeof(EventSequenceParser))]
     public class EventTimelineParserEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()

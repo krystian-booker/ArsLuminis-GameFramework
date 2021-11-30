@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Characters
 {
-    [CreateAssetMenu(fileName = "Data", menuName = "CheddyShakes/ScriptableObjects/Character")]
+    [CreateAssetMenu(fileName = "Data", menuName = "ExAmore/ScriptableObjects/Character")]
     public class Character : ScriptableObject
     {
         private string _id = Guid.NewGuid().ToString();
@@ -11,6 +11,8 @@ namespace Characters
         [Tooltip("Characters display name, will be overwritten via localization")]
         public string displayName;
         public GameObject prefab;
+        
+        //TODO: These should be refactored out into customizable stats instead of hardcoded
         public int level;
         public int exp;
         public int hp;

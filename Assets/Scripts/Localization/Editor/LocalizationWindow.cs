@@ -13,10 +13,10 @@ namespace Localization.Editor
         public string filterValue;
         public Vector2 scroll;
 
-        [MenuItem("Tools/CheddyShakes/Localization")]
+        [MenuItem("Tools/ExAmore/Localization")]
         private static void Init()
         {
-            var window = (LocalizationWindow) EditorWindow.GetWindow(typeof(LocalizationWindow));
+            var window = (LocalizationWindow) GetWindow(typeof(LocalizationWindow));
             window.titleContent = new GUIContent("Localization");
             window.Show();
         }
@@ -78,7 +78,7 @@ namespace Localization.Editor
                         }
                     }
                 }
- 
+
 
                 foreach (var element in filteredDictionary)
                 {
@@ -86,8 +86,8 @@ namespace Localization.Editor
                     if (GUILayout.Button("X", GUILayout.MaxWidth(20), GUILayout.MaxHeight(20)))
                     {
                         if (EditorUtility.DisplayDialog(
-                            $"Remove key {element.key}?", $"This will remove the {element.key} from localization." +
-                                                          $"Please ensure that all references to this key have been removed before deleting",
+                            $"Remove key {element.key}?",
+                            $"This will remove the {element.key} from localization. Please ensure that all references to this key have been removed before deleting",
                             "Ok",
                             "Cancel"))
                         {
@@ -101,7 +101,6 @@ namespace Localization.Editor
                     EditorGUILayout.EndHorizontal();
                 }
             }
-
 
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();

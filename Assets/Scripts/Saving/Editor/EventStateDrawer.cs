@@ -14,8 +14,7 @@ namespace Saving.Editor
         {
             EditorGUI.BeginProperty(position, label, property);
 
-            var rectFoldout = new Rect(position.min.x, position.min.y, position.size.x,
-                EditorGUIUtility.singleLineHeight * 2);
+            var rectFoldout = new Rect(position.min.x, position.min.y, position.size.x, EditorGUIUtility.singleLineHeight * 2);
             property.isExpanded = EditorGUI.Foldout(rectFoldout, property.isExpanded, label);
 
             var lines = 1f;
@@ -67,23 +66,23 @@ namespace Saving.Editor
                 var valueLabel = new GUIContent("Value");
                 switch (dataType.enumValueIndex)
                 {
-                    case (int)DataType.String:
+                    case (int) DataType.String:
                         EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("stringValue"), valueLabel);
                         ClearValues(property, "stringValue");
                         break;
-                    case (int)DataType.Integer:
+                    case (int) DataType.Integer:
                         EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("intValue"), valueLabel);
                         ClearValues(property, "intValue");
                         break;
-                    case (int)DataType.Float:
+                    case (int) DataType.Float:
                         EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("floatValue"), valueLabel);
                         ClearValues(property, "floatValue");
                         break;
-                    case (int)DataType.Boolean:
+                    case (int) DataType.Boolean:
                         EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("booleanValue"), valueLabel);
                         ClearValues(property, "booleanValue");
                         break;
-                    case (int)DataType.Vector3:
+                    case (int) DataType.Vector3:
                         EditorGUI.PropertyField(rectDefaultValue, property.FindPropertyRelative("vector3Value"), valueLabel);
                         ClearValues(property, "vector3Value");
                         break;

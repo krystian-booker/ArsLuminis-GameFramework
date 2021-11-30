@@ -14,12 +14,13 @@ namespace EventSystem.Triggers
     {
         //Used to control focus
         private CharacterManager _characterManager;
-        
+
         [Tooltip("Event Sequence to be triggered")]
-        public EventSequenceSceneGraph triggerEventSequence;
-        private EventTimelineParser _triggerEventTimelineParser;
+        public EventSequenceGraph triggerEventSequence;
+
+        private EventSequenceParser _triggerEventSequenceParser;
         private bool _eventRunning;
-        
+
         private void Start()
         {
             _characterManager = GetComponent<CharacterManager>();
@@ -41,28 +42,28 @@ namespace EventSystem.Triggers
                 yield break;
 
             _eventRunning = true;
-            
+
             //Pause events of main sequence
             _characterManager.PauseEventSequence();
-            
+
             //Add trigger event timeline parser
-            if (_triggerEventTimelineParser == null)
+            if (_triggerEventSequenceParser == null)
             {
-                _triggerEventTimelineParser = gameObject.AddComponent<EventTimelineParser>();
+                _triggerEventSequenceParser = gameObject.AddComponent<EventSequenceParser>();
             }
-            
+
             //Start trigger event sequence
-            StartCoroutine(_triggerEventTimelineParser.StartEventSequence(triggerEventSequence));
-            
+            StartCoroutine(_triggerEventSequenceParser.StartEventSequence(triggerEventSequence));
+
             _characterManager.SetFocus(triggerObject);
             triggerCharacterManager.SetFocus(this.gameObject);
-            
-            yield return new WaitUntil(_triggerEventTimelineParser.IsEventSequenceFinished);
-            
+
+            yield return new WaitUntil(_triggerEventSequenceParser.IsEventSequenceFinished);
+
             //Remove focus Events
-            triggerCharacterManager.LoseFocus();
-            _characterManager.LoseFocus();
-            
+            triggerCharacterManager.RemoveFocus();
+            _characterManager.RemoveFocus();
+
             //Resume events
             _characterManager.ResumeEventSequence();
             _eventRunning = false;

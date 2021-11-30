@@ -27,11 +27,11 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
         private int _selectedIndex;
         private string[] _animationTriggers = Array.Empty<string>();
         private GameObject _currentAnimationTarget;
-        
+
         public override void OnBodyGUI()
         {
             serializedObject.Update();
-            string[] excludes = { "m_Script", "graph", "position", "ports" };
+            string[] excludes = {"m_Script", "graph", "position", "ports"};
 
             // Iterate through serialized properties and draw them like the Inspector (But with ports)
             var iterator = serializedObject.GetIterator();
@@ -89,19 +89,17 @@ namespace EventSystem.VisualEditor.Nodes.Animation.Editor
         {
             var animationTargetProperty = serializedObject.FindProperty("animationTarget");
             var animationTarget = animationTargetProperty.objectReferenceValue as GameObject;
-            
-            if (animationTarget == null || (_animationTriggers?.Length > 0 && _currentAnimationTarget == animationTarget))
+
+            if (animationTarget == null || _animationTriggers?.Length > 0 && _currentAnimationTarget == animationTarget)
                 return;
 
             _currentAnimationTarget = animationTarget;
-            
+
             var animator = animationTarget.GetComponent<Animator>();
-            Assert.IsNotNull(animator,
-                $"{nameof(PlayAnimationNode)}: Missing component ${nameof(Animator)} on {animationTarget.name}");
+            Assert.IsNotNull(animator, $"{nameof(PlayAnimationNode)}: Missing component ${nameof(Animator)} on {animationTarget.name}");
 
             var animatorController = animator.runtimeAnimatorController as AnimatorController;
-            Assert.IsNotNull(animatorController,
-                $"{nameof(PlayAnimationNode)}: Missing ${nameof(AnimatorController)} on {animationTarget.name}");
+            Assert.IsNotNull(animatorController, $"{nameof(PlayAnimationNode)}: Missing ${nameof(AnimatorController)} on {animationTarget.name}");
 
             _animationTriggers = animatorController.parameters.Select(x => x.name).ToArray();
         }

@@ -14,7 +14,7 @@ namespace Tools
         /// Example: used to create Targets from prefabs
         /// </summary>
         /// <param name="gameObject">Object to be instantiated</param>
-        /// <returns>Reference to the instantiated gameobject</returns>
+        /// <returns>Reference to the instantiated GameObjects</returns>
         public static GameObject InstantiateObject(GameObject gameObject)
         {
             Debug.Log($"Object instantiated at 0,0,0");
@@ -113,7 +113,7 @@ namespace Tools
                     //Skip if no message to add
                     if (string.IsNullOrEmpty(option.text))
                         continue;
-                    
+
                     //Create data element, add resx required properties
                     var data = messageDefaultResourceDoc.CreateElement("data");
                     data.SetAttribute("name", option.key);
@@ -163,7 +163,7 @@ namespace Tools
 
             return null;
         }
-        
+
         /// <summary>
         /// Removes the specified key/text from the Messages.xml file
         /// This does not remove it from the other localized files if they exist

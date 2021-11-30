@@ -1,34 +1,29 @@
-﻿using System.Collections;
+using System.Collections;
 using EventSystem.VisualEditor.Graphs;
 using UnityEngine;
 
 namespace EventSystem.Triggers
 {
     /// <summary>
-    /// The triggerEventSequence will begin when this component is initialized.
-    /// This should be added to a gameObject to start at the beginning a scene
-    /// or when a gameObject in instantiated 
+    /// Attach to a gameObject with a trigger collider, will be triggered on character entry
     /// </summary>
-    public class OnStartTrigger : MonoBehaviour
+    public class ColliderTrigger : MonoBehaviour
     {
-        [Tooltip("Event Sequence to be triggered")]
         public EventSequenceGraph triggerEventSequence;
 
+        [Tooltip("If enabled the event sequence can only be triggered once during this session. " +
+                 "If the player leaves a scene and re-enters, this will be reset. To save states permanently use state nodes")]
+        public bool runOnce;
+
         private EventSequenceParser _triggerEventSequenceParser;
+        private bool _hasTriggered;
 
-        private void Start()
+        public IEnumerator BeginTriggerEvent()
         {
-            StartCoroutine(BeginTriggerEvent());
-        }
-
-        /// <summary>
-        /// Triggers the event sequence as part of a coroutine
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator BeginTriggerEvent()
-        {
-            if (triggerEventSequence == null)
+            if (triggerEventSequence == null || _hasTriggered)
                 yield break;
+
+            _hasTriggered = true;
 
             //Add trigger event timeline parser
             if (_triggerEventSequenceParser == null)
@@ -39,6 +34,9 @@ namespace EventSystem.Triggers
             //Start trigger event sequence
             StartCoroutine(_triggerEventSequenceParser.StartEventSequence(triggerEventSequence));
             yield return new WaitUntil(_triggerEventSequenceParser.IsEventSequenceFinished);
+
+            if (!runOnce)
+                _hasTriggered = false;
         }
     }
 }

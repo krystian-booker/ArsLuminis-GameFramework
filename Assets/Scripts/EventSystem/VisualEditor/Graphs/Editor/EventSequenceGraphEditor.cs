@@ -2,8 +2,8 @@
 
 namespace EventSystem.VisualEditor.Graphs.Editor
 {
-    [CustomNodeGraphEditor(typeof(EventSequenceGraph))]
-    public class EventSequenceGraphEditor : NodeGraphEditor 
+    [CustomNodeGraphEditor(typeof(EventSequenceNodeGraph))]
+    public class EventSequenceGraphEditor : NodeGraphEditor
     {
         /// <summary>
         /// Simplifies/Cleans the right click menu for xNode 

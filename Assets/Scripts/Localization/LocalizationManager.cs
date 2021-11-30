@@ -49,13 +49,11 @@ namespace Localization
         /// <returns>String of the localized text</returns>
         public static string GetTranslatedString(string key)
         {
-            
 #if (UNITY_EDITOR)
             var regexItem = new Regex("^[a-zA-Z0-9_-]*$");
             if (!regexItem.IsMatch(key))
             {
-                Debug.LogError(
-                    $"{nameof(Localization)}: Localization Keys can only contain a-z, 0-9, '_', and '-' \n  {key}");
+                Debug.LogError($"{nameof(Localization)}: Localization Keys can only contain a-z, 0-9, '_', and '-' \n  {key}");
                 return "LOCALIZATION_KEY_ERROR";
             }
 #endif
@@ -159,8 +157,7 @@ namespace Localization
         /// <param name="dataName"></param>
         private static void TextNotFoundError(string dataName)
         {
-            Debug.LogError(
-                $"{nameof(Localization)}: Translation not found for {dataName} in {Localization.ToString()}");
+            Debug.LogError($"{nameof(Localization)}: Translation not found for {dataName} in {Localization.ToString()}");
         }
 
         /// <summary>

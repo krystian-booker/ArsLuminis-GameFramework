@@ -22,8 +22,7 @@ namespace EventSystem.VisualEditor.Nodes.Dialog
 
         #region Speaker
 
-        [Header("Speaker properties")]
-        [Tooltip("Required for dialog, used for tracking, names, sizing, location, etc.")]
+        [Header("Speaker properties")] [Tooltip("Required for dialog, used for tracking, names, sizing, location, etc.")]
         public GameObject character;
 
         #endregion
@@ -70,7 +69,9 @@ namespace EventSystem.VisualEditor.Nodes.Dialog
         #region DialogTextLocalization
 
         [Tooltip("Localization key")] public string localizationKey;
-        private string _lastLocalizationKey; //Used to store the last state of the key
+
+        //Used to store the last state of the key
+        private string _lastLocalizationKey;
 
         [TextArea] public string text;
 

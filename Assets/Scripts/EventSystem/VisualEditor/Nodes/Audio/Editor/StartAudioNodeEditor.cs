@@ -16,7 +16,7 @@ namespace EventSystem.VisualEditor.Nodes.Audio.Editor
         public override void OnBodyGUI()
         {
             serializedObject.Update();
-            string[] excludes = { "m_Script", "graph", "position", "ports" };
+            string[] excludes = {"m_Script", "graph", "position", "ports"};
 
             // Iterate through serialized properties and draw them like the Inspector (But with ports)
             var iterator = serializedObject.GetIterator();
@@ -41,7 +41,7 @@ namespace EventSystem.VisualEditor.Nodes.Audio.Editor
                         break;
                     case "publicId":
                         var isPublic = serializedObject.FindProperty("isPublic");
-                        if (isPublic is { boolValue: true })
+                        if (isPublic is {boolValue: true})
                         {
                             EditorGUIUtility.labelWidth = 150;
                             NodeEditorGUILayout.PropertyField(iterator);
@@ -51,12 +51,13 @@ namespace EventSystem.VisualEditor.Nodes.Audio.Editor
                             //Clear previous value
                             iterator.stringValue = string.Empty;
                         }
+
                         break;
                     case "targetVolume":
                     case "fadeDuration":
                     case "initialFadeDelay":
                         var audioFade = serializedObject.FindProperty("audioFade");
-                        if (audioFade is { boolValue: true })
+                        if (audioFade is {boolValue: true})
                         {
                             EditorGUIUtility.labelWidth = 110;
                             NodeEditorGUILayout.PropertyField(iterator);
@@ -66,6 +67,7 @@ namespace EventSystem.VisualEditor.Nodes.Audio.Editor
                             //Clear previous value
                             iterator.floatValue = 0f;
                         }
+
                         break;
                     default:
                         EditorGUIUtility.labelWidth = 110;

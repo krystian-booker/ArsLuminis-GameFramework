@@ -16,18 +16,15 @@ namespace EventSystem.Events
         public void Execute(Node node)
         {
             _animationNode = node as PlayAnimationNode;
-            Assert.IsNotNull(_animationNode,
-                $"{nameof(AnimationExecution)}: Invalid setup on {nameof(PlayAnimationNode)}.");
+            Assert.IsNotNull(_animationNode, $"{nameof(AnimationExecution)}: Invalid setup on {nameof(PlayAnimationNode)}.");
 
             //Get animator
             _animator = _animationNode.animationTarget.GetComponent<Animator>();
             _animatorLink = _animationNode.animationTarget.GetComponent<AnimatorLink>();
 
             //Asserts
-            Assert.IsNotNull(_animator,
-                $"{nameof(AnimationExecution)}: Animator required for playing animations on ${_animationNode.animationTarget.name}");
-            Assert.IsNotNull(_animatorLink,
-                $"{nameof(AnimationExecution)}: AnimatorLink required for playing animations on ${_animationNode.animationTarget.name}");
+            Assert.IsNotNull(_animator, $"{nameof(AnimationExecution)}: Animator required for playing animations on ${_animationNode.animationTarget.name}");
+            Assert.IsNotNull(_animatorLink,$"{nameof(AnimationExecution)}: AnimatorLink required for playing animations on ${_animationNode.animationTarget.name}");
 
             //Clear previous states
             _animatorLink.ResetAnimationState();

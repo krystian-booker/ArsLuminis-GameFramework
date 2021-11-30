@@ -6,12 +6,8 @@ namespace EventSystem.VisualEditor.Graphs
     /// <summary>
     /// Required to be defined by xNode
     /// </summary>
-    [CreateAssetMenu(menuName = "CheddyShakes/ScriptableObjects/EventSequence", order = 0)]
-    public class EventSequenceGraph : NodeGraph
+    public class EventSequenceGraph : SceneGraph<EventSequenceNodeGraph>
     {
-        public void OnDropObjects(UnityEngine.Object[] objects)
-        {
-            
-        }
+        [TextArea, Tooltip("No code usage")] public string description;
     }
 }

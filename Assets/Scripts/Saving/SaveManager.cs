@@ -69,7 +69,7 @@ namespace Saving
             Assert.IsNotNull(stateNode);
 
             var eventState = Systems.SaveManager._gameState.states.FirstOrDefault(x => x.id == stateNode.selectedStateId);
-            Assert.IsNotNull(eventState, $"{nameof(EventTimelineParser)}: Unable to find the state '{stateNode.selectedStateId}' in gameManager states");
+            Assert.IsNotNull(eventState, $"{nameof(EventSequenceParser)}: Unable to find the state '{stateNode.selectedStateId}' in gameManager states");
 
             NodePort nodePort = null;
             var dynamicOutputs = node.DynamicOutputs;

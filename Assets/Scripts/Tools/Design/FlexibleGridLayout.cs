@@ -18,17 +18,17 @@ namespace Tools.Design
         public FitType fitType;
 
         public int rows;
-        
+
         public int columns;
-        
+
         public Vector2 cellSize;
-        
+
         public Vector2 spacing;
 
         public bool fitX;
 
         public bool fitY;
-        
+
         public override void CalculateLayoutInputHorizontal()
         {
             base.CalculateLayoutInputHorizontal();
@@ -46,11 +46,11 @@ namespace Tools.Design
             {
                 case FitType.Width:
                 case FitType.FixedColumns:
-                    rows = Mathf.CeilToInt(rectChildren.Count / (float)columns);
+                    rows = Mathf.CeilToInt(rectChildren.Count / (float) columns);
                     break;
                 case FitType.Height:
                 case FitType.FixedRows:
-                    rows = Mathf.CeilToInt(rectChildren.Count / (float)rows);
+                    rows = Mathf.CeilToInt(rectChildren.Count / (float) rows);
                     break;
                 case FitType.Uniform:
                     break;
@@ -60,7 +60,7 @@ namespace Tools.Design
 
             var rect = rectTransform.rect;
             var parentWidth = fitX ? rect.width : cellSize.x;
-            var parentHeight = fitY ?  rect.height : cellSize.y;
+            var parentHeight = fitY ? rect.height : cellSize.y;
 
             var cellWidth = (parentWidth / (float) columns) - ((spacing.x / ((float) columns)) * (columns - 1)) -
                             (padding.left / (float) columns) - (padding.right / (float) columns);
