@@ -6,7 +6,8 @@ namespace EventSystem.VisualEditor.Editor
     [CustomNodeEditor(typeof(BaseNode))]
     public class BaseNodeEditor : NodeEditor
     {
-        public override int GetWidth() {
+        public override int GetWidth()
+        {
             return 300;
         }
     }

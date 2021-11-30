@@ -16,7 +16,7 @@ namespace EventSystem.VisualEditor.Nodes.Camera.Editor
         public override void OnBodyGUI()
         {
             serializedObject.Update();
-            string[] excludes = { "m_Script", "graph", "position", "ports" };
+            string[] excludes = {"m_Script", "graph", "position", "ports"};
 
             // Iterate through serialized properties and draw them like the Inspector (But with ports)
             var iterator = serializedObject.GetIterator();

@@ -9,12 +9,10 @@ namespace EventSystem.VisualEditor.Nodes.State
     {
         [Input] public NodeLink entry;
         [Output] public NodeLink exit;
-        
-        [Tooltip("Only used for documentation purposes")]
-        [TextArea]
+
+        [Tooltip("Only used for documentation purposes")] [TextArea]
         public string description;
 
-        [Tooltip("Action map to switch to")]
-        public ActionMap actionMap;
+        [Tooltip("Action map to switch to")] public ActionMap actionMap;
     }
 }

@@ -17,10 +17,12 @@ namespace Tools
         public static readonly SceneControlManager SceneControlManager;
         public static readonly AudioManager AudioManager;
         public static readonly SaveManager SaveManager;
-        
+
         public static readonly Camera MainCamera;
         public static readonly CinemachineBrain CinemachineBrain;
         public static readonly UnityEngine.EventSystems.EventSystem EventSystem;
+
+        public const bool DebugWarnings = true;
 
         static Systems()
         {
@@ -49,7 +51,7 @@ namespace Tools
                 //Systems is used by the Editor, these are only available when the game is running
                 EventSystem = UnityEngine.EventSystems.EventSystem.current;
                 Assert.IsNotNull(EventSystem, $"{nameof(Systems)}: EventSystem is missing from _preload");
-                
+
                 CinemachineBrain = MainCamera.GetComponent<CinemachineBrain>();
                 Assert.IsNotNull(CinemachineBrain, $"{nameof(Systems)}: CinemachineBrain is missing from _preload camera");
             }

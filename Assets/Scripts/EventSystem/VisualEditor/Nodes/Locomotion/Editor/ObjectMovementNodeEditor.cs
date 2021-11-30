@@ -19,7 +19,7 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion.Editor
         public override void OnBodyGUI()
         {
             serializedObject.Update();
-            string[] excludes = { "m_Script", "graph", "position", "ports" };
+            string[] excludes = {"m_Script", "graph", "position", "ports"};
 
             // Iterate through serialized properties and draw them like the Inspector (But with ports)
             var iterator = serializedObject.GetIterator();
@@ -38,6 +38,7 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion.Editor
                         {
                             GenerateTargetPosition();
                         }
+
                         EditorGUILayout.EndHorizontal();
                         break;
                     case "startingPosition":
@@ -48,6 +49,7 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion.Editor
                         {
                             GenerateStartingPosition();
                         }
+
                         EditorGUILayout.EndHorizontal();
                         break;
                     default:
@@ -66,7 +68,7 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion.Editor
 
             serializedObject.ApplyModifiedProperties();
         }
-        
+
         private void GenerateTargetPosition()
         {
             var positionTargetGameObject = Resources.Load<GameObject>("Prefabs/editorTools/YellowTarget");
@@ -75,7 +77,7 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion.Editor
             //Get node values
             var shortName = serializedObject.FindProperty("shortName");
             var targetPosition = serializedObject.FindProperty("targetPosition");
-            
+
             //Assign object back to self
             var instantiatedTarget = Utilities.InstantiateObject(positionTargetGameObject);
             instantiatedTarget.name =
@@ -87,11 +89,11 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion.Editor
         {
             var positionTargetGameObject = Resources.Load<GameObject>("Prefabs/editorTools/GreenTarget");
             if (positionTargetGameObject == null) return;
-            
+
             //Get node values
             var shortName = serializedObject.FindProperty("shortName");
             var startingPosition = serializedObject.FindProperty("startingPosition");
-            
+
             //Assign object back to self
             var instantiatedTarget = Utilities.InstantiateObject(positionTargetGameObject);
             instantiatedTarget.name =

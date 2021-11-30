@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
- 
+
     void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
             ChangeCharacter(activePlayer);
         }
     }
-    
+
     private void ChangeCharacter(GameObject newCharacter)
     {
         activePlayer = newCharacter;

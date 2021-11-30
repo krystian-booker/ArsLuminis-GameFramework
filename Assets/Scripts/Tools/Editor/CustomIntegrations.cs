@@ -3,7 +3,7 @@ using UnityEditor.Compilation;
 
 public class CustomIntegrations : Editor
 {
-    #if EASY_CHARACTER_MOVEMENT
+#if EASY_CHARACTER_MOVEMENT
     [MenuItem("Tools/ExAmore/Third Party Integrations/Disable 'Easy Charater Movement'")]
     public static void DisableEasyCharacterMovement()
     {
@@ -14,7 +14,7 @@ public class CustomIntegrations : Editor
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, symbols);
         }
     }
-    #else
+#else
     [MenuItem("Tools/ExAmore/Third Party Integrations/Enable 'Easy Character Movement'")]
     public static void EnableEasyCharacterMovement()
     {
@@ -24,5 +24,5 @@ public class CustomIntegrations : Editor
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, symbols + ";EASY_CHARACTER_MOVEMENT");
         }
     }
-    #endif
+#endif
 }

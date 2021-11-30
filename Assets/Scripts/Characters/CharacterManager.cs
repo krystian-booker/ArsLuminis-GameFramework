@@ -1,4 +1,5 @@
-﻿using EventSystem;
+﻿using System.Collections.Generic;
+using EventSystem;
 using EventSystem.Triggers;
 using EventSystem.VisualEditor.Graphs;
 using Tools;
@@ -19,33 +20,45 @@ namespace Characters
     public class CharacterManager : MonoBehaviour
     {
         #region Properties
-        
-        [Tooltip("Not required, the event sequence will automatically be started in Start()")]
-        public EventSequenceSceneGraph defaultEventSequence;
 
-        private EventTimelineParser _defaultEventTimelineParser;
+        [Header("Event Sequencer")] 
+        [Tooltip("Not required, the default event sequence that starts automatically in Start()")]
+        public EventSequenceGraph defaultEventSequence;
 
-        [Tooltip("If set to true this gameObject will turn towards the triggering game object (player)")]
+        //Each Character has their own individual EventSequenceParser, the running EventSequence can be switched out freely
+        private EventSequenceParser _defaultEventSequenceParser;
+
+        [Header("Trigger")]
+        [Tooltip("A list of GameObjects that will call the EntryTrigger if they collide.If list is empty any gameObject will will call the trigger.")]
+        public List<GameObject> triggerGameObjects = new List<GameObject>();
+
+        [Tooltip("If set to true this gameObject will turn towards the triggering game object")]
         public bool focusOnTrigger = true;
 
-        [Range(1f, 20f)] public float focusRotationSpeed = 8f;
+        [Tooltip("Speed that the gameObject will turn towards the triggering game object")] [Range(1f, 20f)]
+        public float focusRotationSpeed = 8f;
+
+        //Internal flag if the focus is currently active
         private bool _focusActive;
+
+        //GameObject that triggered
         private GameObject _focusTarget;
-        
+
+        #endregion
+
         #region Character Movement Controllers
 
 #if EASY_CHARACTER_MOVEMENT
         private AgentControllerECM _agentControllerEcm;
 #else
+        //If no custom character controller is being used we will default to NavMeshAgent
         private NavMeshAgent _navMeshAgent;
 #endif
 
         #endregion
 
-        #endregion
-
         #region Monobehaviour
-        
+
         private void Awake()
         {
 #if EASY_CHARACTER_MOVEMENT
@@ -57,13 +70,12 @@ namespace Characters
 
         private void Start()
         {
-            //Everything that moves needs a character manager, NPCs and Playable characters,
-            //Not everything will need to always have a default sequence
-            if (defaultEventSequence == null)
-                return;
-
-            _defaultEventTimelineParser = gameObject.AddComponent<EventTimelineParser>();
-            StartCoroutine(_defaultEventTimelineParser.StartEventSequence(defaultEventSequence));
+            //A default event sequence is not required, the object could run an event sequence from a trigger 
+            if (defaultEventSequence != null)
+            {
+                _defaultEventSequenceParser = gameObject.AddComponent<EventSequenceParser>();
+                StartCoroutine(_defaultEventSequenceParser.StartEventSequence(defaultEventSequence));
+            }
         }
 
         private void Update()
@@ -72,18 +84,18 @@ namespace Characters
         }
 
         #endregion
-        
+
         #region EventSequence
-        
+
         /// <summary>
         /// Used to pause an active eventSequence.
         /// Only specific events can be paused that implement the IPauseEventExecution interface
         /// </summary>
         public void PauseEventSequence()
         {
-            if (_defaultEventTimelineParser != null)
+            if (_defaultEventSequenceParser != null)
             {
-                _defaultEventTimelineParser.PauseEventSequence();
+                _defaultEventSequenceParser.PauseEventSequence();
             }
         }
 
@@ -92,51 +104,61 @@ namespace Characters
         /// </summary>
         public void ResumeEventSequence()
         {
-            _defaultEventTimelineParser.ResumeEventSequence();
+            _defaultEventSequenceParser.ResumeEventSequence();
         }
 
         #endregion
-        
+
         #region Triggers
-        
+
         /// <summary>
-        /// Used to trigger event sequences.
-        /// Trigger gameObjects must have the tag 'Trigger' and have the script 'EntryTrigger' attached.
+        /// When a trigger collides, we will call the ColliderTrigger.
+        /// The current gameObject must have the tag "Trigger"
+        /// If only specific collisions should trigger an event than add those GameObjects to the triggerGameObjects list.
         /// </summary>
         private void OnTriggerEnter(Collider other)
         {
-            //Only want events triggered on active player
-            //TODO: We will want to extend this, I can think of scenarios where you would want an NPC to trigger an event.
-            if (Systems.GameManager.activePlayer == null ||
-                Systems.GameManager.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
-
-            //TODO: Remove CompareTag, replace of enum for both
-            if (other.gameObject.CompareTag($"Trigger"))
+            if (gameObject.CompareTag($"Trigger") && (triggerGameObjects.Count == 0 || triggerGameObjects.Contains(other.gameObject)))
             {
-                var entryTrigger = other.gameObject.GetComponent<EntryTrigger>();
-                StartCoroutine(entryTrigger.BeginTriggerEvent());
+                var colliderTrigger = other.gameObject.GetComponent<ColliderTrigger>();
+                if (Systems.DebugWarnings && colliderTrigger == null)
+                {
+                    Debug.LogWarning($"{nameof(CharacterManager)}: OnTriggerEnter called for '{gameObject.name}' but no ColliderTrigger component exists");
+                    return;
+                }
+
+                StartCoroutine(colliderTrigger.BeginTriggerEvent());
             }
         }
 
         /// <summary>
+        /// When a trigger collides, we will call the ColliderTrigger.
+        /// The current gameObject must have the tag "Trigger"
+        /// If only specific collisions should trigger an event than add those GameObjects to the triggerGameObjects list.
         /// </summary>
         private void OnTriggerStay(Collider other)
         {
-            //Only want events triggered on active player
-            if (Systems.GameManager.activePlayer == null ||
-                Systems.GameManager.activePlayer.GetInstanceID() != gameObject.GetInstanceID()) return;
+            if (other.gameObject.layer == LayerMask.NameToLayer($"Character") || other.gameObject.CompareTag($"NPC"))
+            {
+                //InputManager: Wait for user to click 'Confirm'
+                if (Systems.InputManager.onConfirmValue.started)
+                {
+                    var npcEventTrigger = other.gameObject.GetComponent<NpcEventTrigger>();
+                    if (Systems.DebugWarnings && npcEventTrigger == null)
+                    {
+                        Debug.LogWarning($"{nameof(CharacterManager)}: OnTriggerStay called for '{gameObject.name}' but no NpcEventTrigger component exists");
+                        return;
+                    }
 
-            //TODO: Remove both nameToLayer and CompareTag, replace of enum for both
-            if (other.gameObject.layer != LayerMask.NameToLayer($"Character") ||
-                !other.gameObject.CompareTag($"NPC")) return;
-
-            //InputManager wait for a confirm
-            if (!Systems.InputManager.onConfirmValue.started) return;
-
-            var npcEventTrigger = other.gameObject.GetComponent<NpcEventTrigger>();
-            StartCoroutine(npcEventTrigger.BeginTriggerEvent(gameObject, this));
+                    StartCoroutine(npcEventTrigger.BeginTriggerEvent(gameObject, this));
+                }
+            }
         }
-        
+
+        #endregion
+
+        #region Focus
+
         /// <summary>
         /// Sets the target this gameObject will rotate to look at until LoseFocus()
         /// is called
@@ -151,7 +173,7 @@ namespace Characters
         /// <summary>
         /// Stop the focus event, removes focus target
         /// </summary>
-        public void LoseFocus()
+        public void RemoveFocus()
         {
             _focusActive = false;
             _focusTarget = null;
@@ -163,26 +185,27 @@ namespace Characters
         /// </summary>
         private void FocusOnTrigger()
         {
-            if (!focusOnTrigger || !_focusActive || _focusTarget == null) return;
-            var direction = (_focusTarget.transform.position - gameObject.transform.position).normalized;
-            var lookRotation = Quaternion.LookRotation(direction);
-            gameObject.transform.rotation =
-                Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * focusRotationSpeed);
+            if (focusOnTrigger && _focusActive && _focusTarget != null)
+            {
+                var direction = (_focusTarget.transform.position - gameObject.transform.position).normalized;
+                var lookRotation = Quaternion.LookRotation(direction);
+                gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * focusRotationSpeed);
+            }
         }
-        
+
         #endregion
-        
+
         #region Locomotion
 
         public void Move(Vector3 inputMovement)
         {
 #if EASY_CHARACTER_MOVEMENT
             _agentControllerEcm.moveDirection = inputMovement;
-            // _agentControllerEcm.agent.Move(inputMovement * 0.5f);
-#else
-            _navMeshAgent.Move(inputMovement * 0.5f);
-#endif
             transform.rotation = Quaternion.LookRotation(inputMovement);
+#else
+            _navMeshAgent.Move(inputMovement);
+            transform.rotation = Quaternion.LookRotation(inputMovement);
+#endif
         }
 
         public void SetDestination(Vector3 destination)
@@ -265,7 +288,7 @@ namespace Characters
             _navMeshAgent.isStopped = stop;
 #endif
         }
-        
+
         #endregion
     }
 }

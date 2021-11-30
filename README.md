@@ -7,7 +7,7 @@ Due to the active development it is recommended to make backups before pulling t
 
 If you have any feature requests or bugs contact me on Twitter [@CheddyShakes](twitter.com/CheddyShakes)
 ## Requirements
-- Unity 2020.3.21
+- Unity 2020.3.23
 ## Features
 - Extendable node based state machine & event sequencer
 - Customizable Dialog System

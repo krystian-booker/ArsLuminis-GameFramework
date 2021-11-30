@@ -10,17 +10,15 @@ namespace EventSystem.Events
     {
         private CharacterMovementNode _characterMovementNode;
         private CharacterManager _targetCharacterManager;
-        
+
         public void Execute(Node node)
         {
             _characterMovementNode = node as CharacterMovementNode;
-            Assert.IsNotNull(_characterMovementNode,
-                $"{nameof(CharacterMovementExecution)}: Invalid setup on {nameof(CharacterMovementNode)}.");
+            Assert.IsNotNull(_characterMovementNode, $"{nameof(CharacterMovementExecution)}: Invalid setup on {nameof(CharacterMovementNode)}.");
 
             //Get navMeshAgent
             _targetCharacterManager = _characterMovementNode.target.GetComponent<CharacterManager>();
-            Assert.IsNotNull(_targetCharacterManager,
-                $"{nameof(CharacterMovementExecution)}: Missing component {nameof(CharacterManager)}");
+            Assert.IsNotNull(_targetCharacterManager, $"{nameof(CharacterMovementExecution)}: Missing component {nameof(CharacterManager)}");
 
             //Set properties
             _targetCharacterManager.SetSpeed(_characterMovementNode.speed);
@@ -40,8 +38,7 @@ namespace EventSystem.Events
         public bool IsFinished()
         {
             return _targetCharacterManager != null && _targetCharacterManager.HasPath() &&
-                   _targetCharacterManager.GetRemainingDistance() <=
-                   _targetCharacterManager.GetStoppingDistance() + _characterMovementNode.distanceThreshold;
+                   _targetCharacterManager.GetRemainingDistance() <= _targetCharacterManager.GetStoppingDistance() + _characterMovementNode.distanceThreshold;
         }
 
         public void PauseExecution()

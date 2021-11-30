@@ -11,6 +11,8 @@ namespace Characters
         [Tooltip("Characters display name, will be overwritten via localization")]
         public string displayName;
         public GameObject prefab;
+        
+        //TODO: These should be refactored out into customizable stats instead of hardcoded
         public int level;
         public int exp;
         public int hp;

@@ -15,12 +15,10 @@ namespace EventSystem.Events
 
         public ChangeVirtualCameraExecution(Camera primaryCamera)
         {
-            Assert.IsNotNull(primaryCamera,
-                $"{nameof(ChangeVirtualCameraExecution)}: Primary camera is required for all camera events.");
+            Assert.IsNotNull(primaryCamera, $"{nameof(ChangeVirtualCameraExecution)}: Primary camera is required for all camera events.");
 
             _cinemachineBrain = primaryCamera.GetComponent<CinemachineBrain>();
-            Assert.IsNotNull(_cinemachineBrain,
-                $"{nameof(ChangeVirtualCameraExecution)}: CinemachineBrain required on primary camera.");
+            Assert.IsNotNull(_cinemachineBrain, $"{nameof(ChangeVirtualCameraExecution)}: CinemachineBrain required on primary camera.");
         }
 
         public void Execute(Node node)
@@ -39,7 +37,7 @@ namespace EventSystem.Events
 
             //Set active camera state
             _timeStarted = Time.time;
-            cameraNode.virtualCamera.Priority = (int)CameraPriorityState.Active;
+            cameraNode.virtualCamera.Priority = (int) CameraPriorityState.Active;
         }
 
         public bool IsFinished()
@@ -52,13 +50,13 @@ namespace EventSystem.Events
             for (var i = 0; i < CinemachineCore.Instance.VirtualCameraCount; i++)
             {
                 var vcam = CinemachineCore.Instance.GetVirtualCamera(i);
-                if (vcam.Priority == (int)CameraPriorityState.Active)
+                if (vcam.Priority == (int) CameraPriorityState.Active)
                 {
-                    vcam.Priority = (int)CameraPriorityState.Secondary;
+                    vcam.Priority = (int) CameraPriorityState.Secondary;
                 }
                 else
                 {
-                    vcam.Priority = (int)CameraPriorityState.Disabled;
+                    vcam.Priority = (int) CameraPriorityState.Disabled;
                 }
             }
         }

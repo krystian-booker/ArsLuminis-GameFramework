@@ -15,15 +15,14 @@ namespace EventSystem.Events
         public void Execute(Node node)
         {
             _objectMovementNode = node as ObjectMovementNode;
-            Assert.IsNotNull(_objectMovementNode,
-                $"{nameof(ObjectMovementExecution)}: Invalid setup on {nameof(ObjectMovementNode)}.");
+            Assert.IsNotNull(_objectMovementNode, $"{nameof(ObjectMovementExecution)}: Invalid setup on {nameof(ObjectMovementNode)}.");
 
             //Create navMeshAgent
             _targetCharacterManager = _objectMovementNode.target.GetComponent<CharacterManager>();
             Assert.IsNotNull($"{nameof(ObjectMovementExecution)}: CharacterManager required.");
 
             //Set properties
-            
+
             //TODO: Add AngularSpeed, Velocity, Acceleration
             _targetCharacterManager.SetSpeed(_objectMovementNode.speed);
             _targetCharacterManager.UpdateRotation(!_objectMovementNode.disableRotation);
@@ -42,10 +41,10 @@ namespace EventSystem.Events
         public bool IsFinished()
         {
             //Check if objects position is within range of the target position of x,y
-            if (_targetCharacterManager == null || !_targetCharacterManager.HasPath() ||
-                !(_targetCharacterManager.GetRemainingDistance() <=
-                  _targetCharacterManager.GetStoppingDistance() +
-                  _objectMovementNode.distanceThreshold)) return false;
+            if (_targetCharacterManager == null || !_targetCharacterManager.HasPath() || !(_targetCharacterManager.GetRemainingDistance() <=
+                                                                                           _targetCharacterManager.GetStoppingDistance() +
+                                                                                           _objectMovementNode.distanceThreshold))
+                return false;
 
             //Remove Navmesh
             Utilities.DestroyComponent(_targetCharacterManager);

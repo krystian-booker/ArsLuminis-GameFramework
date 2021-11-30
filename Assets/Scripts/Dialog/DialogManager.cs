@@ -87,14 +87,8 @@ namespace Dialog
             for (var i = _activeDialogWriters.Count - 1; i >= 0; i--)
             {
                 _activeDialogWriters[i].Update();
-
-
-                if ( //Timed dialog
-                    (_activeDialogWriters[i].IsTimedDialog() &&
-                     _activeDialogWriters[i].HasDisplayedForRequiredTime()) ||
-                    //Option dialog
-                    (_activeDialogWriters[i].IsOptionDialog() &&
-                     _activeDialogWriters[i].IsOptionSelected()))
+                if (_activeDialogWriters[i].IsTimedDialog() && _activeDialogWriters[i].HasDisplayedForRequiredTime() ||
+                    _activeDialogWriters[i].IsOptionDialog() && _activeDialogWriters[i].IsOptionSelected())
                 {
                     ReturnDialogToPool(_activeDialogWriters[i].GetDialogComponent());
                     _activeDialogWriters.RemoveAt(i);

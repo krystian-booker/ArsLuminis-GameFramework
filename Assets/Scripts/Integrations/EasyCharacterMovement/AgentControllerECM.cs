@@ -1,5 +1,4 @@
 #if EASY_CHARACTER_MOVEMENT
-
 using ECM.Controllers;
 using UnityEngine;
 using UnityEngine.AI;

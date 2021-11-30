@@ -15,7 +15,6 @@ using EventSystem.VisualEditor.Nodes.Flow;
 using EventSystem.VisualEditor.Nodes.Locomotion;
 using EventSystem.VisualEditor.Nodes.State;
 using Saving;
-using Saving.Models;
 using Tools;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -23,7 +22,7 @@ using XNode;
 
 namespace EventSystem
 {
-    public class EventTimelineParser : MonoBehaviour
+    public class EventSequenceParser : MonoBehaviour
     {
         public EventSequenceState eventSequenceState = EventSequenceState.Awaiting;
 
@@ -37,7 +36,7 @@ namespace EventSystem
 
         #region Sequence
 
-        private EventSequenceSceneGraph _eventSequenceSceneGraph;
+        private EventSequenceGraph _eventSequenceGraph;
         private List<IPauseEventExecution> _pauseEventExecutions = new List<IPauseEventExecution>();
 
         #endregion
@@ -48,20 +47,20 @@ namespace EventSystem
         /// Start parsing the xNode timeLine.
         /// Currently this is called from Start() will be moved over to events 
         /// </summary>
-        public IEnumerator StartEventSequence(EventSequenceSceneGraph eventSequenceSceneGraph)
+        public IEnumerator StartEventSequence(EventSequenceGraph eventSequenceGraph)
         {
-            var startNode = eventSequenceSceneGraph.graph.nodes.OfType<StartNode>().ToList();
-            description = eventSequenceSceneGraph.description;
+            var startNode = eventSequenceGraph.graph.nodes.OfType<StartNode>().ToList();
+            description = eventSequenceGraph.description;
 
             //Assert
-            Assert.IsTrue(startNode.Any(), $"{nameof(EventTimelineParser)}: Missing {nameof(StartNode)} from graph");
-            Assert.IsFalse(startNode.Count > 1, $"{nameof(EventTimelineParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
+            Assert.IsTrue(startNode.Any(), $"{nameof(EventSequenceParser)}: Missing {nameof(StartNode)} from graph");
+            Assert.IsFalse(startNode.Count > 1, $"{nameof(EventSequenceParser)}: There cannot be more than one {nameof(StartNode)} in your graph");
 
             //Start Sequence
             eventSequenceState = EventSequenceState.Running;
             yield return ParseNode(startNode.FirstOrDefault());
         }
-        
+
         /// <summary>
         /// All nodes are the type of BaseNode, from there they are extended as needed.
         /// Here the specific type of the node is checked and executed as needed.
@@ -75,7 +74,7 @@ namespace EventSystem
 
             //perform action for node type
             var currentNodeType = node.GetType();
-            if (currentNodeType == typeof(StartNode) || node is SkippableBaseNode { skip: true })
+            if (currentNodeType == typeof(StartNode) || node is SkippableBaseNode {skip: true})
             {
                 yield return NextNode(node);
             }
@@ -137,7 +136,7 @@ namespace EventSystem
             }
             else
             {
-                Debug.LogError($"{nameof(EventTimelineParser)}: Unknown node type {currentNodeType}");
+                Debug.LogError($"{nameof(EventSequenceParser)}: Unknown node type {currentNodeType}");
             }
         }
 
@@ -395,7 +394,7 @@ namespace EventSystem
             Systems.SaveManager.LoadGame(loadSaveNode.saveFileName);
             yield return NextNode(node);
         }
-            
+
         #endregion
     }
 }

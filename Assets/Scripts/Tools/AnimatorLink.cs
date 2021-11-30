@@ -5,7 +5,7 @@ namespace Tools
     public class AnimatorLink : MonoBehaviour
     {
         private bool _animationFinished;
-        
+
         //Unity animation event call
         public void MarkAnimationComplete()
         {

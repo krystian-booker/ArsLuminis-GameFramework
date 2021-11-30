@@ -20,10 +20,10 @@ namespace EventSystem.VisualEditor.Nodes.Locomotion
         [Tooltip("Not required, will be prefixed to generated targets names")]
         public string shortName;
 
-        [Tooltip("Gameobject that will be moved")]
+        [Tooltip("GameObject that will be moved")]
         public GameObject target;
 
-        [Tooltip("Position gameobject will be moved to")]
+        [Tooltip("Position GameObject will be moved to")]
         public GameObject targetPosition;
 
         [Tooltip("Override the game objects current position")]

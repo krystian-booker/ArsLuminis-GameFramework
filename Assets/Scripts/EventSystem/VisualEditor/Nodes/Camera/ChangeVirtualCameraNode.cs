@@ -15,7 +15,7 @@ namespace EventSystem.VisualEditor.Nodes.Camera
 
         [TextArea, Tooltip("Documentation purposes only")]
         public string description;
-        
+
         [Tooltip("Virtual camera to switch to")]
         public CinemachineVirtualCamera virtualCamera;
 

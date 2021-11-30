@@ -49,8 +49,9 @@ namespace EventSystem.VisualEditor.Nodes.State
         {
             var selectedState = Systems.SaveManager.saveTemplate.states.FirstOrDefault(x => x.id == selectedStateId);
             if (selectedState != null)
-                
-                //This likely needs to be removed, breaking ui
+            {
+                //TODO: This likely needs to be removed, breaking ui (KB - 2021/08/22)
+                //TODO: Why does this need to be removed? This needs to be retested, I don't remember what the issue is (KB - 2021/11/29)
                 switch (selectedState.dataType)
                 {
                     case DataType.String:
@@ -82,6 +83,7 @@ namespace EventSystem.VisualEditor.Nodes.State
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+            }
         }
 #endif
     }
