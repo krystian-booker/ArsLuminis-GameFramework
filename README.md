@@ -1,7 +1,5 @@
-# JRPG-System
-A Unity template project with all the necessary systems and tools to create an old school JRPG. 
-Features are based around PS1 era Final Fantasy games.
-
+# ExA-Game-Framework
+ExA Game Framework is a collection of tools to assist in the development of Unity 3D games
 Project is in active development, with tools and data structures changing frequently. 
 Due to the active development it is recommended to make backups before pulling the latest changes into your projects.
 
