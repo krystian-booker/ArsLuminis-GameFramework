@@ -220,7 +220,7 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator CameraNodeExecution(Node node)
         {
-            var cameraExecution = new ChangeVirtualCameraExecution(Systems.MainCamera);
+            var cameraExecution = new ChangeVirtualCameraExecution(Systems.mainCamera);
             cameraExecution.Execute(node);
             yield return new WaitUntil(cameraExecution.IsFinished);
             yield return NextNode(node);
@@ -296,7 +296,7 @@ namespace EventSystem
             var dialogNode = node as DialogNode;
             Assert.IsNotNull(dialogNode);
 
-            var dialogWriter = Systems.DialogManager.NewDialog(dialogNode);
+            var dialogWriter = Systems.dialogManager.NewDialog(dialogNode);
             yield return new WaitUntil(dialogWriter.IsNodeFinished);
 
             if (dialogNode.options.Count > 0)
@@ -322,7 +322,7 @@ namespace EventSystem
         {
             var updateStateNode = node as UpdateStateNode;
             Assert.IsNotNull(updateStateNode);
-            Systems.SaveManager.UpdateState(updateStateNode);
+            Systems.saveManager.UpdateState(updateStateNode);
             yield return NextNode(node);
         }
 
@@ -344,7 +344,7 @@ namespace EventSystem
         /// <returns></returns>
         private IEnumerator AutoSaveNodeExecution(Node node)
         {
-            Systems.SaveManager.SaveGame(true);
+            Systems.saveManager.SaveGame(true);
             yield return NextNode(node);
         }
 
@@ -357,7 +357,7 @@ namespace EventSystem
         {
             var inputActionMapNode = node as ChangeInputActionMapNode;
             Assert.IsNotNull(inputActionMapNode);
-            Systems.InputManager.ChangeActionMap(inputActionMapNode.actionMap);
+            Systems.inputManager.ChangeActionMap(inputActionMapNode.actionMap);
             yield return NextNode(node);
         }
 
@@ -383,7 +383,7 @@ namespace EventSystem
         {
             var stopAudioById = node as StopAudioByIdNode;
             Assert.IsNotNull(stopAudioById);
-            Systems.AudioManager.StopActiveAudioSource(stopAudioById.audioNodeId);
+            Systems.audioManager.StopActiveAudioSource(stopAudioById.audioNodeId);
             yield return NextNode(node);
         }
 
@@ -391,7 +391,7 @@ namespace EventSystem
         {
             var loadSaveNode = node as LoadSaveNode;
             Assert.IsNotNull(loadSaveNode);
-            Systems.SaveManager.LoadGame(loadSaveNode.saveFileName);
+            Systems.saveManager.LoadGame(loadSaveNode.saveFileName);
             yield return NextNode(node);
         }
 

@@ -8,7 +8,7 @@ namespace Localization
     {
         private void Start()
         {
-            if (Systems.GameManager.enableLocalization)
+            if (Systems.gameManager.enableLocalization)
             {
                 UpdateKeysWithText();
             }
@@ -19,7 +19,7 @@ namespace Localization
         /// </summary>
         public void RefreshText()
         {
-            if (Systems.GameManager.enableLocalization)
+            if (Systems.gameManager.enableLocalization)
             {
                 UpdateKeysWithText();
             }

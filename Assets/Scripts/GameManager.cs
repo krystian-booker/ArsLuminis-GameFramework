@@ -1,4 +1,5 @@
 ﻿using Characters;
+using Tools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +11,12 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public GameObject activePlayer;
     [HideInInspector] public CharacterManager activeCharacterManager;
 
-    void OnEnable()
+    private void Awake()
+    {
+        Systems.Initialize();
+    }
+
+    private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }

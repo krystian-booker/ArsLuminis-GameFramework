@@ -25,7 +25,7 @@ namespace Dialog
         {
             _dialogNode = dialogNode;
             _dialogComponents = dialogComponents;
-            _timePerCharacter = dialogNode.customTimePerCharacter ? dialogNode.timePerCharacter : Systems.DialogManager.defaultTimePerCharacter;
+            _timePerCharacter = dialogNode.customTimePerCharacter ? dialogNode.timePerCharacter : Systems.dialogManager.defaultTimePerCharacter;
 
             //Reset from previous runs
             _characterIndex = 0;
@@ -45,8 +45,8 @@ namespace Dialog
             _dialogComponents.dialogTMPText.text = string.Empty;
 
             //Set size of dialog window
-            var width = _dialogNode.dialogWidth != 0 ? _dialogNode.dialogWidth : Systems.DialogManager.defaultWidth;
-            var height = _dialogNode.dialogHeight != 0 ? _dialogNode.dialogHeight : Systems.DialogManager.defaultHeight;
+            var width = _dialogNode.dialogWidth != 0 ? _dialogNode.dialogWidth : Systems.dialogManager.defaultWidth;
+            var height = _dialogNode.dialogHeight != 0 ? _dialogNode.dialogHeight : Systems.dialogManager.defaultHeight;
             _dialogComponents.rectTransform.sizeDelta = new Vector2(width, height);
 
             //Add options
@@ -70,14 +70,14 @@ namespace Dialog
             }
 
             //Move dialog to position
-            var positionX = _dialogNode.customDialogPosition ? _dialogNode.dialogPositionX : Systems.DialogManager.defaultPositionX;
-            var positionY = _dialogNode.customDialogPosition ? _dialogNode.dialogPositionY : Systems.DialogManager.defaultPositionY;
+            var positionX = _dialogNode.customDialogPosition ? _dialogNode.dialogPositionX : Systems.dialogManager.defaultPositionX;
+            var positionY = _dialogNode.customDialogPosition ? _dialogNode.dialogPositionY : Systems.dialogManager.defaultPositionY;
             _dialogComponents.rectTransform.anchoredPosition = new Vector2(positionX, positionY);
 
             //Initial Offset, used when following a character
             if (_dialogNode.followCharacter)
             {
-                var characterOriginalPosition = Systems.MainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
+                var characterOriginalPosition = Systems.mainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
                 var canvasPosition = _dialogComponents.rectTransform.position;
                 _followPlayerOffset = canvasPosition - characterOriginalPosition;
             }
@@ -190,7 +190,7 @@ namespace Dialog
         {
             if (_dialogNode.followCharacter)
             {
-                var characterPosition = Systems.MainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
+                var characterPosition = Systems.mainCamera.WorldToScreenPoint(_dialogNode.character.transform.position);
                 characterPosition += _followPlayerOffset;
                 _dialogComponents.rectTransform.position = characterPosition;
             }

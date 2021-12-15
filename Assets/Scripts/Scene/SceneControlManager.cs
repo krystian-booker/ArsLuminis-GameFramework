@@ -17,13 +17,17 @@ namespace Scene
 
         public void Awake()
         {
-            if (overrideScene != null && Application.isEditor)
+            //We don't want to load a scene if there is one already open in the editor
+            if (SceneManager.sceneCount == 1)
             {
-                SceneManager.LoadSceneAsync(overrideScene.SceneName, LoadSceneMode.Additive);
-            }
-            else if (initialScene != null)
-            {
-                SceneManager.LoadSceneAsync(initialScene.SceneName, LoadSceneMode.Additive);
+                if (overrideScene != null && Application.isEditor)
+                {
+                    SceneManager.LoadSceneAsync(overrideScene.SceneName, LoadSceneMode.Additive);
+                }
+                else if (initialScene != null)
+                {
+                    SceneManager.LoadSceneAsync(initialScene.SceneName, LoadSceneMode.Additive);
+                }
             }
 
             //UI

@@ -141,7 +141,7 @@ namespace Characters
             if (other.gameObject.layer == LayerMask.NameToLayer($"Character") || other.gameObject.CompareTag($"NPC"))
             {
                 //InputManager: Wait for user to click 'Confirm'
-                if (Systems.InputManager.onConfirmValue.started)
+                if (Systems.inputManager.onConfirmValue.started)
                 {
                     var npcEventTrigger = other.gameObject.GetComponent<NpcEventTrigger>();
                     if (Systems.DebugWarnings && npcEventTrigger == null)

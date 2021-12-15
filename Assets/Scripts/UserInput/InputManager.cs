@@ -1,8 +1,9 @@
+using SystemInput;
 using Tools;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace SystemInput
+namespace UserInput
 {
     [RequireComponent(typeof(PlayerInput))]
     public class InputManager : MonoBehaviour
@@ -15,7 +16,7 @@ namespace SystemInput
         {
             if (_rawInputMovement != Vector3.zero)
             {
-                Systems.GameManager.activeCharacterManager.Move(_rawInputMovement);
+                Systems.gameManager.activeCharacterManager.Move(_rawInputMovement);
             }
         }
 
@@ -34,7 +35,7 @@ namespace SystemInput
         {
             if (value.started)
             {
-                Systems.DialogManager.ContinueClicked();
+                Systems.dialogManager.ContinueClicked();
             }
         }
 
@@ -52,7 +53,7 @@ namespace SystemInput
             var inputMovement = value.ReadValue<Vector2>();
 
             //camera forward and right vectors:
-            var cameraTransform = Systems.CinemachineBrain.transform;
+            var cameraTransform = Systems.cinemachineBrain.transform;
             var cameraForward = cameraTransform.forward;
             cameraForward.y = 0f;
 

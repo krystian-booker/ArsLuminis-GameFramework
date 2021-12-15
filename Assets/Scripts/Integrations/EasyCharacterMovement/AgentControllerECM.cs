@@ -243,5 +243,4 @@ namespace Integrations.EasyCharacterMovement
         #endregion
     }
 }
-
 #endif
