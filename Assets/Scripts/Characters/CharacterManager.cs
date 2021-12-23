@@ -199,94 +199,46 @@ namespace Characters
 
         public void Move(Vector3 inputMovement)
         {
-#if EASY_CHARACTER_MOVEMENT
-            _agentControllerEcm.moveDirection = inputMovement;
-            transform.rotation = Quaternion.LookRotation(inputMovement);
-#else
-            _navMeshAgent.Move(inputMovement);
-            transform.rotation = Quaternion.LookRotation(inputMovement);
-#endif
         }
 
         public void SetDestination(Vector3 destination)
         {
-#if EASY_CHARACTER_MOVEMENT
-            _agentControllerEcm.agent.SetDestination(destination);
-#else
-            _navMeshAgent.SetDestination(destination);
-#endif
         }
 
         public void Warp(Vector3 destination)
         {
-#if EASY_CHARACTER_MOVEMENT
-            _agentControllerEcm.agent.Warp(destination);
-#else
-            _navMeshAgent.Warp(destination);
-#endif
         }
 
         public void SetSpeed(float speed)
         {
-#if EASY_CHARACTER_MOVEMENT
-            _agentControllerEcm.speed = speed;
-#else
-            _navMeshAgent.speed = speed;
-#endif
         }
 
         public void UpdateRotation(bool updateRotation)
         {
-#if EASY_CHARACTER_MOVEMENT
-            _agentControllerEcm.agent.updateRotation = updateRotation;
-#else
-            _navMeshAgent.updateRotation = updateRotation;
-#endif
         }
 
         public void SetRadius(float radius)
         {
-#if EASY_CHARACTER_MOVEMENT
-            _agentControllerEcm.agent.radius = radius;
-#else
-            _navMeshAgent.radius = radius;
-#endif
         }
 
         public float GetRemainingDistance()
         {
-#if EASY_CHARACTER_MOVEMENT
-            return _agentControllerEcm.agent.remainingDistance;
-#else
-            return _navMeshAgent.remainingDistance;
-#endif
+            return 0;
         }
 
         public float GetStoppingDistance()
         {
-#if EASY_CHARACTER_MOVEMENT
-            return _agentControllerEcm.agent.stoppingDistance;
-#else
-            return _navMeshAgent.stoppingDistance;
-#endif
+            return 0;
         }
 
         public bool HasPath()
         {
-#if EASY_CHARACTER_MOVEMENT
-            return _agentControllerEcm.agent.hasPath;
-#else
-            return _navMeshAgent.hasPath;
-#endif
+            return false;
         }
 
         public void IsStopped(bool stop)
         {
-#if EASY_CHARACTER_MOVEMENT
-            _agentControllerEcm.agent.isStopped = stop;
-#else
-            _navMeshAgent.isStopped = stop;
-#endif
+            
         }
 
         #endregion
