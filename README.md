@@ -1,23 +1,44 @@
-# ExA-Game-Framework
-ExA Game Framework is a collection of tools to assist in the development of Unity 3D games
-Project is in active development, with tools and data structures changing frequently. 
-Due to the active development it is recommended to make backups before pulling the latest changes into your projects.
+# Ars Luminis Game Framework
 
-If you have any feature requests or bugs contact me on Twitter [@CheddyShakes](twitter.com/CheddyShakes)
-## Requirements
-- Unity 2020.3.23
-## Features
-- Extendable node based state machine & event sequencer
-- Customizable Dialog System
-- Localization support
-- Save manager 
-- Character creation
-- Party manager
-- Battle system
-- Inventory system
-## Third Party Integrations
-- [Easy Character Movement](https://assetstore.unity.com/packages/templates/systems/easy-character-movement-57985)
-## Planned functionality
-### [Trello](https://trello.com/b/H51PWGcy/jrpg-system)
+[![Unity Version](https://img.shields.io/badge/Unity-2022.3.9-blue.svg)](https://unity.com/)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.png?v=103)](https://opensource.org/licenses/mit-license.php)
 
+## Ars Luminis — *Radiate Creativity*
+
+Welcome to Ars Luminis Game Framework — a collection of tools and features designed to streamline your game development process in Unity 3D. :rocket:
+
+> :warning: **Project in Active Development**: Make sure to back up your projects before pulling the latest changes.
+
+Feel free to reach out for feature requests or report bugs. :bug: [Twitter @CheddyShakes](https://twitter.com/CheddyShakes)
+
+## :clipboard: Features
+
+### State Machine & Event Sequencer
+A node-based state machine with preconfigured nodes for handling various tasks like movement, audio, cinematics, logic trees, and dialogues. It allows for easy AI creation, event systems, and custom code execution through developer-created nodes.
+
+### Save Manager
+A straightforward save functionality that simplifies the process of storing game data.
+
+### Character Manager
+Create playable and non-playable characters with preconfigured kinematic bodies. It also allows for custom properties and event systems.
+
+### Inventory System
+Manage items and equipment with a built-in inventory system.
+
+## :wrench: Requirements
+
+- Unity 2022.3.9 or higher
+
+## :earth_americas: Third-Party Integrations
+
+- [Kinematic Character Controller](https://assetstore.unity.com/packages/tools/physics/kinematic-character-controller-99131)
+- [Dialogue System for Unity](https://assetstore.unity.com/packages/tools/behavior-ai/dialogue-system-for-unity-11672)
+
+## :clipboard: Roadmap
+
+See what we are planning [here](https://trello.com/b/H51PWGcy/jrpg-system).
+
+## :love_letter: Contact
+
+- [Twitter @CheddyShakes](https://twitter.com/CheddyShakes)
 
