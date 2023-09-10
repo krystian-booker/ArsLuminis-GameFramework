@@ -4,75 +4,159 @@ using UnityEngine;
 using XNode;
 using Nodes.Flow;
 using Assets.Scripts.Interfaces;
-using System.Linq;
-using UnityEngine.Assertions;
 
 namespace Assets.Scripts.Parsers
 {
     public class EventSequenceParser : MonoBehaviour
     {
-        [SerializeField] private NodeGraph eventSequenceGraph;
+        [Tooltip("Default EventSequenceGraph, not required")]
+        [SerializeField] private NodeGraph defaultEventSequenceGraph;
+
+        [Tooltip("Should the default EventSequenceGraph loop?")]
+        [SerializeField] private bool loopDefaultEventSequence;
+
+        private int activeNodeCount;
+        private bool isUsingDefaultGraph = true;
+        private bool loopCurrentGraph;
+        private NodeGraph lastUsedGraph;
 
         private void Start()
         {
-            Assert.IsNotNull(eventSequenceGraph, string.Format("{0}'s {1} is missing its {2}", gameObject.name, nameof(EventSequenceParser), nameof(NodeGraph)));
+            ExecuteGraph();
+        }
 
-            List<StartNode> startNodes = FindStartNodes();
+        public void ExecuteGraph(NodeGraph eventSequenceGraph = null, bool loop = false)
+        {
+            ResetExecutionState();
+
+            UpdateGraphUsageSettings(eventSequenceGraph, loop);
+
+            if (lastUsedGraph == null)
+            {
+                return;
+            }
+
+            InitializeAndExecuteStartNodes();
+        }
+
+        private void ResetExecutionState()
+        {
+            StopAllCoroutines();
+            activeNodeCount = 0;
+        }
+
+        private void UpdateGraphUsageSettings(NodeGraph eventSequenceGraph, bool loop)
+        {
+            isUsingDefaultGraph = eventSequenceGraph == null;
+            lastUsedGraph = eventSequenceGraph ?? defaultEventSequenceGraph;
+            loopCurrentGraph = loop;
+        }
+
+        private void InitializeAndExecuteStartNodes()
+        {
+            List<StartNode> startNodes = FindStartNodes(lastUsedGraph);
+            activeNodeCount += startNodes.Count;
+
             foreach (StartNode node in startNodes)
             {
                 StartCoroutine(ParseEventSequenceGraph(node));
             }
         }
 
-        private List<StartNode> FindStartNodes()
+        private List<StartNode> FindStartNodes(NodeGraph graph)
         {
             List<StartNode> startNodes = new List<StartNode>();
-
-            foreach (var node in eventSequenceGraph.nodes)
+            foreach (var node in graph.nodes)
             {
                 if (node is StartNode startNode && !startNode.Skip)
                 {
                     startNodes.Add(startNode);
                 }
             }
-
             return startNodes;
         }
 
         private IEnumerator ParseEventSequenceGraph(IBaseNode node)
         {
             IBaseNode currentNode = node;
-            List<IBaseNode> nextNodes;
 
             while (currentNode != null)
             {
                 currentNode.Execute();
                 yield return new WaitUntil(() => currentNode.IsFinished());
 
-                if (currentNode is StartNode startNode)
+                var nextNodes = GetConnectedOutputs(currentNode);
+                ProcessNextNodes(nextNodes);
+
+                currentNode = null;
+                activeNodeCount--;
+
+                if (IsGraphExecutionComplete())
                 {
-                    nextNodes = startNode.GetConnectedOutputs();
+                    HandleGraphCompletion();
                 }
-                else if (currentNode is IExecutableNode executableNode)
+            }
+        }
+
+        private static List<IBaseNode> GetConnectedOutputs(IBaseNode currentNode)
+        {
+            List<IBaseNode> nextNodes;
+            if (currentNode is StartNode startNode)
+            {
+                nextNodes = startNode.GetConnectedOutputs();
+            }
+            else if (currentNode is IExecutableNode executableNode)
+            {
+                nextNodes = executableNode.GetConnectedOutputs();
+            }
+            else
+            {
+                nextNodes = null;
+            }
+
+            return nextNodes;
+        }
+
+        private void ProcessNextNodes(List<IBaseNode> nextNodes)
+        {
+            if (nextNodes == null) return;
+
+            activeNodeCount += nextNodes.Count;
+
+            foreach (var nextNode in nextNodes)
+            {
+                StartCoroutine(ParseEventSequenceGraph(nextNode));
+            }
+        }
+
+        private bool IsGraphExecutionComplete()
+        {
+            return activeNodeCount <= 0;
+        }
+
+        private void HandleGraphCompletion()
+        {
+            if (!isUsingDefaultGraph)
+            {
+                if (loopCurrentGraph)
                 {
-                    nextNodes = executableNode.GetConnectedOutputs();
+                    // Pass in the last used graph and set loop to true
+                    ExecuteGraph(lastUsedGraph, true);
                 }
                 else
                 {
-                    // Terminate the graph if it's a non-executable node
-                    nextNodes = null;
+                    // Use the default graph and its loop setting
+                    isUsingDefaultGraph = true;
+                    ExecuteGraph(defaultEventSequenceGraph, loopDefaultEventSequence);
                 }
-
-                // Start new coroutines for next nodes to execute them in parallel
-                if (nextNodes != null)
-                {
-                    foreach (var nextNode in nextNodes)
-                    {
-                        StartCoroutine(ParseEventSequenceGraph(nextNode));
-                    }
-                }
-
-                currentNode = null; // Since we're spawning new coroutines, we nullify the current node to terminate this one
+            }
+            else if (loopDefaultEventSequence)
+            {
+                // Use the default graph and its loop setting
+                ExecuteGraph(defaultEventSequenceGraph, loopDefaultEventSequence);
+            } else
+            {
+                // end
             }
         }
     }

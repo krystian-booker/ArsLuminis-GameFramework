@@ -8,7 +8,7 @@ namespace Nodes
     {
         public override void Execute()
         {
-            Debug.Log("Executing Example Node");
+            Debug.Log(description);
         }
 
         public override bool IsFinished()

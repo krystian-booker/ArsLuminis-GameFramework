@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8072913498396148858
+--- !u!114 &-4811490897339703707
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: End
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 56, y: 24}
+  position: {x: -8, y: -8}
   ports:
     keys:
     - Entry
     values:
     - _fieldName: Entry
-      _node: {fileID: -8072913498396148858}
+      _node: {fileID: -4811490897339703707}
       _typeQualifiedName: XNode.NodePort, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
       - fieldName: exit
-        node: {fileID: -5721258662838938388}
+        node: {fileID: -423457441138061685}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
     _connectionType: 0
     _typeConstraint: 0
     _dynamic: 0
---- !u!114 &-5721258662838938388
+--- !u!114 &-423457441138061685
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -53,31 +53,31 @@ MonoBehaviour:
   m_Name: Example
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -248, y: 40}
+  position: {x: -264, y: -8}
   ports:
     keys:
     - entry
     - exit
     values:
     - _fieldName: entry
-      _node: {fileID: -5721258662838938388}
+      _node: {fileID: -423457441138061685}
       _typeQualifiedName: XNode.NodePort, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
       - fieldName: Exit
-        node: {fileID: -3862703382564551224}
+        node: {fileID: 2507918303274716038}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: exit
-      _node: {fileID: -5721258662838938388}
+      _node: {fileID: -423457441138061685}
       _typeQualifiedName: XNode.NodePort, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
       - fieldName: Entry
-        node: {fileID: -8072913498396148858}
+        node: {fileID: -4811490897339703707}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -101,9 +101,25 @@ MonoBehaviour:
     _connectionType: 0
     _typeConstraint: 0
     _dynamic: 0
-  description: 
+  description: NPC was triggered
   skip: 0
---- !u!114 &-3862703382564551224
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82278f98407bbe94b8314d0fdd2cff39, type: 3}
+  m_Name: NPC_Trigger
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 2507918303274716038}
+  - {fileID: -4811490897339703707}
+  - {fileID: -423457441138061685}
+--- !u!114 &2507918303274716038
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,18 +132,18 @@ MonoBehaviour:
   m_Name: Start
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -552, y: 24}
+  position: {x: -520, y: -8}
   ports:
     keys:
     - Exit
     values:
     - _fieldName: Exit
-      _node: {fileID: -3862703382564551224}
+      _node: {fileID: 2507918303274716038}
       _typeQualifiedName: XNode.NodePort, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
       - fieldName: entry
-        node: {fileID: -5721258662838938388}
+        node: {fileID: -423457441138061685}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -144,19 +160,3 @@ MonoBehaviour:
     _typeConstraint: 0
     _dynamic: 0
   Skip: 0
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82278f98407bbe94b8314d0fdd2cff39, type: 3}
-  m_Name: DemoGraph
-  m_EditorClassIdentifier: 
-  nodes:
-  - {fileID: -8072913498396148858}
-  - {fileID: -3862703382564551224}
-  - {fileID: -5721258662838938388}
