@@ -8,10 +8,13 @@ namespace Assets.Scripts.Nodes.Trigger
     public class EventTriggerRadius : MonoBehaviour
     {
         [Tooltip("Assign your EventSequenceGraph object here")]
-        public EventSequenceGraph triggeredEventSequenceGraph;
+        [SerializeField] private EventSequenceGraph _triggeredEventSequenceGraph;
 
         [Tooltip("Should the default TriggeredEventSequenceGraph loop while the player is in the radius?")]
-        [SerializeField] private bool loopTriggeredEvent = false;
+        [SerializeField] private bool _loopTriggeredEvent = false;
+
+        [Tooltip("The default event sequence will be triggered after the collision event has ended")]
+        [SerializeField] private bool _autoStartDefaultSequenceAfterCollisionEnds = false;
 
         private EventSequenceParser _eventSequenceParser;
 
@@ -24,7 +27,7 @@ namespace Assets.Scripts.Nodes.Trigger
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (_triggeredEventSequenceGraph != null && other.CompareTag("Player"))
             {
                 ExecuteEventSequence();
             }
@@ -32,7 +35,7 @@ namespace Assets.Scripts.Nodes.Trigger
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (_triggeredEventSequenceGraph != null && other.CompareTag("Player") && _autoStartDefaultSequenceAfterCollisionEnds)
             {
                 // When the player exits the radius, revert back to the default sequence without looping
                 _eventSequenceParser.ExecuteGraph(loop: false);
@@ -41,9 +44,9 @@ namespace Assets.Scripts.Nodes.Trigger
 
         private void ExecuteEventSequence()
         {
-            if (triggeredEventSequenceGraph != null)
+            if (_triggeredEventSequenceGraph != null)
             {
-                _eventSequenceParser.ExecuteGraph(triggeredEventSequenceGraph, loopTriggeredEvent);
+                _eventSequenceParser.ExecuteGraph(_triggeredEventSequenceGraph, _loopTriggeredEvent, !_autoStartDefaultSequenceAfterCollisionEnds);
             }
         }
 
@@ -60,5 +63,4 @@ namespace Assets.Scripts.Nodes.Trigger
             }
         }
     }
-
 }

@@ -15,23 +15,24 @@ namespace Assets.Scripts.Parsers
         [Tooltip("Should the default EventSequenceGraph loop?")]
         [SerializeField] private bool loopDefaultEventSequence;
 
-        private int activeNodeCount;
-        private bool isUsingDefaultGraph = true;
-        private bool loopCurrentGraph;
-        private NodeGraph lastUsedGraph;
+        private int _activeNodeCount;
+        private bool _isUsingDefaultGraph;
+        private bool _loopCurrentGraph;
+        private bool _autoStartDefaultGraph;
+        private NodeGraph _lastUsedGraph;
 
         private void Start()
         {
             ExecuteGraph();
         }
 
-        public void ExecuteGraph(NodeGraph eventSequenceGraph = null, bool loop = false)
+        public void ExecuteGraph(NodeGraph eventSequenceGraph = null, bool loop = false, bool autoStartDefaultGraph = false)
         {
             ResetExecutionState();
 
-            UpdateGraphUsageSettings(eventSequenceGraph, loop);
+            UpdateGraphUsageSettings(eventSequenceGraph, loop, autoStartDefaultGraph);
 
-            if (lastUsedGraph == null)
+            if (_lastUsedGraph == null)
             {
                 return;
             }
@@ -42,20 +43,21 @@ namespace Assets.Scripts.Parsers
         private void ResetExecutionState()
         {
             StopAllCoroutines();
-            activeNodeCount = 0;
+            _activeNodeCount = 0;
         }
 
-        private void UpdateGraphUsageSettings(NodeGraph eventSequenceGraph, bool loop)
+        private void UpdateGraphUsageSettings(NodeGraph eventSequenceGraph, bool loop, bool autoStartDefaultGraph)
         {
-            isUsingDefaultGraph = eventSequenceGraph == null;
-            lastUsedGraph = eventSequenceGraph ?? defaultEventSequenceGraph;
-            loopCurrentGraph = loop;
+            _isUsingDefaultGraph = eventSequenceGraph == null;
+            _lastUsedGraph = eventSequenceGraph ?? defaultEventSequenceGraph;
+            _loopCurrentGraph = loop;
+            _autoStartDefaultGraph = autoStartDefaultGraph;
         }
-
+         
         private void InitializeAndExecuteStartNodes()
         {
-            List<StartNode> startNodes = FindStartNodes(lastUsedGraph);
-            activeNodeCount += startNodes.Count;
+            List<StartNode> startNodes = FindStartNodes(_lastUsedGraph);
+            _activeNodeCount += startNodes.Count;
 
             foreach (StartNode node in startNodes)
             {
@@ -89,7 +91,7 @@ namespace Assets.Scripts.Parsers
                 ProcessNextNodes(nextNodes);
 
                 currentNode = null;
-                activeNodeCount--;
+                _activeNodeCount--;
 
                 if (IsGraphExecutionComplete())
                 {
@@ -121,7 +123,7 @@ namespace Assets.Scripts.Parsers
         {
             if (nextNodes == null) return;
 
-            activeNodeCount += nextNodes.Count;
+            _activeNodeCount += nextNodes.Count;
 
             foreach (var nextNode in nextNodes)
             {
@@ -131,32 +133,30 @@ namespace Assets.Scripts.Parsers
 
         private bool IsGraphExecutionComplete()
         {
-            return activeNodeCount <= 0;
+            return _activeNodeCount <= 0;
         }
 
         private void HandleGraphCompletion()
         {
-            if (!isUsingDefaultGraph)
+            if (_isUsingDefaultGraph)
             {
-                if (loopCurrentGraph)
-                {
-                    // Pass in the last used graph and set loop to true
-                    ExecuteGraph(lastUsedGraph, true);
-                }
-                else
+                if (loopDefaultEventSequence)
                 {
                     // Use the default graph and its loop setting
-                    isUsingDefaultGraph = true;
                     ExecuteGraph(defaultEventSequenceGraph, loopDefaultEventSequence);
                 }
             }
-            else if (loopDefaultEventSequence)
+            else
             {
-                // Use the default graph and its loop setting
-                ExecuteGraph(defaultEventSequenceGraph, loopDefaultEventSequence);
-            } else
-            {
-                // end
+                if (_loopCurrentGraph)
+                {
+                    // Pass in the last used graph and set loop to true
+                    ExecuteGraph(_lastUsedGraph, true);
+                }
+                else if (_autoStartDefaultGraph)
+                {
+                    ExecuteGraph();
+                }
             }
         }
     }
