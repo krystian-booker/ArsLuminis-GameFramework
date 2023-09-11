@@ -14,7 +14,7 @@ namespace Assets.Scripts.Nodes.Trigger
         [SerializeField] private bool _loopTriggeredEvent = false;
 
         [Tooltip("The default event sequence will be triggered after the collision event has ended")]
-        [SerializeField] private bool _autoStartDefaultSequenceAfterCollisionEnds = false;
+        [SerializeField] private bool _startDefaultAfterCollision = false;
 
         private EventSequenceParser _eventSequenceParser;
 
@@ -35,7 +35,7 @@ namespace Assets.Scripts.Nodes.Trigger
 
         private void OnTriggerExit(Collider other)
         {
-            if (_triggeredEventSequenceGraph != null && other.CompareTag("Player") && _autoStartDefaultSequenceAfterCollisionEnds)
+            if (_triggeredEventSequenceGraph != null && other.CompareTag("Player") && _startDefaultAfterCollision)
             {
                 // When the player exits the radius, revert back to the default sequence without looping
                 _eventSequenceParser.ExecuteGraph(loop: false);
@@ -46,7 +46,7 @@ namespace Assets.Scripts.Nodes.Trigger
         {
             if (_triggeredEventSequenceGraph != null)
             {
-                _eventSequenceParser.ExecuteGraph(_triggeredEventSequenceGraph, _loopTriggeredEvent, !_autoStartDefaultSequenceAfterCollisionEnds);
+                _eventSequenceParser.ExecuteGraph(_triggeredEventSequenceGraph, _loopTriggeredEvent, !_startDefaultAfterCollision);
             }
         }
 
