@@ -1,16 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XNode;
 using Nodes.Flow;
-using Assets.Scripts.Interfaces;
+using Assets.Scripts.Models.Interfaces;
 
 namespace Assets.Scripts.Parsers
 {
     public class EventSequenceParser : MonoBehaviour
     {
         [Tooltip("Default EventSequenceGraph, not required")]
-        [SerializeField] private NodeGraph defaultEventSequenceGraph;
+        [SerializeField] private EventSequenceSceneGraph defaultEventSequenceGraph;
 
         [Tooltip("Should the default EventSequenceGraph loop?")]
         [SerializeField] private bool loopDefaultEventSequence;
@@ -19,14 +18,19 @@ namespace Assets.Scripts.Parsers
         private bool _isUsingDefaultGraph;
         private bool _loopCurrentGraph;
         private bool _autoStartDefaultGraph;
-        private NodeGraph _lastUsedGraph;
+        private EventSequenceSceneGraph _lastUsedGraph;
 
         private void Start()
         {
             ExecuteGraph();
         }
 
-        public void ExecuteGraph(NodeGraph eventSequenceGraph = null, bool loop = false, bool autoStartDefaultGraph = false)
+        public EventSequenceSceneGraph GetDefaultEventSequenceGraph()
+        {
+            return defaultEventSequenceGraph;
+        }
+
+        public void ExecuteGraph(EventSequenceSceneGraph eventSequenceGraph = null, bool loop = false, bool autoStartDefaultGraph = false)
         {
             ResetExecutionState();
 
@@ -46,7 +50,7 @@ namespace Assets.Scripts.Parsers
             _activeNodeCount = 0;
         }
 
-        private void UpdateGraphUsageSettings(NodeGraph eventSequenceGraph, bool loop, bool autoStartDefaultGraph)
+        private void UpdateGraphUsageSettings(EventSequenceSceneGraph eventSequenceGraph, bool loop, bool autoStartDefaultGraph)
         {
             _isUsingDefaultGraph = eventSequenceGraph == null;
             _lastUsedGraph = eventSequenceGraph ?? defaultEventSequenceGraph;
@@ -65,10 +69,10 @@ namespace Assets.Scripts.Parsers
             }
         }
 
-        private List<StartNode> FindStartNodes(NodeGraph graph)
+        private List<StartNode> FindStartNodes(EventSequenceSceneGraph sceneGraph)
         {
             List<StartNode> startNodes = new List<StartNode>();
-            foreach (var node in graph.nodes)
+            foreach (var node in sceneGraph.graph.nodes)
             {
                 if (node is StartNode startNode && !startNode.Skip)
                 {

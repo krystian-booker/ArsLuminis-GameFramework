@@ -1,14 +1,13 @@
 using Assets.Scripts.Nodes;
-using UnityEngine;
 
-namespace Nodes
+namespace Nodes.Tools
 {
     [NodeTint(51, 51, 51)]
-    public class ExampleNode : ExecutableNode
+    public class LogToConsole : ExecutableNode
     {
         public override void Execute()
         {
-            Debug.Log(description);
+            UnityEngine.Debug.Log(description);
         }
 
         public override bool IsFinished()

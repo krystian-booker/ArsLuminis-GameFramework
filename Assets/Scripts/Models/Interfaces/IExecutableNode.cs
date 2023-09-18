@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using XNode;
 
-namespace Assets.Scripts.Interfaces
+namespace Assets.Scripts.Models.Interfaces
 {
     public interface IExecutableNode : IBaseNode
     {

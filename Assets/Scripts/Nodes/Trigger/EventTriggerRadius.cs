@@ -8,7 +8,7 @@ namespace Assets.Scripts.Nodes.Trigger
     public class EventTriggerRadius : MonoBehaviour
     {
         [Tooltip("Assign your EventSequenceGraph object here")]
-        [SerializeField] private EventSequenceGraph _triggeredEventSequenceGraph;
+        [SerializeField] private EventSequenceSceneGraph _triggeredEventSequenceGraph;
 
         [Tooltip("Should the default TriggeredEventSequenceGraph loop while the player is in the radius?")]
         [SerializeField] private bool _loopTriggeredEvent = false;

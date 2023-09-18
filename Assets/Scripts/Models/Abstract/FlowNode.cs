@@ -1,8 +1,7 @@
-using Assets.Scripts.Interfaces;
+using Assets.Scripts.Models.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 using XNode;
-using System.Linq;
 
 namespace Assets.Scripts.Nodes
 {
