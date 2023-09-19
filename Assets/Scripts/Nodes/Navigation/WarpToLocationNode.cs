@@ -1,52 +1,40 @@
-﻿using UnityEngine;
-using UnityEngine.AI;
-using Sirenix.OdinInspector;
+﻿using Assets.Scripts.Components;
 using Assets.Scripts.Nodes;
-using Assets.Scripts.Components;
+using Sirenix.OdinInspector;
+using UnityEngine.AI;
 using UnityEngine.Assertions;
+using UnityEngine;
 
 namespace Nodes.Navigation
 {
-    [NodeTint(100, 100, 200)]
-    public class SetDestinationNode : ExecutableNode
+    [NodeTint(200, 100, 100)]
+    public class WarpToLocationNode : ExecutableNode
     {
-        [Tooltip("The NavMesh agent to be moved")]
+        [Tooltip("The NavMesh agent to be warped")]
         [SerializeField] private NavMeshAgent targetAgent;
 
-        [Tooltip("The GameObject marking the destination")]
+        [Tooltip("The GameObject marking the warp location")]
         [SerializeField] private GameObject targetObject;
         private GizmoComponent gizmoComponent;
-
-        [Tooltip("The stopping distance for the NavMesh agent")]
-        [Range(0f, 20f), SerializeField]
-        private float stoppingDistance;
 
         [Tooltip("Tolerance for reaching the destination")]
         [SerializeField] private float tolerance = 0.1f;
 
-        // Update gizmoRadius when stoppingDistance is modified in the Inspector
         private void OnValidate()
         {
             if (targetObject != null && gizmoComponent == null)
             {
                 gizmoComponent = targetObject.GetComponent<GizmoComponent>();
             }
-
-            if (gizmoComponent != null)
-            {
-                gizmoComponent.gizmoRadius = stoppingDistance;
-            }
         }
 
         public override void Execute()
         {
-            Assert.IsNotNull(targetAgent, "Target NavMeshAgent is null. Cannot set destination.");
-            Assert.IsNotNull(targetObject, "Target GameObject is null. Cannot set destination.");
+            Assert.IsNotNull(targetAgent, "Target NavMeshAgent is null. Cannot warp.");
+            Assert.IsNotNull(targetObject, "Target GameObject is null. Cannot warp.");
 
-            Vector3 targetPosition = targetObject.transform.position;
-            targetAgent.SetDestination(targetPosition);
-            targetAgent.stoppingDistance = stoppingDistance;
-
+            Vector3 warpPosition = targetObject.transform.position;
+            targetAgent.Warp(warpPosition);
         }
 
         public override bool IsFinished()
@@ -54,13 +42,13 @@ namespace Nodes.Navigation
             if (targetAgent != null && targetObject != null)
             {
                 float distanceToTarget = Vector3.Distance(targetAgent.transform.position, targetObject.transform.position);
-                return distanceToTarget <= stoppingDistance + tolerance;
+                return distanceToTarget <= tolerance;
             }
             return true;
         }
 
-        [Button("Create Target Object")]
-        private void CreateTargetObject()
+        [Button("Create Warp Target Object")]
+        private void CreateWarpTargetObject()
         {
             if (targetAgent != null)
             {
@@ -76,26 +64,24 @@ namespace Nodes.Navigation
                 // Count similar named GameObjects already present under TargetPositions
                 foreach (UnityEngine.Transform child in targetParent.transform)
                 {
-                    if (child.name.StartsWith(string.Format("{0} - Destination", targetAgent.name)))
+                    if (child.name.StartsWith(string.Format("{0} - Warp", targetAgent.name)))
                     {
                         count++;
                     }
                 }
 
                 // Create GameObject with incremented name.
-                var newTarget = new GameObject(string.Format("{0} - Destination {1}", targetAgent.name, count));
+                var newTarget = new GameObject(string.Format("{0} - Warp {1}", targetAgent.name, count));
 
                 gizmoComponent = newTarget.AddComponent<GizmoComponent>();
-                gizmoComponent.gizmoRadius = stoppingDistance;
 
                 newTarget.transform.position = targetAgent.transform.position;
                 newTarget.transform.SetParent(targetParent.transform);
 
                 targetObject = newTarget;
-            }
-            else
+            } else
             {
-                Debug.LogError("SetDestinationNode: Can't create a Target Object because the Target Agent has not been assigned.");
+                Debug.LogError("WarpToLocationNode: Can't create a Warp Target Object because the Target Agent has not been assigned.");
             }
         }
     }
