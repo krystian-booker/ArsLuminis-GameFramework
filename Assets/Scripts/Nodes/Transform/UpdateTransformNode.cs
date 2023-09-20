@@ -1,4 +1,5 @@
 using Assets.Scripts.Nodes;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -8,10 +9,10 @@ namespace Nodes.Transform
     public class UpdateTransformNode : ExecutableNode
     {
         [Tooltip("The GameObject to be moved")]
-        [SerializeField] private GameObject targetObject;
+        [SerializeField, Required] private GameObject targetObject;
 
         [Tooltip("The new position in Vector3 format")]
-        [SerializeField] private Vector3 newPosition;
+        [SerializeField, Required] private Vector3 newPosition;
 
         public override void Execute()
         {

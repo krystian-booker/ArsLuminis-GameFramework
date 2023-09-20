@@ -11,10 +11,10 @@ namespace Nodes.Navigation
     public class WarpToLocationNode : ExecutableNode
     {
         [Tooltip("The NavMesh agent to be warped")]
-        [SerializeField] private NavMeshAgent targetAgent;
+        [SerializeField, Required] private NavMeshAgent targetAgent;
 
         [Tooltip("The GameObject marking the warp location")]
-        [SerializeField] private GameObject targetObject;
+        [SerializeField, Required] private GameObject targetObject;
         private GizmoComponent gizmoComponent;
 
         [Tooltip("Tolerance for reaching the destination")]

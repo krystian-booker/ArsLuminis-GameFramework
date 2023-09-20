@@ -11,6 +11,8 @@ namespace Assets.Scripts.Components
         public int health;
         public int xp;
 
+        public bool isAlive = true;
+
         public PlayerData(Vector3 playerLocation, int health, int xp)
         {
             this.playerLocation = playerLocation;
@@ -24,6 +26,9 @@ namespace Assets.Scripts.Components
         public Vector3 playerLocation;
         public int health = 100;
         public int xp;
+        public bool isAlive = true;
+
+        public string test = "hello";
 
         public override void Load(PlayerData data)
         {

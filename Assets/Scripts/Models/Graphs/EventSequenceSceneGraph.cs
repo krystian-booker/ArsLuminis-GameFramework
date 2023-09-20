@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using XNode;
 
-namespace Assets.Scripts.Parsers
+namespace Assets.Scripts.Models.Graphs
 {
     public class EventSequenceSceneGraph : SceneGraph<EventSequenceGraph>
     {

@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using Assets.Scripts.Models.Graphs;
 using Assets.Scripts.Parsers;
 using UnityEditor;
 

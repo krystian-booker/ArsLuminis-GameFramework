@@ -11,15 +11,15 @@ namespace Nodes.Navigation
     public class SetDestinationNode : ExecutableNode
     {
         [Tooltip("The NavMesh agent to be moved")]
-        [SerializeField] private NavMeshAgent targetAgent;
+        [SerializeField, Required] private NavMeshAgent targetAgent;
 
         [Tooltip("The GameObject marking the destination")]
-        [SerializeField] private GameObject targetObject;
+        [SerializeField, Required] private GameObject targetObject;
         private GizmoComponent gizmoComponent;
 
         [Tooltip("The stopping distance for the NavMesh agent")]
         [Range(0f, 20f), SerializeField]
-        private float stoppingDistance;
+        private float stoppingDistance = 1;
 
         [Tooltip("Tolerance for reaching the destination")]
         [SerializeField] private float tolerance = 0.1f;
