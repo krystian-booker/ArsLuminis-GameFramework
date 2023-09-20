@@ -1440,6 +1440,7 @@ MonoBehaviour:
   - {fileID: 551681254}
   - {fileID: 1718843855}
   - {fileID: 947224444}
+  - {fileID: 1575417196}
 --- !u!1001 &163481350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8459,8 +8460,8 @@ MonoBehaviour:
       _typeQualifiedName: XNode.NodePort, XNode, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
-      - fieldName: Exit
-        node: {fileID: 1718843855}
+      - fieldName: exit
+        node: {fileID: 1575417196}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -8489,8 +8490,8 @@ MonoBehaviour:
   description: 
   gameObject: {fileID: 1482443924}
   component: {fileID: 1482443932}
-  member: Field:isAlive
-  comparisonValue: 
+  member: Field:test
+  compareValue: 
 --- !u!1 &956939991
 GameObject:
   m_ObjectHideFlags: 0
@@ -12192,9 +12193,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _guid: fe085a40-070b-4e25-81da-f6568ec1cef1
   playerLocation: {x: 0, y: 0, z: 0}
-  health: 100
+  health: 50
   xp: 0
-  isAlive: 1
+  isAlive: 0
+  test: finally
 --- !u!1001 &1500069761
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12963,6 +12965,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4252784401376168, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
   m_PrefabInstance: {fileID: 1564430843}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1575417196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19516b593dade9142b2135ca2f4b8120, type: 3}
+  m_Name: Execute
+  m_EditorClassIdentifier: 
+  graph: {fileID: 163092494}
+  position: {x: -808, y: 120}
+  ports:
+    keys:
+    - entry
+    - exit
+    values:
+    - _fieldName: entry
+      _node: {fileID: 1575417196}
+      _typeQualifiedName: XNode.NodePort, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: Exit
+        node: {fileID: 1718843855}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: exit
+      _node: {fileID: 1575417196}
+      _typeQualifiedName: XNode.NodePort, XNode, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: entry
+        node: {fileID: 947224444}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  entry:
+    _fieldName: 
+    _node: {fileID: 0}
+    _typeQualifiedName: 
+    connections: []
+    _direction: 0
+    _connectionType: 0
+    _typeConstraint: 0
+    _dynamic: 0
+  exit:
+    _fieldName: 
+    _node: {fileID: 0}
+    _typeQualifiedName: 
+    connections: []
+    _direction: 0
+    _connectionType: 0
+    _typeConstraint: 0
+    _dynamic: 0
+  description: 
+  skip: 0
+  gameObject: {fileID: 1482443924}
+  component: {fileID: 1482443932}
+  method: PrintData
 --- !u!1001 &1589324303
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13883,7 +13951,7 @@ MonoBehaviour:
   m_Name: Start
   m_EditorClassIdentifier: 
   graph: {fileID: 163092494}
-  position: {x: -712, y: 120}
+  position: {x: -1096, y: 120}
   ports:
     keys:
     - Exit
@@ -13894,7 +13962,7 @@ MonoBehaviour:
         PublicKeyToken=null
       connections:
       - fieldName: entry
-        node: {fileID: 947224444}
+        node: {fileID: 1575417196}
         reroutePoints: []
       _direction: 1
       _connectionType: 0

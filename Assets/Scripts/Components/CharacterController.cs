@@ -27,7 +27,6 @@ namespace Assets.Scripts.Components
         public int health = 100;
         public int xp;
         public bool isAlive = true;
-
         public string test = "hello";
 
         public override void Load(PlayerData data)
@@ -40,9 +39,9 @@ namespace Assets.Scripts.Components
             throw new NotImplementedException();
         }
 
-        void Awake()
+        public void PrintData()
         {
-            //print(health);
+            print(test);
         }
     }
 }

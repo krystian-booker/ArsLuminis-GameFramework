@@ -8,6 +8,7 @@ using System.Reflection;
 using Assets.Scripts.Constants;
 using Assets.Scripts.Models.Interfaces;
 using XNode;
+using UnityEngine.Assertions;
 
 namespace Nodes.Logic
 {
@@ -36,7 +37,10 @@ namespace Nodes.Logic
         private string compareValue;
 
         private bool evaluationResult = false;
-        private bool isFinished = false;
+
+        private Dictionary<string, PropertyInfo> propertyCache = new Dictionary<string, PropertyInfo>();
+        private Dictionary<string, FieldInfo> fieldCache = new Dictionary<string, FieldInfo>();
+        private Dictionary<string, MethodInfo> methodCache = new Dictionary<string, MethodInfo>();
 
         public IfNode()
         {
@@ -155,19 +159,15 @@ namespace Nodes.Logic
 
         /// <summary>
         /// Executes an evaluation on a specified member (either a property, field, or method) of a given component.
-        /// The evaluation result is stored in the 'evaluationResult' field, and the method sets 'isFinished' to true upon completion.
+        /// The evaluation result is stored in the 'evaluationResult' field.
         /// If the component or member is not properly set, a warning is logged and no further action is taken.
         /// </summary>
         public override void Execute()
         {
-            evaluationResult = false;
-            isFinished = false;
+            Assert.IsNotNull(component, "Component is not set.");
+            Assert.IsNotNull(member, "Member is not set.");
 
-            if (component == null || string.IsNullOrEmpty(member))
-            {
-                Debug.LogWarning("Component or member not set.");
-                return;
-            }
+            evaluationResult = false;
 
             string[] parts = member.Split(':');
             if (parts.Length != 2) return;
@@ -176,35 +176,45 @@ namespace Nodes.Logic
             string memberName = parts[1];
             Type type = component.GetType();
 
-            if (memberType == "Property")
+            switch (memberType)
             {
-                var propInfo = type.GetProperty(memberName);
-                if (propInfo != null)
-                {
-                    object value = propInfo.GetValue(component);
-                    evaluationResult = Evaluate(value);
-                }
+                case "Property":
+                    if (!propertyCache.TryGetValue(memberName, out var propInfo))
+                    {
+                        propInfo = type.GetProperty(memberName);
+                        propertyCache[memberName] = propInfo;
+                    }
+                    if (propInfo != null)
+                    {
+                        object value = propInfo.GetValue(component);
+                        evaluationResult = Evaluate(value);
+                    }
+                    break;
+                case "Field":
+                    if (!fieldCache.TryGetValue(memberName, out var fieldInfo))
+                    {
+                        fieldInfo = type.GetField(memberName);
+                        fieldCache[memberName] = fieldInfo;
+                    }
+                    if (fieldInfo != null)
+                    {
+                        object value = fieldInfo.GetValue(component);
+                        evaluationResult = Evaluate(value);
+                    }
+                    break;
+                case "Method":
+                    if (!methodCache.TryGetValue(memberName, out var methodInfo))
+                    {
+                        methodInfo = type.GetMethod(memberName);
+                        methodCache[memberName] = methodInfo;
+                    }
+                    if (methodInfo != null)
+                    {
+                        object value = methodInfo.Invoke(component, null);
+                        evaluationResult = Evaluate(value);
+                    }
+                    break;
             }
-            else if (memberType == "Field")
-            {
-                var fieldInfo = type.GetField(memberName);
-                if (fieldInfo != null)
-                {
-                    object value = fieldInfo.GetValue(component);
-                    evaluationResult = Evaluate(value);
-                }
-            }
-            else if (memberType == "Method")
-            {
-                var methodInfo = type.GetMethod(memberName);
-                if (methodInfo != null)
-                {
-                    object value = methodInfo.Invoke(component, null);
-                    evaluationResult = Evaluate(value);
-                }
-            }
-
-            isFinished = true;
         }
 
         /// <summary>
@@ -235,11 +245,11 @@ namespace Nodes.Logic
         /// Checks whether the current operation or task has finished execution.
         /// </summary>
         /// <returns>
-        /// Returns true if the operation is finished, as indicated by the 'isFinished' field; otherwise, returns false.
+        /// Returns true if the operation is finished.
         /// </returns>
         public override bool IsFinished()
         {
-            return isFinished;
+            return true;
         }
 
         /// <summary>
