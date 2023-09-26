@@ -10,14 +10,14 @@ namespace Assets.Scripts.Components
         public Vector3 playerLocation;
         public int health;
         public int xp;
-
         public bool isAlive = true;
 
-        public PlayerData(Vector3 playerLocation, int health, int xp)
+        public PlayerData(Vector3 playerLocation, int health, int xp, bool isAlive)
         {
             this.playerLocation = playerLocation;
             this.health = health;
             this.xp = xp;
+            this.isAlive = isAlive;
         }
     }
 
@@ -27,21 +27,34 @@ namespace Assets.Scripts.Components
         public int health = 100;
         public int xp;
         public bool isAlive = true;
-        public string test = "hello";
 
-        public override void Load(PlayerData data)
+        protected override void Start()
         {
-            throw new NotImplementedException();
+            base.Start();
+            Debug.Log("Awake called in CharacterController");
         }
 
         public override PlayerData Save()
         {
-            throw new NotImplementedException();
+            return new PlayerData(playerLocation, health, xp, isAlive);
         }
 
-        public void PrintData()
+        public override void Load(PlayerData data)
         {
-            print(test);
+            if (data != null)
+            {
+                playerLocation = data.playerLocation;
+                health = data.health;
+                xp = data.xp;
+                isAlive = data.isAlive;
+
+                // Move the player to the saved location
+                transform.position = playerLocation;
+            }
+            else
+            {
+                Debug.LogError("No data to load!");
+            }
         }
     }
 }

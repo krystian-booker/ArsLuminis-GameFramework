@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Models.Interfaces;
+﻿using Assets.Scripts.Managers;
+using Assets.Scripts.Models.Interfaces;
 using System;
 using UnityEngine;
 
@@ -6,6 +7,16 @@ namespace Assets.Scripts.Models.Abstract
 {
     public abstract class SaveableMonoBehaviour<T> : MonoBehaviour, ISaveable<T> where T : class
     {
+        protected virtual void Start()
+        {
+            GameManager.Instance.SaveManager.Register(this as SaveableMonoBehaviour<object>);
+        }
+
+        protected virtual void OnDestroy()
+        {
+            GameManager.Instance.SaveManager.Unregister(this as SaveableMonoBehaviour<object>);
+        }
+
         [SerializeField, HideInInspector]
         private string _guid;
         public string UniqueId => _guid;
