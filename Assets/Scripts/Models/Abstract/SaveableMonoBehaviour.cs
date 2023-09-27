@@ -1,36 +1,31 @@
 ﻿using Assets.Scripts.Managers;
 using Assets.Scripts.Models.Interfaces;
-using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Models.Abstract
 {
-    public abstract class SaveableMonoBehaviour<T> : MonoBehaviour, ISaveable<T> where T : class
+    public abstract class SaveableMonoBehaviour<T> : MonoBehaviour, ISaveable where T : SaveableData
     {
-        protected virtual void Start()
+        [HideInInspector] public string Guid = System.Guid.NewGuid().ToString();
+
+        private void Awake()
         {
-            GameManager.Instance.SaveManager.Register(this as SaveableMonoBehaviour<object>);
+            SaveManager.Instance.RegisterSaveableObject(Guid, this);
         }
 
-        protected virtual void OnDestroy()
+        public abstract T SaveData();
+        public abstract void LoadData(T saveData);
+
+        public SaveableData Save()
         {
-            GameManager.Instance.SaveManager.Unregister(this as SaveableMonoBehaviour<object>);
+            return SaveData();
         }
 
-        [SerializeField, HideInInspector]
-        private string _guid;
-        public string UniqueId => _guid;
-
-        protected virtual void OnValidate()
+        public void Load(SaveableData data)
         {
-            // Only generate a GUID if one doesn't already exist
-            if (string.IsNullOrEmpty(_guid))
-            {
-                _guid = Guid.NewGuid().ToString();
-            }
+            LoadData((T)data);
         }
 
-        public abstract T Save();
-        public abstract void Load(T data);
+        public string GetGuid() => Guid;
     }
 }

@@ -3,7 +3,7 @@ using Assets.Scripts.Nodes;
 namespace Nodes.Tools
 {
     [NodeTint(51, 51, 51)]
-    public class SaveNode : ExecutableNode
+    public class LogToConsole : ExecutableNode
     {
         public override void Execute()
         {

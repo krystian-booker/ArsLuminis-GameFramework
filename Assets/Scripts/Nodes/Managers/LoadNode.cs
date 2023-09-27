@@ -8,7 +8,7 @@ namespace Nodes.Managers
     {
         public override void Execute()
         {
-            GameManager.Instance.SaveManager.LoadGame("");
+            GameManager.Instance.SaveManager.Load();
         }
 
         public override bool IsFinished()

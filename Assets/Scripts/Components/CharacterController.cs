@@ -1,11 +1,12 @@
-﻿using Assets.Scripts.Models.Abstract;
+﻿using Assets.Scripts.Models;
+using Assets.Scripts.Models.Abstract;
 using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Components
 {
     [Serializable]
-    public class PlayerData
+    public class PlayerData : SaveableData
     {
         public Vector3 playerLocation;
         public int health;
@@ -25,28 +26,38 @@ namespace Assets.Scripts.Components
     {
         public Vector3 playerLocation;
         public int health = 100;
-        public int xp;
+        public int xp = 0;
         public bool isAlive = true;
 
-        protected override void Start()
+        private void Start()
         {
-            base.Start();
-            Debug.Log("Awake called in CharacterController");
+            playerLocation = this.transform.position;
+            health = 0;
+            isAlive = false;
         }
 
-        public override PlayerData Save()
+        private void Update()
         {
-            return new PlayerData(playerLocation, health, xp, isAlive);
+            xp++;
+            xp*= 2;
+            health++;
         }
 
-        public override void Load(PlayerData data)
+        public override PlayerData SaveData()
         {
-            if (data != null)
+            var temp = new PlayerData(playerLocation, health, xp, isAlive);
+            temp.Guid = this.Guid;
+            return temp;
+        }
+
+        public override void LoadData(PlayerData saveData)
+        {
+            if (saveData != null)
             {
-                playerLocation = data.playerLocation;
-                health = data.health;
-                xp = data.xp;
-                isAlive = data.isAlive;
+                playerLocation = saveData.playerLocation;
+                health = saveData.health;
+                xp = saveData.xp;
+                isAlive = saveData.isAlive;
 
                 // Move the player to the saved location
                 transform.position = playerLocation;

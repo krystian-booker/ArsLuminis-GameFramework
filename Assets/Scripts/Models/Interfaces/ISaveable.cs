@@ -1,9 +1,9 @@
 ﻿namespace Assets.Scripts.Models.Interfaces
 {
-    public interface ISaveable<T> where T : class
+    public interface ISaveable
     {
-        T Save();
-        void Load(T data);
-        string UniqueId { get; }
+        void Load(SaveableData data);
+        SaveableData Save();
+        string GetGuid();
     }
 }
