@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Models;
 using Assets.Scripts.Models.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,11 +15,15 @@ namespace Assets.Scripts.Managers
 {
     public class SaveManager : MonoBehaviour
     {
+        public static bool IsDebugMode = true;
+
+
         private static readonly object LockObject = new object();
         private static SaveManager _instance;
 
         private static int saveCounter = 0;
-        private static readonly string AutoSaveFilePath = Path.Combine(Application.persistentDataPath, "autoSaveData.dat");
+        private static readonly string AutoSaveFilePath = Path.Combine(Application.persistentDataPath, "autoSaveData");
+        private static Dictionary<string, Dictionary<string, object>> currentSave;
 
         public static SaveManager Instance
         {
@@ -86,6 +91,14 @@ namespace Assets.Scripts.Managers
             saveCounter = indices.Any() ? indices.Max() : 0;
         }
 
+        public void RegisterSaveableObject(string guid, ISaveable saveableObject)
+        {
+            if (!saveableObjects.ContainsKey(guid))
+            {
+                saveableObjects.Add(guid, saveableObject);
+            }
+        }
+
         public List<SaveData> GetAllSaves()
         {
             string saveFileDirectory = Application.persistentDataPath;
@@ -144,71 +157,21 @@ namespace Assets.Scripts.Managers
             return saveDataModels;
         }
 
-        public void Save(bool isAutoSave = false, int overwriteIndex = -1)
+        public void Save(bool isAutoSave = true, int overwriteIndex = -1)
         {
             lock (LockObject)
             {
                 try
                 {
-                    string filePath;
-                    string dateTimeStr = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-                    if (isAutoSave)
-                    {
-                        filePath = AutoSaveFilePath; // always overwrite the autosave file
-                    }
-                    else if (overwriteIndex >= 0)
-                    {
-                        filePath = Path.Combine(Application.persistentDataPath, $"saveData{overwriteIndex}_{dateTimeStr}.dat"); // Overwrite existing save file.
-                    }
-                    else
-                    {
-                        saveCounter++;
-                        filePath = Path.Combine(Application.persistentDataPath, $"saveData{saveCounter}_{dateTimeStr}.dat"); // Create new save file.
-                    }
-
-                    // Capture Screenshot
-                    string screenshotPath = Path.ChangeExtension(filePath, "png");
+                    var (filePath, screenshotPath) = InitializeSavePaths(isAutoSave, overwriteIndex);
                     ScreenCapture.CaptureScreenshot(screenshotPath);
 
-                    var dataList = new List<Dictionary<string, object>>();
-                    foreach (var saveableObject in saveableObjects.Values)
-                    {
-                        var data = saveableObject.Save();
-                        var serializableData = new Dictionary<string, object>();
-
-                        foreach (var field in data.GetType().GetFields())
-                        {
-                            if (field.FieldType == typeof(Vector3))
-                            {
-                                Vector3 vector = (Vector3)field.GetValue(data);
-                                serializableData.Add(field.Name, new SerializableVector3(vector));
-                            }
-                            else
-                            {
-                                serializableData.Add(field.Name, field.GetValue(data));
-                            }
-                        }
-
-                        dataList.Add(serializableData);
-                    }
+                    var dataList = PrepareSaveDataDictionary();
+                    UpdateCurrentSave(dataList);
 
                     // Serialize object to JSON string 
-                    string jsonString = JsonUtility.ToJson(dataList);
-
-                    // Convert JSON string to hex
-                    var jsonBytes = Encoding.UTF8.GetBytes(jsonString);
-                    var hexString = BitConverter.ToString(jsonBytes).Replace("-", string.Empty);
-
-                    // Compute the checksum of the hex string.
-                    using (SHA256 sha256Hash = SHA256.Create())
-                    {
-                        byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(hexString));
-                        string checksum = BitConverter.ToString(bytes).Replace("-", string.Empty);
-
-                        // Save the checksum along with the hex string to the file.
-                        File.WriteAllText(filePath, $"{checksum}\n{hexString}");
-                    }
+                    var jsonString = JsonConvert.SerializeObject(dataList);
+                    SerializeAndWriteDataToFile(filePath, jsonString);
                 }
                 catch (Exception ex)
                 {
@@ -221,96 +184,228 @@ namespace Assets.Scripts.Managers
         {
             lock (LockObject)
             {
-                string loadPath = fileName.EndsWith(".dat") ?
-                                  Path.Combine(Application.persistentDataPath, fileName) :
-                                  Path.Combine(Application.persistentDataPath, $"{fileName}.dat");
+                var loadPath = GetLoadPath(fileName);
+                if (!File.Exists(loadPath)) throw new FileNotFoundException("No save file found!");
 
-                if (File.Exists(loadPath))
+                try
                 {
-                    try
+                    Dictionary<string, Dictionary<string, object>> dataList;
+                    if (IsDebugMode)
                     {
-                        // Read the checksum and hex string from the file.
-                        var lines = File.ReadAllLines(loadPath);
-                        if (lines.Length < 2)
-                        {
-                            Debug.LogError("Invalid save file format.");
-                            return;
-                        }
-
-                        var readChecksum = lines[0];
-                        var hexString = lines[1];
-
-                        // Compute the checksum of the hex string and compare.
-                        using (SHA256 sha256Hash = SHA256.Create())
-                        {
-                            var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(hexString));
-                            var computedChecksum = BitConverter.ToString(bytes).Replace("-", string.Empty);
-
-                            if (computedChecksum != readChecksum)
-                            {
-                                Debug.LogError("Checksum validation failed. The save file might be corrupted.");
-                                return;
-                            }
-                        }
-
-                        // Convert hex string to JSON bytes
-                        var jsonBytes = Enumerable.Range(0, hexString.Length)
-                                                  .Where(x => x % 2 == 0)
-                                                  .Select(x => Convert.ToByte(hexString.Substring(x, 2), 16))
-                                                  .ToArray();
-
-                        // Deserialize JSON string to object using Newtonsoft.Json
-                        var jsonString = Encoding.UTF8.GetString(jsonBytes);
-
-                        var dataList = JsonUtility.FromJson<List<Dictionary<string, object>>>(jsonString);
-
-                        foreach (var dataDict in dataList)
-                        {
-                            if (dataDict.TryGetValue("Guid", out object guidObj) && guidObj is string guid && saveableObjects.TryGetValue(guid, out ISaveable saveableObject))
-                            {
-                                // Create an instance of appropriate SaveableData type.
-                                var data = saveableObject.Save();
-
-                                foreach (var field in data.GetType().GetFields())
-                                {
-                                    if (dataDict.TryGetValue(field.Name, out object fieldValue))
-                                    {
-                                        if (field.FieldType == typeof(Vector3) && fieldValue is SerializableVector3 serializableVector)
-                                        {
-                                            field.SetValue(data, (Vector3)serializableVector);
-                                        }
-                                        else
-                                        {
-                                            field.SetValue(data, fieldValue);
-                                        }
-                                    }
-                                }
-
-                                saveableObject.Load(data);
-                            }
-                            else
-                            {
-                                Debug.LogError("Invalid GUID or no ISaveable object associated with it.");
-                            }
-                        }
+                        var fileContent = File.ReadAllText(loadPath);
+                        dataList = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(fileContent);
                     }
-                    catch (Exception e)
+                    else
                     {
-                        Debug.LogError($"Error loading save data: {e.Message}");
+                        dataList = ReadAndDeserializeDataFromFile(loadPath);
                     }
+
+                    if (dataList == null)
+                        return;
+
+                    currentSave = dataList ?? new Dictionary<string, Dictionary<string, object>>();
+                    LoadSaveableObjectsFromDataList(dataList);
                 }
-                else
+                catch (Exception e)
                 {
-                    Debug.LogError("No save file found!");
+                    Debug.LogError($"Error loading save data: {e.Message}");
                 }
             }
         }
 
-        public void RegisterSaveableObject(string guid, ISaveable saveableObject)
+        private (string filePath, string screenshotPath) InitializeSavePaths(bool isAutoSave, int overwriteIndex)
         {
-            if (!saveableObjects.ContainsKey(guid))
+            string filePath;
+            string dateTimeStr = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+            if (isAutoSave)
             {
-                saveableObjects.Add(guid, saveableObject);
+                // Always overwrite the autosave file
+                filePath = AutoSaveFilePath;
+            }
+            else if (overwriteIndex >= 0)
+            {
+                // Overwrite existing save file.
+                filePath = Path.Combine(Application.persistentDataPath, $"saveData{overwriteIndex}_{dateTimeStr}");
+            }
+            else
+            {
+                // Create new save file.
+                saveCounter++;
+                filePath = Path.Combine(Application.persistentDataPath, $"saveData{saveCounter}_{dateTimeStr}");
+            }
+
+            filePath += IsDebugMode ? ".json" : ".dat";
+
+            // Capture Screenshot
+            string screenshotPath = Path.ChangeExtension(filePath, "png");
+
+            return (filePath, screenshotPath);
+        }
+
+        private static void UpdateCurrentSave(Dictionary<string, Dictionary<string, object>> dataList)
+        {
+            if (currentSave == null)
+            {
+                currentSave = new Dictionary<string, Dictionary<string, object>>();
+            }
+
+            foreach (var kvp in dataList)
+            {
+                var guid = kvp.Key;
+                var dataDict = kvp.Value;
+
+                if (currentSave.ContainsKey(guid))
+                {
+                    // Update the existing item
+                    currentSave[guid] = dataDict;
+                }
+                else
+                {
+                    // Add new item if it does not exist in currentSave
+                    currentSave.Add(guid, dataDict);
+                }
+            }
+        }
+
+        private static Dictionary<string, Dictionary<string, object>> PrepareSaveDataDictionary()
+        {
+            var dataDictionary = new Dictionary<string, Dictionary<string, object>>();
+            foreach (var saveableObject in saveableObjects.Values)
+            {
+                var guid = saveableObject.GetGuid();
+
+                var data = saveableObject.Save();
+                var serializableData = new Dictionary<string, object>();
+
+                foreach (var field in data.GetType().GetFields())
+                {
+                    if (field.Name == "Guid")
+                    {
+                        continue;
+                    }
+                    else if (field.FieldType == typeof(Vector3))
+                    {
+                        Vector3 vector = (Vector3)field.GetValue(data);
+                        serializableData.Add(field.Name, new SerializableVector3(vector));
+                    }
+                    else
+                    {
+                        serializableData.Add(field.Name, field.GetValue(data));
+                    }
+                }
+
+                dataDictionary.Add(guid, serializableData);
+            }
+
+            return dataDictionary;
+        }
+
+        private void SerializeAndWriteDataToFile(string filePath, string jsonString)
+        {
+            if (IsDebugMode)
+            {
+                File.WriteAllText(filePath, jsonString);
+            }
+            else
+            {
+                // Convert JSON string to hex
+                var jsonBytes = Encoding.UTF8.GetBytes(jsonString);
+                var hexString = BitConverter.ToString(jsonBytes).Replace("-", string.Empty);
+
+                // Compute the checksum of the hex string.
+                using (SHA256 sha256Hash = SHA256.Create())
+                {
+                    byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(hexString));
+                    string checksum = BitConverter.ToString(bytes).Replace("-", string.Empty);
+
+                    // Save the checksum along with the hex string to the file.
+                    File.WriteAllText(filePath, $"{checksum}\n{hexString}");
+                }
+            }
+        }
+
+        private string GetLoadPath(string fileName)
+        {
+            var fileExtension = IsDebugMode ? ".json" : ".dat";
+            return fileName.EndsWith(fileExtension) ?
+                              Path.Combine(Application.persistentDataPath, fileName) :
+                              Path.Combine(Application.persistentDataPath, $"{fileName}{fileExtension}");
+        }
+
+        private Dictionary<string, Dictionary<string, object>> ReadAndDeserializeDataFromFile(string loadPath)
+        {
+            // Assume loadPath has been validated to exist at this point
+            var lines = File.ReadAllLines(loadPath);
+            if (lines.Length < 2)
+            {
+                Debug.LogError("Invalid save file format.");
+                return new Dictionary<string, Dictionary<string, object>>();
+            }
+
+            var readChecksum = lines[0];
+            var hexString = lines[1];
+
+            // Compute the checksum of the hex string and compare.
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(hexString));
+                var computedChecksum = BitConverter.ToString(bytes).Replace("-", string.Empty);
+
+                if (computedChecksum != readChecksum)
+                {
+                    Debug.LogError("Checksum validation failed. The save file might be corrupted.");
+                    return new Dictionary<string, Dictionary<string, object>>();
+                }
+            }
+
+            // Convert hex string to JSON bytes
+            var jsonBytes = Enumerable.Range(0, hexString.Length)
+                                      .Where(x => x % 2 == 0)
+                                      .Select(x => Convert.ToByte(hexString.Substring(x, 2), 16))
+                                      .ToArray();
+
+            // Deserialize JSON string to object using Newtonsoft.Json
+            var jsonString = Encoding.UTF8.GetString(jsonBytes);
+            return JsonUtility.FromJson<Dictionary<string, Dictionary<string, object>>>(jsonString);
+        }
+
+        private void LoadSaveableObjectsFromDataList(Dictionary<string, Dictionary<string, object>> dataList)
+        {
+            // Sort dataList by Priority here before loading each object
+            var orderedDataList = dataList.OrderBy(dataDict => Convert.ToInt32(dataDict.Value["Priority"])).ToList();
+
+            foreach (var kvp in orderedDataList)
+            {
+                var guid = kvp.Key;
+                var dataDict = kvp.Value;
+
+                if (saveableObjects.TryGetValue(guid, out ISaveable saveableObject))
+                {
+                    // Create an instance of appropriate SaveableData type.
+                    var data = saveableObject.Save();
+
+                    foreach (var field in data.GetType().GetFields())
+                    {
+                        if (dataDict.TryGetValue(field.Name, out object fieldValue))
+                        {
+                            if (field.FieldType == typeof(Vector3) && fieldValue is SerializableVector3 serializableVector)
+                            {
+                                field.SetValue(data, (Vector3)serializableVector);
+                            }
+                            else
+                            {
+                                field.SetValue(data, fieldValue);
+                            }
+                        }
+                    }
+
+                    saveableObject.Load(data);
+                }
+                else
+                {
+                    Debug.LogError("Invalid GUID or no ISaveable object associated with it.");
+                }
             }
         }
     }

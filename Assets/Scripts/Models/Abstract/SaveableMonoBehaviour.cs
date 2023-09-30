@@ -8,6 +8,12 @@ namespace Assets.Scripts.Models.Abstract
     {
         [HideInInspector] public string Guid = System.Guid.NewGuid().ToString();
 
+        [SerializeField] private int priority = int.MaxValue;
+
+        public int GetPriority() => priority;
+
+        public string GetGuid() => Guid;
+        
         private void Awake()
         {
             SaveManager.Instance.RegisterSaveableObject(Guid, this);
@@ -25,7 +31,5 @@ namespace Assets.Scripts.Models.Abstract
         {
             LoadData((T)data);
         }
-
-        public string GetGuid() => Guid;
     }
 }

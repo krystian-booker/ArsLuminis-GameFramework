@@ -63,3 +63,4 @@ crashlytics-build.properties
 Assets/ThirdPartyAssets/
 Assets/TextMesh Pro/
 Assets/TextMesh Pro.meta
+/Packages/com.singularitygroup.hotreload

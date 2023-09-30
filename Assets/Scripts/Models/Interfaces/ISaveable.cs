@@ -5,5 +5,6 @@
         void Load(SaveableData data);
         SaveableData Save();
         string GetGuid();
+        int GetPriority();
     }
 }
