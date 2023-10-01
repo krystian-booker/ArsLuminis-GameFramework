@@ -16,8 +16,12 @@ namespace Assets.Scripts.Managers
 {
     public class SaveManager : MonoBehaviour
     {
-        public static bool IsDebugMode = true;
-
+        private const string DEBUG_MODE_KEY = "IsDebugMode";
+        public static bool IsDebugMode
+        {
+            get => PlayerPrefs.GetInt(DEBUG_MODE_KEY, 1) == 1;
+            set => PlayerPrefs.SetInt(DEBUG_MODE_KEY, value ? 1 : 0);
+        }
 
         private static readonly object LockObject = new object();
         private static SaveManager _instance;
