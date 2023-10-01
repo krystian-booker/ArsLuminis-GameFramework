@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -274,31 +275,42 @@ namespace Assets.Scripts.Managers
             foreach (var saveableObject in saveableObjects.Values)
             {
                 var guid = saveableObject.GetGuid();
-
                 var data = saveableObject.Save();
-                var serializableData = new Dictionary<string, object>();
-
-                foreach (var field in data.GetType().GetFields())
-                {
-                    if (field.Name == "Guid")
-                    {
-                        continue;
-                    }
-                    else if (field.FieldType == typeof(Vector3))
-                    {
-                        Vector3 vector = (Vector3)field.GetValue(data);
-                        serializableData.Add(field.Name, new SerializableVector3(vector));
-                    }
-                    else
-                    {
-                        serializableData.Add(field.Name, field.GetValue(data));
-                    }
-                }
-
+                var serializableData = ConvertToSerializableData(data);
                 dataDictionary.Add(guid, serializableData);
             }
-
             return dataDictionary;
+        }
+
+        private static Dictionary<string, object> ConvertToSerializableData(object data)
+        {
+            var serializableData = new Dictionary<string, object>();
+            foreach (var field in data.GetType().GetFields())
+            {
+                if (field.Name == "Guid") continue;
+                var fieldValue = field.GetValue(data);
+                var serializableValue = ConvertToSerializableValue(field, fieldValue);
+                serializableData.Add(field.Name, serializableValue);
+            }
+            return serializableData;
+        }
+
+        private static object ConvertToSerializableValue(FieldInfo field, object value)
+        {
+            return field.FieldType switch
+            {
+                Type t when t == typeof(Vector3) => new SerializableVector3((Vector3)value),
+                Type t when t == typeof(Vector3Int) => new SerializableVector3Int((Vector3Int)value),
+                Type t when t == typeof(Vector2) => new SerializableVector2((Vector2)value),
+                Type t when t == typeof(Vector2Int) => new SerializableVector2Int((Vector2Int)value),
+                Type t when t == typeof(Vector4) => new SerializableVector4((Vector4)value),
+                Type t when t == typeof(Quaternion) => new SerializableQuaternion((Quaternion)value),
+                Type t when t == typeof(Matrix4x4) => new SerializableMatrix4x4((Matrix4x4)value),
+                Type t when t == typeof(LayerMask) => new SerializableLayerMask((LayerMask)value),
+                Type t when t == typeof(Hash128) => new SerializableHash128((Hash128)value),
+                Type t when t == typeof(Color32) => new SerializableColor32((Color32)value),
+                _ => value
+            };
         }
 
         private void SerializeAndWriteDataToFile(string filePath, string jsonString)
@@ -372,8 +384,10 @@ namespace Assets.Scripts.Managers
 
         private void LoadSaveableObjectsFromDataList(Dictionary<string, Dictionary<string, object>> dataList)
         {
-            // Sort dataList by Priority here before loading each object
-            var orderedDataList = dataList.OrderBy(dataDict => Convert.ToInt32(dataDict.Value["Priority"])).ToList();
+            // Ordering dataList by Priority before loading each object
+            var orderedDataList = dataList
+                                  .OrderBy(dataDict => Convert.ToInt32(dataDict.Value["Priority"]))
+                                  .ToList();
 
             foreach (var kvp in orderedDataList)
             {
@@ -382,31 +396,46 @@ namespace Assets.Scripts.Managers
 
                 if (saveableObjects.TryGetValue(guid, out ISaveable saveableObject))
                 {
-                    // Create an instance of appropriate SaveableData type.
+                    // Create an instance of the appropriate SaveableData type.
                     var data = saveableObject.Save();
-
-                    foreach (var field in data.GetType().GetFields())
-                    {
-                        if (dataDict.TryGetValue(field.Name, out object fieldValue))
-                        {
-                            if (field.FieldType == typeof(Vector3) && fieldValue is SerializableVector3 serializableVector)
-                            {
-                                field.SetValue(data, (Vector3)serializableVector);
-                            }
-                            else
-                            {
-                                field.SetValue(data, fieldValue);
-                            }
-                        }
-                    }
-
+                    ConvertAndSetFieldValues(data, dataDict);
                     saveableObject.Load(data);
                 }
                 else
                 {
-                    Debug.LogError("Invalid GUID or no ISaveable object associated with it.");
+                    Debug.LogError($"Invalid GUID: {guid} or no ISaveable object associated with it.");
                 }
             }
+        }
+
+        private static void ConvertAndSetFieldValues(object data, IReadOnlyDictionary<string, object> dataDict)
+        {
+            foreach (var field in data.GetType().GetFields())
+            {
+                if (dataDict.TryGetValue(field.Name, out object fieldValue))
+                {
+                    object convertedValue = ConvertToOriginalValue(field, fieldValue);
+                    field.SetValue(data, convertedValue);
+                }
+            }
+        }
+
+        private static object ConvertToOriginalValue(FieldInfo field, object value)
+        {
+            return field.FieldType switch
+            {
+                Type t when t == typeof(Vector3) && value is SerializableVector3 sVector3 => (Vector3)sVector3,
+                Type t when t == typeof(Vector3Int) && value is SerializableVector3Int sVector3Int => (Vector3Int)sVector3Int,
+                Type t when t == typeof(Vector2) && value is SerializableVector2 sVector2 => (Vector2)sVector2,
+                Type t when t == typeof(Vector2Int) && value is SerializableVector2Int sVector2Int => (Vector2Int)sVector2Int,
+                Type t when t == typeof(Vector4) && value is SerializableVector4 sVector4 => (Vector4)sVector4,
+                Type t when t == typeof(Quaternion) && value is SerializableQuaternion sQuaternion => (Quaternion)sQuaternion,
+                Type t when t == typeof(Matrix4x4) && value is SerializableMatrix4x4 sMatrix4x4 => (Matrix4x4)sMatrix4x4,
+                Type t when t == typeof(LayerMask) && value is SerializableLayerMask sLayerMask => (LayerMask)sLayerMask,
+                Type t when t == typeof(Hash128) && value is SerializableHash128 sHash128 => (Hash128)sHash128,
+                Type t when t == typeof(Color32) && value is SerializableColor32 sColor32 => (Color32)sColor32,
+                _ => value
+            };
         }
     }
 }
