@@ -1,10 +1,25 @@
+using Assets.Scripts.Models;
+using Assets.Scripts.Models.Abstract;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Managers
 {
+    [Serializable]
+    public class GameManagerData : SaveableData
+    {
+        public string sceneName;
+
+        public GameManagerData(string guid, int priority, string currentScene) : base(guid, priority)
+        {
+            this.sceneName = currentScene;
+        }
+    }
+
     [RequireComponent(typeof(PlayerInput))]
-    public class GameManager : MonoBehaviour
+    public class GameManager : SaveableMonoBehaviour<GameManagerData>
     {
         public static GameManager Instance;
 
@@ -24,6 +39,18 @@ namespace Assets.Scripts.Managers
                 SaveManager = gameObject.AddComponent<SaveManager>();
                 DontDestroyOnLoad(gameObject);
             }
+        }
+
+        public override void LoadData(GameManagerData saveData)
+        {
+            SceneManager.LoadScene(saveData.sceneName);
+        }
+
+        public override GameManagerData SaveData()
+        {
+            var currentSceneName = SceneManager.GetActiveScene().name;
+            var gameManagerData = new GameManagerData(Guid, 0, currentSceneName);
+            return gameManagerData;
         }
     }
 }

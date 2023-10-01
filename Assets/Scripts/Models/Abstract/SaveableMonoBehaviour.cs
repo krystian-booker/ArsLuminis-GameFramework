@@ -8,9 +8,9 @@ namespace Assets.Scripts.Models.Abstract
     {
         [HideInInspector] public string Guid = System.Guid.NewGuid().ToString();
 
-        [SerializeField] private int priority = int.MaxValue;
+        [HideInInspector] public int Priority = int.MaxValue;
 
-        public int GetPriority() => priority;
+        public int GetPriority() => Priority;
 
         public string GetGuid() => Guid;
         

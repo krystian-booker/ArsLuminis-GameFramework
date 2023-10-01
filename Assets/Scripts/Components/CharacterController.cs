@@ -19,7 +19,7 @@ namespace Assets.Scripts.Components
         public Hash128 hash128;
         public Color32 color32;
 
-        public PlayerData(Vector2 vector2, Vector2Int vector2Int, Vector3 vector3, Vector3Int vector3Int, Vector4 vector4, Quaternion quaternion, Matrix4x4 matrix4X4, LayerMask layerMask, Hash128 hash128, Color32 color32)
+        public PlayerData(string guid, Vector2 vector2, Vector2Int vector2Int, Vector3 vector3, Vector3Int vector3Int, Vector4 vector4, Quaternion quaternion, Matrix4x4 matrix4X4, LayerMask layerMask, Hash128 hash128, Color32 color32) : base(guid)
         {
             this.vector2 = vector2;
             this.vector2Int = vector2Int;
@@ -66,12 +66,9 @@ namespace Assets.Scripts.Components
             Matrix4x4 matrix4x4 = Matrix4x4.identity;
             LayerMask layerMask = new LayerMask();
             Hash128 hash128 = Hash128.Compute("Some String");
-            BoundingSphere boundingSphere = new BoundingSphere(new Vector3(1, 2, 3), 4);
-            BoundsInt boundsInt = new BoundsInt(0, 0, 0, 5, 6, 7);
             Color32 color32 = new Color32(255, 0, 0, 255);
 
-            var playerData = new PlayerData(vector2, vector2Int, vector3, vector3Int, vector4, quaternion, matrix4x4, layerMask, hash128, color32);
-            playerData.Guid = this.Guid;
+            var playerData = new PlayerData(this.Guid, vector2, vector2Int, vector3, vector3Int, vector4, quaternion, matrix4x4, layerMask, hash128, color32);
             return playerData;
         }
 
