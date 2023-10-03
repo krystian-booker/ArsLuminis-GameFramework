@@ -1,24 +1,34 @@
 ﻿using Assets.Scripts.Managers;
 using Assets.Scripts.Models.Interfaces;
+using Assets.Scripts.Models.PropertyAttributes;
 using UnityEngine;
 
 namespace Assets.Scripts.Models.Abstract
 {
     public abstract class SaveableMonoBehaviour<T> : MonoBehaviour, ISaveable where T : SaveableData
     {
-        private string Guid = System.Guid.NewGuid().ToString();
+        [UniqueIdentifier, SerializeField]
+        private string _guid;
 
-        private int Priority = int.MaxValue;
+        private int _priority = int.MaxValue;
 
-        public int GetPriority() => Priority;
-
-        public string GetGuid() => Guid;
-        
-        private void Start()
+        private void OnValidate()
         {
-            GameManager.Instance.SaveManager.RegisterSaveableObject(Guid, this);
+            Debug.Log(this.GetInstanceID());
+
+            if (string.IsNullOrEmpty(_guid))
+            {
+                _guid = System.Guid.NewGuid().ToString();
+            }
         }
 
+        private void Start()
+        {
+            GameManager.Instance.SaveManager.RegisterSaveableObject(_guid, this);
+        }
+
+        public int GetPriority() => _priority;
+        public string GetGuid() => _guid;
         public abstract T SaveData();
         public abstract void LoadData(T saveData);
 

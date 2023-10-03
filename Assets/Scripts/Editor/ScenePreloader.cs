@@ -1,6 +1,7 @@
 ﻿using UnityEditor.SceneManagement;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using Assets.Scripts.Constants;
 
 namespace Assets.Scripts.Editor
 {
@@ -32,7 +33,7 @@ namespace Assets.Scripts.Editor
                         LastScenePath = EditorSceneManager.GetActiveScene().path;
 
                         // Load the __preload scene
-                        EditorSceneManager.OpenScene("Assets/Scenes/__preload.unity");
+                        EditorSceneManager.OpenScene($"Assets/Scenes/{SceneNames.Preload}.unity");
                     }
                     else
                     {

@@ -41,20 +41,6 @@ namespace Assets.Scripts.Components
         public int xp = 0;
         public bool isAlive = true;
 
-        private void Start()
-        {
-            playerLocation = this.transform.position;
-            health = 0;
-            isAlive = false;
-        }
-
-        private void Update()
-        {
-            xp++;
-            xp *= 2;
-            health++;
-        }
-
         public override PlayerData SaveData()
         {
             Vector2 vector2 = new Vector2(1, 2);

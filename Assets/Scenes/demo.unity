@@ -5179,6 +5179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b808a4ebadb5640a0d7ce4e78a51cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uniqueId: 37abf968-89cc-40cb-a26a-219d7a8de67e
+  _guid: 14e8464a-31f3-43f2-ae05-b8bafa890a56
   playerLocation: {x: 0, y: 0, z: 0}
   health: 100
   xp: 0
@@ -12271,6 +12273,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b808a4ebadb5640a0d7ce4e78a51cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uniqueId: 
+  _guid: 3a522aba-88e5-4a02-90fc-0ff659536e72
   playerLocation: {x: 0, y: 0, z: 0}
   health: 50
   xp: 0
