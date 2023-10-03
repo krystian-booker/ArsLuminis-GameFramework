@@ -6,17 +6,17 @@ namespace Assets.Scripts.Models.Abstract
 {
     public abstract class SaveableMonoBehaviour<T> : MonoBehaviour, ISaveable where T : SaveableData
     {
-        [HideInInspector] public string Guid = System.Guid.NewGuid().ToString();
+        private string Guid = System.Guid.NewGuid().ToString();
 
-        [HideInInspector] public int Priority = int.MaxValue;
+        private int Priority = int.MaxValue;
 
         public int GetPriority() => Priority;
 
         public string GetGuid() => Guid;
         
-        private void Awake()
+        private void Start()
         {
-            SaveManager.Instance.RegisterSaveableObject(Guid, this);
+            GameManager.Instance.SaveManager.RegisterSaveableObject(Guid, this);
         }
 
         public abstract T SaveData();

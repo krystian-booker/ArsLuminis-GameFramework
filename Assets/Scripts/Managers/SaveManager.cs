@@ -24,55 +24,24 @@ namespace Assets.Scripts.Managers
         }
 
         private static readonly object LockObject = new object();
-        private static SaveManager _instance;
 
         private static int saveCounter = 0;
-        private static readonly string AutoSaveFilePath = Path.Combine(Application.persistentDataPath, "autoSaveData");
+        private static string autoSaveFilePath;
         private static Dictionary<string, Dictionary<string, object>> currentSave;
-
-        public static SaveManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    // Try to find existing instance
-                    _instance = FindObjectOfType<SaveManager>();
-
-                    // If no instance was found, create a new one
-                    if (_instance == null)
-                    {
-                        GameObject go = new GameObject("SaveManager");
-                        _instance = go.AddComponent<SaveManager>();
-                        DontDestroyOnLoad(go);
-                    }
-                }
-                return _instance;
-            }
-        }
-
         private static Dictionary<string, ISaveable> saveableObjects = new Dictionary<string, ISaveable>();
-        private void Awake()
-        {
-            if (_instance == null)
-            {
-                _instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else if (_instance != this)
-            {
-                Destroy(gameObject);
-            }
 
+        private void Start()
+        {
             InitializeSaveCounter();
         }
 
         private void InitializeSaveCounter()
         {
-            string saveFileDirectory = Application.persistentDataPath;
-            string searchPattern = "saveData*.dat";
+            autoSaveFilePath = Path.Combine(Application.persistentDataPath, "autoSaveData");
+            var saveFileDirectory = Application.persistentDataPath;
+            var searchPattern = "saveData*.dat";
 
-            string[] foundSaveFiles = Directory.GetFiles(saveFileDirectory, searchPattern);
+            var foundSaveFiles = Directory.GetFiles(saveFileDirectory, searchPattern);
 
             if (foundSaveFiles.Length == 0)
             {
@@ -80,10 +49,10 @@ namespace Assets.Scripts.Managers
                 return;
             }
 
-            List<int> indices = new List<int>();
-            foreach (string file in foundSaveFiles)
+            var indices = new List<int>();
+            foreach (var file in foundSaveFiles)
             {
-                string fileName = Path.GetFileName(file);
+                var fileName = Path.GetFileName(file);
                 var match = Regex.Match(fileName, @"saveData(\d+)\.dat");
 
                 if (match.Success && int.TryParse(match.Groups[1].Value, out int index))
@@ -113,9 +82,9 @@ namespace Assets.Scripts.Managers
 
             List<SaveData> saveDataModels = new List<SaveData>();
 
-            if (foundSaveFiles.Contains(AutoSaveFilePath))
+            if (foundSaveFiles.Contains(autoSaveFilePath))
             {
-                foundSaveFiles.Remove(AutoSaveFilePath);
+                foundSaveFiles.Remove(autoSaveFilePath);
             }
 
             // Loop through and create SaveDataModel objects for each save file.
@@ -139,14 +108,14 @@ namespace Assets.Scripts.Managers
             saveDataModels = saveDataModels.OrderByDescending(model => model.DateTime).ToList();
 
             // If autoSave exists, add it to the front of the list.
-            if (File.Exists(AutoSaveFilePath))
+            if (File.Exists(autoSaveFilePath))
             {
-                string autoSaveFileName = Path.GetFileName(AutoSaveFilePath);
+                string autoSaveFileName = Path.GetFileName(autoSaveFilePath);
                 string autoSaveDateTimeStr = autoSaveFileName.Split('_').LastOrDefault()?.Replace(".dat", string.Empty);
 
                 DateTime.TryParseExact(autoSaveDateTimeStr, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime autoSaveDateTime);
 
-                string autoSaveScreenshotPath = Path.ChangeExtension(AutoSaveFilePath, "png");
+                string autoSaveScreenshotPath = Path.ChangeExtension(autoSaveFilePath, "png");
 
                 SaveData autoSaveDataModel = new SaveData
                 {
@@ -226,7 +195,7 @@ namespace Assets.Scripts.Managers
             if (isAutoSave)
             {
                 // Always overwrite the autosave file
-                filePath = AutoSaveFilePath;
+                filePath = autoSaveFilePath;
             }
             else if (overwriteIndex >= 0)
             {
@@ -419,7 +388,9 @@ namespace Assets.Scripts.Managers
                 if (dataDict.TryGetValue(field.Name, out object fieldValue))
                 {
                     object convertedValue = ConvertToOriginalValue(field, fieldValue);
-                    field.SetValue(data, convertedValue);
+                    object convertedValueForField = Convert.ChangeType(convertedValue, field.FieldType);
+
+                    field.SetValue(data, convertedValueForField);
                 }
             }
         }

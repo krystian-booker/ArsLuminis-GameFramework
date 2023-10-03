@@ -18,27 +18,29 @@ namespace Assets.Scripts.Managers
         }
     }
 
-    [RequireComponent(typeof(PlayerInput))]
+    [RequireComponent(typeof(PlayerInput), typeof(SaveManager))]
     public class GameManager : SaveableMonoBehaviour<GameManagerData>
     {
         public static GameManager Instance;
-
         public PlayerInput PlayerInput { get; private set; }
         public SaveManager SaveManager { get; private set; }
 
-        private void Awake()
+        void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            else
+            if (Instance == null)
             {
                 Instance = this;
-                PlayerInput = gameObject.GetComponent<PlayerInput>();
-                SaveManager = gameObject.AddComponent<SaveManager>();
                 DontDestroyOnLoad(gameObject);
+                PlayerInput = gameObject.GetComponent<PlayerInput>();
+                SaveManager = gameObject.GetComponent<SaveManager>();
             }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            GameManager.Instance.SaveManager.RegisterSaveableObject(this.GetGuid(), this);
         }
 
         public override void LoadData(GameManagerData saveData)
@@ -49,7 +51,7 @@ namespace Assets.Scripts.Managers
         public override GameManagerData SaveData()
         {
             var currentSceneName = SceneManager.GetActiveScene().name;
-            var gameManagerData = new GameManagerData(Guid, 0, currentSceneName);
+            var gameManagerData = new GameManagerData(this.GetGuid(), 0, currentSceneName);
             return gameManagerData;
         }
     }

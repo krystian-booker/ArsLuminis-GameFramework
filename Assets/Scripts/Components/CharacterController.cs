@@ -68,7 +68,7 @@ namespace Assets.Scripts.Components
             Hash128 hash128 = Hash128.Compute("Some String");
             Color32 color32 = new Color32(255, 0, 0, 255);
 
-            var playerData = new PlayerData(this.Guid, vector2, vector2Int, vector3, vector3Int, vector4, quaternion, matrix4x4, layerMask, hash128, color32);
+            var playerData = new PlayerData(this.GetGuid(), vector2, vector2Int, vector3, vector3Int, vector4, quaternion, matrix4x4, layerMask, hash128, color32);
             return playerData;
         }
 
