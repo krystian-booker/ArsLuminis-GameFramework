@@ -1,4 +1,6 @@
-﻿namespace Assets.Scripts.Models.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace Assets.Scripts.Models.Interfaces
 {
     public interface ISaveable
     {
@@ -6,5 +8,6 @@
         SaveableData Save();
         string GetGuid();
         int GetPriority();
+        Task LoadAsync(SaveableData data);
     }
 }

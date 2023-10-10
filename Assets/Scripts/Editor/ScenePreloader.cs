@@ -31,9 +31,15 @@ namespace Assets.Scripts.Editor
                     {
                         // Remember the current scene
                         LastScenePath = EditorSceneManager.GetActiveScene().path;
-
-                        // Load the __preload scene
-                        EditorSceneManager.OpenScene($"Assets/Scenes/{SceneNames.Preload}.unity");
+                        if (LastScenePath.Contains(SceneNames.Preload))
+                        {
+                            LastScenePath = string.Empty;
+                        }
+                        else
+                        {
+                            // Load the __preload scene
+                            EditorSceneManager.OpenScene($"Assets/Scenes/{SceneNames.Preload}.unity");
+                        }
                     }
                     else
                     {

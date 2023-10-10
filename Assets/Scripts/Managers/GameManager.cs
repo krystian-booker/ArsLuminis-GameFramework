@@ -1,6 +1,9 @@
+using Assets.Scripts.Constants;
 using Assets.Scripts.Models;
 using Assets.Scripts.Models.Abstract;
 using System;
+using System.Threading.Tasks;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -43,16 +46,46 @@ namespace Assets.Scripts.Managers
             GameManager.Instance.SaveManager.RegisterSaveableObject(this.GetGuid(), this);
         }
 
-        public override void LoadData(GameManagerData saveData)
+        public override async Task LoadAsync(SaveableData data)
         {
-            SceneManager.LoadScene(saveData.sceneName);
+            var saveDataTyped = (GameManagerData)data;
+            await LoadSceneAsync(saveDataTyped);
         }
+
+        private async Task LoadSceneAsync(GameManagerData saveData)
+        {
+            var loadSceneTask = SceneManager.LoadSceneAsync(saveData.sceneName);
+            await Task.Yield();
+
+            while (!loadSceneTask.isDone)
+            {
+                await Task.Delay(50);
+            }
+
+            Debug.Log("Scene load complete");
+        }
+
 
         public override GameManagerData SaveData()
         {
-            var currentSceneName = SceneManager.GetActiveScene().name;
-            var gameManagerData = new GameManagerData(this.GetGuid(), 0, currentSceneName);
+            var activeScene = string.Empty;
+            var sceneList = SceneManager.GetAllScenes();
+            for (var i = 0; i < sceneList.Length; i++)
+            {
+                var scene = sceneList[i];
+                if (scene.name != SceneNames.Preload)
+                {
+                    activeScene = scene.name;
+                }
+            }
+
+            var gameManagerData = new GameManagerData(this.GetGuid(), 0, activeScene);
             return gameManagerData;
+        }
+
+        public override void LoadData(GameManagerData saveData)
+        {
+            //Skip
         }
     }
 }

@@ -10,6 +10,8 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
@@ -23,12 +25,11 @@ namespace Assets.Scripts.Managers
             set => PlayerPrefs.SetInt(DEBUG_MODE_KEY, value ? 1 : 0);
         }
 
-        private static readonly object LockObject = new object();
-
         private static int saveCounter = 0;
         private static string autoSaveFilePath;
         private static Dictionary<string, Dictionary<string, object>> currentSave;
         private static Dictionary<string, ISaveable> saveableObjects = new Dictionary<string, ISaveable>();
+        private SemaphoreSlim _lockSemaphore = new SemaphoreSlim(1, 1);
 
         private void Start()
         {
@@ -131,59 +132,65 @@ namespace Assets.Scripts.Managers
             return saveDataModels;
         }
 
-        public void Save(bool isAutoSave = true, int overwriteIndex = -1)
+        public async Task Save(bool isAutoSave = true, int overwriteIndex = -1)
         {
-            lock (LockObject)
+            await _lockSemaphore.WaitAsync();
+            try
             {
-                try
-                {
-                    var (filePath, screenshotPath) = InitializeSavePaths(isAutoSave, overwriteIndex);
-                    ScreenCapture.CaptureScreenshot(screenshotPath);
+                var (filePath, screenshotPath) = InitializeSavePaths(isAutoSave, overwriteIndex);
+                ScreenCapture.CaptureScreenshot(screenshotPath);
 
-                    var dataList = PrepareSaveDataDictionary();
-                    UpdateCurrentSave(dataList);
+                var dataList = PrepareSaveDataDictionary();
+                UpdateCurrentSave(dataList);
 
-                    // Serialize object to JSON string 
-                    var jsonString = JsonConvert.SerializeObject(dataList);
-                    SerializeAndWriteDataToFile(filePath, jsonString);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"Error occurred while saving data: {ex.Message}\n{ex.StackTrace}");
-                }
+                // Serialize object to JSON string 
+                var jsonString = JsonConvert.SerializeObject(dataList);
+                SerializeAndWriteDataToFile(filePath, jsonString);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Error occurred while saving data: {ex.Message}\n{ex.StackTrace}");
+            }
+            finally
+            {
+                _lockSemaphore.Release();
             }
         }
 
-        public void Load(string fileName = "autoSaveData")
+        public async Task Load(string fileName = "autoSaveData")
         {
-            lock (LockObject)
+            await _lockSemaphore.WaitAsync();
+
+            try
             {
                 var loadPath = GetLoadPath(fileName);
                 if (!File.Exists(loadPath)) throw new FileNotFoundException("No save file found!");
 
-                try
+                Dictionary<string, Dictionary<string, object>> dataList;
+                if (IsDebugMode)
                 {
-                    Dictionary<string, Dictionary<string, object>> dataList;
-                    if (IsDebugMode)
-                    {
-                        var fileContent = File.ReadAllText(loadPath);
-                        dataList = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(fileContent);
-                    }
-                    else
-                    {
-                        dataList = ReadAndDeserializeDataFromFile(loadPath);
-                    }
-
-                    if (dataList == null)
-                        return;
-
-                    currentSave = dataList ?? new Dictionary<string, Dictionary<string, object>>();
-                    LoadSaveableObjectsFromDataList(dataList);
+                    var fileContent = File.ReadAllText(loadPath);
+                    dataList = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(fileContent);
                 }
-                catch (Exception e)
+                else
                 {
-                    Debug.LogError($"Error loading save data: {e.Message}");
+                    dataList = ReadAndDeserializeDataFromFile(loadPath);
                 }
+
+                if (dataList == null)
+                    return;
+
+                currentSave = dataList ?? new Dictionary<string, Dictionary<string, object>>();
+                await LoadSaveableObjectsFromDataList(dataList);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                throw;
+            }
+            finally
+            {
+                _lockSemaphore.Release();
             }
         }
 
@@ -352,10 +359,10 @@ namespace Assets.Scripts.Managers
 
             // Deserialize JSON string to object using Newtonsoft.Json
             var jsonString = Encoding.UTF8.GetString(jsonBytes);
-            return JsonUtility.FromJson<Dictionary<string, Dictionary<string, object>>>(jsonString);
+            return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, object>>>(jsonString);
         }
 
-        private void LoadSaveableObjectsFromDataList(Dictionary<string, Dictionary<string, object>> dataList)
+        private async Task LoadSaveableObjectsFromDataList(Dictionary<string, Dictionary<string, object>> dataList)
         {
             // Ordering dataList by Priority before loading each object
             var orderedDataList = dataList
@@ -367,11 +374,15 @@ namespace Assets.Scripts.Managers
                 var guid = kvp.Key;
                 var dataDict = kvp.Value;
 
+                Debug.Log(string.Format("Executing load for guid: {0}", guid));
+
                 if (saveableObjects.TryGetValue(guid, out ISaveable saveableObject))
                 {
                     // Create an instance of the appropriate SaveableData type.
                     var data = saveableObject.Save();
                     ConvertAndSetFieldValues(data, dataDict);
+
+                    await saveableObject.LoadAsync(data);
                     saveableObject.Load(data);
                 }
                 else

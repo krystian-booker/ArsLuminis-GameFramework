@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Managers;
 using Assets.Scripts.Models.Interfaces;
 using Assets.Scripts.Models.PropertyAttributes;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts.Models.Abstract
@@ -14,8 +15,6 @@ namespace Assets.Scripts.Models.Abstract
 
         private void OnValidate()
         {
-            Debug.Log(this.GetInstanceID());
-
             if (string.IsNullOrEmpty(_guid))
             {
                 _guid = System.Guid.NewGuid().ToString();
@@ -31,6 +30,11 @@ namespace Assets.Scripts.Models.Abstract
         public string GetGuid() => _guid;
         public abstract T SaveData();
         public abstract void LoadData(T saveData);
+
+        public virtual async Task LoadAsync(SaveableData data)
+        {
+            //Not implemented
+        }
 
         public SaveableData Save()
         {
