@@ -18,54 +18,33 @@ namespace Assets.Scripts.Managers
 {
     public class SaveManager : MonoBehaviour
     {
+        // Constants
         private const string DEBUG_MODE_KEY = "IsDebugMode";
+
+        // Static fields
+        private static int saveCounter = 0;
+        private static string autoSaveFilePath;
+        private static Dictionary<string, Dictionary<string, object>> currentSave;
+        private static Dictionary<string, ISaveable> saveableObjects = new Dictionary<string, ISaveable>();
+
+        // Instance fields
+        private SemaphoreSlim _lockSemaphore = new SemaphoreSlim(1, 1);
+
+
+        // Properties
         public static bool IsDebugMode
         {
             get => PlayerPrefs.GetInt(DEBUG_MODE_KEY, 1) == 1;
             set => PlayerPrefs.SetInt(DEBUG_MODE_KEY, value ? 1 : 0);
         }
 
-        private static int saveCounter = 0;
-        private static string autoSaveFilePath;
-        private static Dictionary<string, Dictionary<string, object>> currentSave;
-        private static Dictionary<string, ISaveable> saveableObjects = new Dictionary<string, ISaveable>();
-        private SemaphoreSlim _lockSemaphore = new SemaphoreSlim(1, 1);
-
+        // Lifecycle methods
         private void Start()
         {
             InitializeSaveCounter();
         }
 
-        private void InitializeSaveCounter()
-        {
-            autoSaveFilePath = Path.Combine(Application.persistentDataPath, "autoSaveData");
-            var saveFileDirectory = Application.persistentDataPath;
-            var searchPattern = "saveData*.dat";
-
-            var foundSaveFiles = Directory.GetFiles(saveFileDirectory, searchPattern);
-
-            if (foundSaveFiles.Length == 0)
-            {
-                saveCounter = 0;
-                return;
-            }
-
-            var indices = new List<int>();
-            foreach (var file in foundSaveFiles)
-            {
-                var fileName = Path.GetFileName(file);
-                var match = Regex.Match(fileName, @"saveData(\d+)\.dat");
-
-                if (match.Success && int.TryParse(match.Groups[1].Value, out int index))
-                {
-                    indices.Add(index);
-                }
-            }
-
-            // Set saveCounter to the maximum index found, or to 0 if no valid files were found.
-            saveCounter = indices.Any() ? indices.Max() : 0;
-        }
-
+        // Public methods
         public void RegisterSaveableObject(string guid, ISaveable saveableObject)
         {
             if (!saveableObjects.ContainsKey(guid))
@@ -192,6 +171,37 @@ namespace Assets.Scripts.Managers
             {
                 _lockSemaphore.Release();
             }
+        }
+
+        // Private methods
+        private void InitializeSaveCounter()
+        {
+            autoSaveFilePath = Path.Combine(Application.persistentDataPath, "autoSaveData");
+            var saveFileDirectory = Application.persistentDataPath;
+            var searchPattern = "saveData*.dat";
+
+            var foundSaveFiles = Directory.GetFiles(saveFileDirectory, searchPattern);
+
+            if (foundSaveFiles.Length == 0)
+            {
+                saveCounter = 0;
+                return;
+            }
+
+            var indices = new List<int>();
+            foreach (var file in foundSaveFiles)
+            {
+                var fileName = Path.GetFileName(file);
+                var match = Regex.Match(fileName, @"saveData(\d+)\.dat");
+
+                if (match.Success && int.TryParse(match.Groups[1].Value, out int index))
+                {
+                    indices.Add(index);
+                }
+            }
+
+            // Set saveCounter to the maximum index found, or to 0 if no valid files were found.
+            saveCounter = indices.Any() ? indices.Max() : 0;
         }
 
         private (string filePath, string screenshotPath) InitializeSavePaths(bool isAutoSave, int overwriteIndex)
@@ -398,30 +408,20 @@ namespace Assets.Scripts.Managers
             {
                 if (dataDict.TryGetValue(field.Name, out object fieldValue))
                 {
-                    object convertedValue = ConvertToOriginalValue(field, fieldValue);
-                    object convertedValueForField = Convert.ChangeType(convertedValue, field.FieldType);
+                    object convertedValue;
+                    try
+                    {
+                        convertedValue = JsonConvert.DeserializeObject(fieldValue.ToString(), field.FieldType);
+                    }
+                    catch
+                    {
+                        convertedValue = fieldValue;
+                    }
 
+                    object convertedValueForField = Convert.ChangeType(convertedValue, field.FieldType);
                     field.SetValue(data, convertedValueForField);
                 }
             }
-        }
-
-        private static object ConvertToOriginalValue(FieldInfo field, object value)
-        {
-            return field.FieldType switch
-            {
-                Type t when t == typeof(Vector3) && value is SerializableVector3 sVector3 => (Vector3)sVector3,
-                Type t when t == typeof(Vector3Int) && value is SerializableVector3Int sVector3Int => (Vector3Int)sVector3Int,
-                Type t when t == typeof(Vector2) && value is SerializableVector2 sVector2 => (Vector2)sVector2,
-                Type t when t == typeof(Vector2Int) && value is SerializableVector2Int sVector2Int => (Vector2Int)sVector2Int,
-                Type t when t == typeof(Vector4) && value is SerializableVector4 sVector4 => (Vector4)sVector4,
-                Type t when t == typeof(Quaternion) && value is SerializableQuaternion sQuaternion => (Quaternion)sQuaternion,
-                Type t when t == typeof(Matrix4x4) && value is SerializableMatrix4x4 sMatrix4x4 => (Matrix4x4)sMatrix4x4,
-                Type t when t == typeof(LayerMask) && value is SerializableLayerMask sLayerMask => (LayerMask)sLayerMask,
-                Type t when t == typeof(Hash128) && value is SerializableHash128 sHash128 => (Hash128)sHash128,
-                Type t when t == typeof(Color32) && value is SerializableColor32 sColor32 => (Color32)sColor32,
-                _ => value
-            };
         }
     }
 }
