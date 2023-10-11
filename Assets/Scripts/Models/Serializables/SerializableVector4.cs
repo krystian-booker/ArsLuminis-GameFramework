@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Models
+namespace Assets.Scripts.Models.Serializables
 {
     [System.Serializable]
     public class SerializableVector4

@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Managers;
 using Assets.Scripts.Models.Interfaces;
-using Assets.Scripts.Models.PropertyAttributes;
+using Assets.Scripts.Models.Attributes;
 using System.Threading.Tasks;
 using UnityEngine;
 

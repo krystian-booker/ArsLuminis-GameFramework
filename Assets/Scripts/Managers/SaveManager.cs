@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Models;
 using Assets.Scripts.Models.Interfaces;
+using Assets.Scripts.Models.Serializables;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
